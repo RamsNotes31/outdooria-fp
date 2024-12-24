@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="./assets/img/icon.png" type="image/png" sizes="32x32">
-    <title class="fw-bold">Hikyu<?= $title; ?></title>
+    <title><?= $title; ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap"
         rel="stylesheet" />
-    <script type="module" crossorigin src="./assets/bundled/js/all.min.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/bundled/css/all.css" />
+    <script type="module" crossorigin src="<?= base_url('public/js/all.min.js'); ?>"></script>
+    <link rel="stylesheet" crossorigin href="<?= base_url('public/css/all.css'); ?>">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <style>
@@ -30,8 +30,8 @@
         <nav class="navbar navbar-neoraised-bottom navbar-expand-lg bg-success navbar-dark p-3">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse align-items-center  justify-content-start mb-4 order-2 order-lg-1" id="navbarColor01"">
-                <a href=" home.php" class="btn btn-lg btn-neoraised btn-light mt-3 me-3 fw-bold">Home</a>
-                    <a href="rental.php" class="btn btn-lg btn-neoraised btn-light mt-3 me-3 fw-bold">Rental</a>
+                <a href=" <?= base_url('home'); ?>" class="btn btn-lg btn-neoraised btn-light mt-3 me-3 fw-bold">Home</a>
+                    <a href="<?= base_url('produk'); ?>" class="btn btn-lg btn-neoraised btn-light mt-3 me-3 fw-bold">Rental</a>
                     <a href="gunung.php" class="btn btn-lg btn-neoraised btn-light mt-3 me-3 fw-bold">Information</a>
                     <div class="btn-group btn-group-neoraised mt-3 me-3" role="group" aria-label="Button group with nested dropdown">
                         <button type="button" class="btn btn-lg btn-light fw-bold">Account</button>

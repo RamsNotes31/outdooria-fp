@@ -1,6 +1,5 @@
 <?php
 
-include './db.php';
 
 if (empty($_SESSION)) {
     echo '<a class="dropdown-item fw-bold" href="login.php">Login</a>';
