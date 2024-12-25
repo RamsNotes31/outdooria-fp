@@ -33,19 +33,24 @@ class Gunung extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-    public function info($id_informasi)
+    public function info($id_informasi = null)
     {
+        if (is_null($id_informasi)) {
+            redirect('../gunung');
+            return;
+        }
+
         $this->load->model('Gunung_model');
         $data['title'] = 'Hikyu | Gunung Info';
         $this->load->view('templates/header', $data);
         $data['detail'] = $this->Gunung_model->get_informasi_by_id($id_informasi);
-        if (empty($data['detail'])) {
-            show_404(); // Tampilkan error jika data tidak ditemukan
-        }
+        // if (empty($data['detail'])) {
+        //     redirect('../gunung');
+        // }
         $data['gunungs'] = $this->Gunung_model->get_informasi_pendakian(6);
-        if (empty($data['gunungs'])) {
-            show_404(); // Tampilkan error jika data tidak ditemukan
-        }
+        // if (empty($data['gunungs'])) {
+        //     redirect('../gunung');
+        // }
         $this->load->view('pages/infor/info', $data);
         $this->load->view('templates/footer');
     }

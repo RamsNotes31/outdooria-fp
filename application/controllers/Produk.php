@@ -26,8 +26,13 @@ class Produk extends CI_Controller
     }
 
     // Menampilkan detail produk berdasarkan id_produk
-    public function detail($product_id)
+    public function detail($product_id = null)
     {
+        if (is_null($product_id)) {
+            redirect('../produk');
+            return;
+        }
+
         $this->load->model('Produk_model');
         $data['title'] = 'Hikyu | Produk Detail';
         $this->load->view('templates/header', $data);
