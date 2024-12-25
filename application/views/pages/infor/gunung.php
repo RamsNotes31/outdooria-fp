@@ -28,7 +28,7 @@
                     <option value="" selected>All Locations</option>
                     <?php if (isset($lokasi_options) && count($lokasi_options) > 0): ?>
                         <?php foreach ($lokasi_options as $lokasi): ?>
-                            <option value="<?= htmlspecialchars($lokasi['lokasi']); ?>"><?= htmlspecialchars($lokasi['lokasi']); ?></option>
+                            <option value="<?= htmlspecialchars(substr($lokasi['lokasi'], 0, strpos($lokasi['lokasi'], ','))); ?>"><?= htmlspecialchars(substr($lokasi['lokasi'], 0, strpos($lokasi['lokasi'], ','))); ?></option>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <option value="">No Locations Available</option>
