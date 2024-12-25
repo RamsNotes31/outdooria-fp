@@ -28,4 +28,13 @@ class Home_model extends CI_Model
         $query = $this->db->get('feedback'); // Dari tabel feedback
         return $query->row()->average_rating; // Mengembalikan rata-rata rating
     }
+
+    public function get_admin_details()
+    {
+        // Query to get the admin details
+        $this->db->select('nama_admin, foto_admin, email_admin, no_telp_admin');
+        $query = $this->db->get('admin');
+
+        return $query->result(); // Returns an array of objects with the admin data
+    }
 }

@@ -97,7 +97,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <h1 class="text-center mt-5 fw-bolder">Our Feedback</h1>
     <p class="text-center mt-4 mb-4 fs-4 fw-light">This is what our customers say about our services and products.</p>
 
-    <div class="px-5 py-5">
+    <div class="px-3 py-3">
         <div class="row">
             <div class="container">
                 <div class="row">
@@ -137,9 +137,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                         echo '<i class="bi bi-star text-muted"></i>'; // Bintang kosong
                                                     }
                                                 }
-                                                ?>
-
-                                            </p>
+                                                ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -151,6 +149,67 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
             </div>
 
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12 col-lg-9">
+            <h1 class="text-center mt-5 fw-bolder mb-5">Visit Our Store</h1>
+            <div class="map-container card-neoraised border border-dark border-2 rounded-3" style="position: relative; padding-bottom: 70.25%; height: 0; overflow: hidden;">
+                <iframe src="https://www.google.com/maps/embed/v1/place?q=-7.720941,+110.365193&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8"
+                    width="600"
+                    height="450"
+                    style="border:0; position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                    allowfullscreen ""
+                    loading="lazy">
+                    <style>
+                        #google-maps-display img {
+                            max-width: none !important;
+                            background: none !important;
+                            font-size: inherit;
+                            font-weight: inherit;
+                        }
+                    </style>
+                </iframe>
+            </div>
+        </div>
+        <div class="col-12 col-lg-3">
+            <h2 class="fw-bolder mt-5 text-center mb-5">Contact Info</h2>
+            <p class="fw-light text-center">Location :
+                Tridadi, Sleman Regency, Special Region of Yogyakarta.
+                <br><br>
+                <?php if (!empty($admins)): ?>
+                    <?php foreach ($admins as $admin): ?>
+                        <hr>
+            <div class="d-flex align-items-center justify-content-center mb-3">
+                <!-- Display Admin Photo -->
+                <img src="<?= base_url('public/img/admin/' . $admin->foto_admin); ?>"
+                    alt="Admin Photo" class="rounded-circle img-fluid me-3 card-neoraised border border-dark border-1" width="30" height="30">
+                <!-- Display Admin Name -->
+                <p class="fw-bold mb-0"><?php echo $admin->nama_admin; ?></p>
+            </div>
+
+            <!-- Display Admin Email -->
+            <div class="text-center">
+                <a href="mailto:<?php echo $admin->email_admin; ?>" class="text-decoration-none">
+                    <i class="bi bi-envelope me-2 text-danger"></i><?php echo $admin->email_admin; ?>
+                </a><br>
+
+                <!-- Display Admin Phone Number -->
+                <a href="tel:<?php echo $admin->no_telp_admin; ?>" class="text-decoration-none">
+                    <i class="bi bi-telephone me-2 text-primary"></i><?php echo $admin->no_telp_admin; ?>
+                </a><br>
+
+                <!-- Display Admin WhatsApp Link -->
+                <a href="https://wa.me/<?php echo preg_replace('/[^0-9]/', '', $admin->no_telp_admin); ?>" class="text-decoration-none">
+                    <i class="bi bi-whatsapp me-2 text-success"></i>+<?php echo $admin->no_telp_admin; ?>
+                </a><br>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p class="text-center">No admin data available.</p>
+    <?php endif; ?>
         </div>
     </div>
 </div>
