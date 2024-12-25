@@ -18,6 +18,7 @@ class Produk extends CI_Controller
         $this->load->view('templates/header', $data);
         $this->load->model('Produk_model');
         $data['produks'] = $this->Produk_model->get_produk_with_feedback(); // Ambil data produk dan rating
+        $data['alat_pendakian'] = $this->Produk_model->get_all_kategori(); // Ambil data alat_pendakian
         if (empty($data['produks'])) {
             log_message('error', 'No produk data available for view.');
         }
@@ -44,3 +45,15 @@ class Produk extends CI_Controller
         $this->load->view('templates/footer');
     }
 }
+
+// $this->load->library('session');
+//         if (empty($this->session->userdata('nama'))) {
+//             echo "<script>
+//                 if(!confirm('Harap login dahulu untuk melihat detail produk!')) {
+//                     window.location.href = '../../login';
+//                 } else {
+//                     window.location.href = '../../login';
+//                 }
+//             </script>";
+//             return;
+//         }

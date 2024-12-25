@@ -94,4 +94,12 @@ class Produk_model extends CI_Model
         $this->db->order_by('feedback.tanggal_feedback', 'DESC');  // Urutkan berdasarkan waktu ulasan terbaru
         return $this->db->get()->result_array();
     }
+
+    public function get_all_kategori()
+    {
+        $this->db->distinct();
+        $this->db->select('kategori'); // Ambil hanya kolom alat_pendakian
+        $this->db->from('alat_pendakian'); // Nama tabel Anda
+        return $this->db->get()->result();
+    }
 }

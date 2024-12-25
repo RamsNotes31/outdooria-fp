@@ -21,7 +21,7 @@
                 <button type="reset" class="btn btn-lg btn-neoraised btn-danger mx-2 mx-sm-auto px-3 py-3 fs-3 mb-4 fw-bold">Reset</button>
             </div>
             <div class="text-center mt-3">
-                <p class="text-dark fs-5 fw-bold">Not have an account?<br><a href="register.php" class="text-warning fw-light">Sign up now!</a></p>
+                <p class="text-dark fs-5 fw-bold">Not have an account?<br><a href="<?= base_url('register') ?>" class="text-warning fw-light">Sign up now!</a></p>
             </div>
         </form>
     </div>
