@@ -35,8 +35,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <div class="d-flex">
                         <?php
                         // Menampilkan bintang berdasarkan rata-rata rating
-                        $fullStars = floor($average_rating); // Jumlah bintang penuh
-                        $halfStar = ($average_rating - $fullStars) >= 0.5 ? true : false; // Cek jika ada bintang setengah
+                        $fullStars = $average_rating !== null ? floor($average_rating) : 0; // Pastikan rating tidak null sebelum floor
+                        $halfStar = ($average_rating - $fullStars) >= 0.5; // Cek jika ada bintang setengah
                         for ($i = 1; $i <= 5; $i++) {
                             if ($i <= $fullStars) {
                                 echo '<i class="bi bi-star-fill text-warning fs-1"></i>'; // Bintang penuh
@@ -122,7 +122,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             <p class="card-text fw-light"><small
                                                     class="text-muted">
                                                     <?= date('F d, Y H:i:s', strtotime($feedback->tanggal_feedback)); ?>
-                                                    </small></p>
+                                                </small></p>
                                             <!-- Nama Alat dan Rating -->
                                             <p class="card-text me-5"><small class="text-muted fw-bold"><?= $feedback->nama_alat; ?></small>
                                                 <?php

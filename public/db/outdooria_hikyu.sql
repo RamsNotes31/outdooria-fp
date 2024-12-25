@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 22, 2024 at 06:07 PM
+-- Generation Time: Dec 25, 2024 at 01:45 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -18,51 +18,274 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `db_outdooria_hikyu`
+-- Database: `outdooria_hikyu`
 --
 
 DELIMITER $$
 --
 -- Procedures
 --
-$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_admin` (IN `p_nama_admin` VARCHAR(100), IN `p_email_admin` VARCHAR(100), IN `p_no_telp_admin` VARCHAR(15), IN `p_password_admin` VARCHAR(255), IN `p_foto_admin` VARCHAR(255))   BEGIN
+    DECLARE id_admin_baru VARCHAR(10);
+    SET id_admin_baru = id_admin_baru(p_nama_admin);
+    
+    INSERT INTO admin (id_admin, nama_admin, email_admin, no_telp_admin, password_admin, tanggal_ditambahkan, foto_admin)
+    VALUES (id_admin_baru, p_nama_admin, p_email_admin, p_no_telp_admin, p_password_admin, CURRENT_TIMESTAMP, p_foto_admin);
+END$$
 
-$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_alat_pendakian` (IN `p_nama_alat` VARCHAR(100), IN `p_kategori` ENUM('primary','secondary','accessory','others'), IN `p_stok` INT, IN `p_harga_sewa` DECIMAL(10,0), IN `p_foto_produk` VARCHAR(255), IN `p_deskripsi` TEXT)   BEGIN
+    DECLARE id_alat_baru VARCHAR(10);
+    SET id_alat_baru = id_alat_baru(p_nama_alat, p_kategori);
+    
+    INSERT INTO alat_pendakian (id_alat, nama_alat, kategori, stok, harga_sewa, foto_produk, deskripsi)
+    VALUES (id_alat_baru, p_nama_alat, p_kategori, p_stok, p_harga_sewa, p_foto_produk, p_deskripsi);
+END$$
 
-$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_chat` (IN `p_id_user` VARCHAR(10), IN `p_id_admin` VARCHAR(10), IN `p_pesan` TEXT, IN `p_foto_chat` VARCHAR(255))   BEGIN
+    DECLARE id_chat_baru VARCHAR(10);
+    SET id_chat_baru = id_chat_baru();
+    
+    INSERT INTO chat (id_chat, id_user, id_admin, pesan, tanggal_kirim, foto_chat)
+    VALUES (id_chat_baru, p_id_user, p_id_admin, p_pesan, CURRENT_TIMESTAMP, p_foto_chat);
+END$$
 
-$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_favorit` (IN `p_id_user` VARCHAR(10), IN `p_id_alat` VARCHAR(10))   BEGIN
+    DECLARE id_favorit_baru VARCHAR(10);
+    SET id_favorit_baru = id_favorit_baru();
+    
+    INSERT INTO favorit (id_favorit, id_user, id_alat, tanggal_ditambahkan)
+    VALUES (id_favorit_baru, p_id_user, p_id_alat, CURRENT_TIMESTAMP);
+END$$
 
-$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_feedback` (IN `p_id_user` VARCHAR(10), IN `p_id_alat` VARCHAR(10), IN `p_komentar` TEXT, IN `p_rating` DECIMAL(2,1))   BEGIN
+    DECLARE id_feedback_baru VARCHAR(10);
+    SET id_feedback_baru = id_feedback_baru();
+    
+    INSERT INTO feedback (id_feedback, id_user, id_alat, komentar, rating, tanggal_feedback)
+    VALUES (id_feedback_baru, p_id_user, p_id_alat, p_komentar, p_rating, CURRENT_TIMESTAMP);
+END$$
 
-$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_informasi_pendakian` (IN `p_id_admin` VARCHAR(10), IN `p_nama_gunung` VARCHAR(100), IN `p_lokasi` VARCHAR(255), IN `p_harga_biaya` DECIMAL(10,0), IN `p_deskripsi` TEXT, IN `p_foto_gunung` VARCHAR(255))   BEGIN
+    DECLARE id_informasi_baru VARCHAR(10);
+    SET id_informasi_baru = id_informasi_baru();
+    
+    INSERT INTO informasi_pendakian (id_informasi, id_admin, nama_gunung, lokasi, harga_biaya, deskripsi, tanggal_update, foto_gunung)
+    VALUES (id_informasi_baru, p_id_admin, p_nama_gunung, p_lokasi, p_harga_biaya, p_deskripsi, CURRENT_TIMESTAMP, p_foto_gunung);
+END$$
 
-$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_penyewaan` (IN `p_id_user` VARCHAR(10), IN `p_seri_alat` VARCHAR(10), IN `p_tanggal_penyewaan` DATETIME, IN `p_tanggal_pengembalian` DATETIME, IN `p_total_harga` DECIMAL(10,0), IN `p_bukti_pembayaran` VARCHAR(255))   BEGIN
+    DECLARE id_penyewaan_baru VARCHAR(10);
+    SET id_penyewaan_baru = id_penyewaan_baru();
+    
+    INSERT INTO penyewaan (id_penyewaan, id_user, seri_alat, tanggal_penyewaan, tanggal_pengembalian, total_harga, status_sewa, bukti_pembayaran)
+    VALUES (id_penyewaan_baru, p_id_user, p_seri_alat, p_tanggal_penyewaan, p_tanggal_pengembalian, p_total_harga, 'menunggu', p_bukti_pembayaran);
+END$$
 
-$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_seri` (IN `p_id_alat` VARCHAR(10), IN `p_kondisi` ENUM('baru','baik','minus'), IN `p_status_produk` ENUM('tersedia','disewa','dalam perawatan','rusak'))   BEGIN
+    DECLARE id_seri_baru VARCHAR(10);
+    SET id_seri_baru = seri_alat_baru();
+    
+    INSERT INTO seri (seri_alat, id_alat, kondisi, status_produk, tanggal_ditambahkan)
+    VALUES (id_seri_baru, p_id_alat, p_kondisi, p_status_produk, CURRENT_TIMESTAMP);
+END$$
 
-$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_user` (IN `p_nama` VARCHAR(100), IN `p_email` VARCHAR(100), IN `p_password` VARCHAR(255), IN `p_no_telepon` VARCHAR(15), IN `p_alamat` TEXT, IN `p_foto_profil` VARCHAR(255))   BEGIN
+    DECLARE id_user_baru VARCHAR(10);
+    SET id_user_baru = id_user_baru(p_nama);
+    
+    INSERT INTO users (id_user, nama, email, password, no_telepon, alamat, tanggal_daftar, foto_profil)
+    VALUES (id_user_baru, p_nama, p_email, p_password, p_no_telepon, p_alamat, CURRENT_TIMESTAMP, p_foto_profil);
+END$$
 
 --
 -- Functions
 --
-$$
+CREATE DEFINER=`root`@`localhost` FUNCTION `id_admin_baru` (`nama_admin` VARCHAR(100)) RETURNS VARCHAR(10) CHARSET utf8mb4 DETERMINISTIC READS SQL DATA BEGIN
+    DECLARE id_admin_baru VARCHAR(10);
+    DECLARE huruf_depan VARCHAR(1);
+    DECLARE urutan INT;
+    DECLARE urutan_str VARCHAR(5);
 
-$$
+    SET huruf_depan = UPPER(LEFT(nama_admin, 1));
 
-$$
+    SELECT COUNT(*) INTO urutan FROM admin;
 
-$$
+    SET urutan = urutan + 1;
+    SET urutan_str = LPAD(urutan, 5, '0');
+    SET id_admin_baru = CONCAT(huruf_depan, urutan_str);
 
-$$
+    WHILE EXISTS (SELECT 1 FROM admin WHERE id_admin = id_admin_baru) DO
+        SET urutan = urutan + 1;
+        SET urutan_str = LPAD(urutan, 5, '0');
+        SET id_admin_baru = CONCAT(huruf_depan, urutan_str);
+    END WHILE;
 
-$$
+    RETURN id_admin_baru;
+END$$
 
-$$
+CREATE DEFINER=`root`@`localhost` FUNCTION `id_alat_baru` (`p_nama_alat` VARCHAR(100), `p_kategori` ENUM('primary','secondary','accessory','others')) RETURNS VARCHAR(10) CHARSET utf8mb4 DETERMINISTIC READS SQL DATA BEGIN
+    DECLARE huruf_kategori CHAR(1);
+    DECLARE huruf_nama CHAR(1);
+    DECLARE alat_baru INT;
+    DECLARE id_alat_baru VARCHAR(10);
+    DECLARE urutan_str VARCHAR(5);
 
-$$
+    SET huruf_kategori = UPPER(SUBSTRING(p_kategori, 1, 1));
+    SET huruf_nama = UPPER(SUBSTRING(p_nama_alat, 1, 1));
 
-$$
+    SELECT COUNT(*) INTO alat_baru FROM alat_pendakian WHERE kategori = p_kategori;
+
+    SET alat_baru = alat_baru + 1;
+    SET urutan_str = LPAD(alat_baru, 5, '0');
+    SET id_alat_baru = CONCAT(huruf_kategori, '-', huruf_nama, '-', urutan_str);
+
+    WHILE EXISTS (SELECT 1 FROM alat_pendakian WHERE id_alat = id_alat_baru) DO
+        SET alat_baru = alat_baru + 1;
+        SET urutan_str = LPAD(alat_baru, 5, '0');
+        SET id_alat_baru = CONCAT(huruf_kategori, '-', huruf_nama, '-', urutan_str);
+    END WHILE;
+
+    RETURN id_alat_baru;
+END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `id_chat_baru` () RETURNS VARCHAR(10) CHARSET utf8mb4 DETERMINISTIC READS SQL DATA BEGIN
+    DECLARE id_chat_baru VARCHAR(10);
+    DECLARE urutan INT;
+    DECLARE urutan_str VARCHAR(5);
+
+    SELECT COUNT(*) INTO urutan FROM chat;
+
+    SET urutan = urutan + 1;
+    SET urutan_str = LPAD(urutan, 5, '0');
+    SET id_chat_baru = CONCAT('C-', urutan_str);
+
+    WHILE EXISTS (SELECT 1 FROM chat WHERE id_chat = id_chat_baru) DO
+        SET urutan = urutan + 1;
+        SET urutan_str = LPAD(urutan, 5, '0');
+        SET id_chat_baru = CONCAT('C-', urutan_str);
+    END WHILE;
+
+    RETURN id_chat_baru;
+END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `id_favorit_baru` () RETURNS VARCHAR(10) CHARSET utf8mb4 DETERMINISTIC READS SQL DATA BEGIN
+    DECLARE id_favorit_baru VARCHAR(10);
+    DECLARE urutan INT;
+    DECLARE urutan_str VARCHAR(5);
+
+    SELECT COUNT(*) INTO urutan FROM favorit;
+
+    SET urutan = urutan + 1;
+    SET urutan_str = LPAD(urutan, 5, '0');
+    SET id_favorit_baru = CONCAT('K-', urutan_str);
+
+    WHILE EXISTS (SELECT 1 FROM favorit WHERE id_favorit = id_favorit_baru) DO
+        SET urutan = urutan + 1;
+        SET urutan_str = LPAD(urutan, 5, '0');
+        SET id_favorit_baru = CONCAT('K-', urutan_str);
+    END WHILE;
+
+    RETURN id_favorit_baru;
+END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `id_feedback_baru` () RETURNS VARCHAR(10) CHARSET utf8mb4 DETERMINISTIC READS SQL DATA BEGIN
+    DECLARE id_feedback_baru VARCHAR(10);
+    DECLARE urutan INT;
+    DECLARE urutan_str VARCHAR(5);
+
+    SELECT COUNT(*) INTO urutan FROM feedback;
+
+    SET urutan = urutan + 1;
+    SET urutan_str = LPAD(urutan, 5, '0');
+    SET id_feedback_baru = CONCAT('F-', urutan_str);
+
+    WHILE EXISTS (SELECT 1 FROM feedback WHERE id_feedback = id_feedback_baru) DO
+        SET urutan = urutan + 1;
+        SET urutan_str = LPAD(urutan, 5, '0');
+        SET id_feedback_baru = CONCAT('F-', urutan_str);
+    END WHILE;
+
+    RETURN id_feedback_baru;
+END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `id_informasi_baru` () RETURNS VARCHAR(10) CHARSET utf8mb4 DETERMINISTIC READS SQL DATA BEGIN
+    DECLARE id_informasi_baru VARCHAR(10);
+    DECLARE urutan INT;
+    DECLARE urutan_str VARCHAR(5);
+
+    SELECT COUNT(*) INTO urutan FROM informasi_pendakian;
+
+    SET urutan = urutan + 1;
+    SET urutan_str = LPAD(urutan, 5, '0');
+    SET id_informasi_baru = CONCAT('I-', urutan_str);
+
+    WHILE EXISTS (SELECT 1 FROM informasi_pendakian WHERE id_informasi = id_informasi_baru) DO
+        SET urutan = urutan + 1;
+        SET urutan_str = LPAD(urutan, 5, '0');
+        SET id_informasi_baru = CONCAT('I-', urutan_str);
+    END WHILE;
+
+    RETURN id_informasi_baru;
+END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `id_penyewaan_baru` () RETURNS VARCHAR(10) CHARSET utf8mb4 DETERMINISTIC READS SQL DATA BEGIN
+    DECLARE id_penyewaan_baru VARCHAR(10);
+    DECLARE urutan INT;
+    DECLARE urutan_str VARCHAR(5);
+
+    SELECT COUNT(*) INTO urutan FROM penyewaan;
+
+    SET urutan = urutan + 1;
+    SET urutan_str = LPAD(urutan, 5, '0');
+    SET id_penyewaan_baru = CONCAT('P-', urutan_str);
+
+    WHILE EXISTS (SELECT 1 FROM penyewaan WHERE id_penyewaan = id_penyewaan_baru) DO
+        SET urutan = urutan + 1;
+        SET urutan_str = LPAD(urutan, 5, '0');
+        SET id_penyewaan_baru = CONCAT('P-', urutan_str);
+    END WHILE;
+
+    RETURN id_penyewaan_baru;
+END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `id_user_baru` (`nama` VARCHAR(100)) RETURNS VARCHAR(10) CHARSET utf8mb4 DETERMINISTIC READS SQL DATA BEGIN
+    DECLARE id_user_baru VARCHAR(10);
+    DECLARE huruf_depan VARCHAR(1);
+    DECLARE urutan INT;
+    DECLARE urutan_str VARCHAR(5);
+
+    SET huruf_depan = UPPER(LEFT(nama, 1));
+
+    SELECT COUNT(*) INTO urutan FROM users;
+
+    SET urutan = urutan + 1;
+    SET urutan_str = LPAD(urutan, 5, '0');
+    SET id_user_baru = CONCAT(huruf_depan, urutan_str);
+
+    WHILE EXISTS (SELECT 1 FROM users WHERE id_user = id_user_baru) DO
+        SET urutan = urutan + 1;
+        SET urutan_str = LPAD(urutan, 5, '0');
+        SET id_user_baru = CONCAT(huruf_depan, urutan_str);
+    END WHILE;
+
+    RETURN id_user_baru;
+END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `seri_alat_baru` () RETURNS VARCHAR(10) CHARSET utf8mb4 DETERMINISTIC BEGIN
+    DECLARE seri_alat_baru VARCHAR(10);
+    DECLARE urutan INT;
+    DECLARE urutan_str VARCHAR(5);
+
+    SELECT COALESCE(MAX(CAST(SUBSTRING(seri_alat, 3) AS UNSIGNED)), 0) + 1 INTO urutan
+    FROM seri
+    WHERE seri_alat REGEXP '^S-[0-9]+$';
+
+    SET urutan_str = LPAD(urutan, 5, '0');
+
+    SET seri_alat_baru = CONCAT('S-', urutan_str);
+
+    RETURN seri_alat_baru;
+END$$
 
 DELIMITER ;
 
@@ -118,7 +341,7 @@ INSERT INTO `alat_pendakian` (`id_alat`, `nama_alat`, `kategori`, `stok`, `harga
 ('2', 'Tracking Pole', 'secondary', 67, '15000', '', 'Alat Bantuan'),
 ('A-J-00001', 'jam', 'accessory', 3, '21000', 'jam.jpg', 'jam'),
 ('O-K-00001', 'kompor', 'others', 6, '50000', 'kompor.jpg', 'untuk memasak'),
-('S-L-00002', 'lampu', 'secondary', 10, '50000', 'tenda4p.jpg', 'untuk penerangan');
+('S-L-00002', 'lampu', 'secondary', 11, '50000', 'tenda4p.jpg', 'untuk penerangan');
 
 --
 -- Triggers `alat_pendakian`
@@ -266,8 +489,7 @@ INSERT INTO `penyewaan` (`id_penyewaan`, `id_user`, `seri_alat`, `tanggal_penyew
 ('2', '1', '2', '2024-11-27 19:28:52', '2024-11-28 19:28:52', '30000', 'batal', NULL),
 ('P-00003', 'N00003', 'S-00003', '2024-12-07 10:00:00', '2024-12-08 10:00:00', '100000', 'selesai', 'bukti_pembayaran.jpg'),
 ('P-00004', 'N00003', 'S-00004', '2024-12-07 10:00:00', '2024-12-08 10:00:00', '100000', 'selesai', 'bukti_pembayaran.jpg'),
-('P-00005', 'W00004', 'S-00005', '2024-12-07 10:00:00', '2024-12-08 10:00:00', '100000', 'disewa', 'bukti_pembayaran.jpg'),
-('P-00006', 'W00004', 'S-00006', '2024-12-07 10:00:00', '2024-12-08 10:00:00', '100000', 'disewa', 'bukti_pembayaran.jpg');
+('P-00005', 'W00004', 'S-00005', '2024-12-07 10:00:00', '2024-12-08 10:00:00', '100000', 'disewa', 'bukti_pembayaran.jpg');
 
 --
 -- Triggers `penyewaan`
@@ -325,7 +547,7 @@ INSERT INTO `seri` (`seri_alat`, `id_alat`, `kondisi`, `status_produk`, `tanggal
 ('S-00003', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
 ('S-00004', 'S-L-00002', 'baru', 'tersedia', '2024-12-07 03:40:42'),
 ('S-00005', 'S-L-00002', 'baik', 'disewa', '2024-12-07 03:40:42'),
-('S-00006', 'S-L-00002', 'baik', 'disewa', '2024-12-07 03:40:42'),
+('S-00006', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
 ('S-00007', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
 ('S-00008', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
 ('S-00009', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
@@ -407,29 +629,6 @@ INSERT INTO `users` (`id_user`, `nama`, `email`, `password`, `no_telepon`, `alam
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `view_alat_dengan_favorit`
--- (See below for the actual view)
---
-CREATE TABLE `view_alat_dengan_favorit` (
-`jumlah_favorit` bigint
-,`nama_alat` varchar(100)
-);
-
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `view_alat_dengan_rating`
--- (See below for the actual view)
---
-CREATE TABLE `view_alat_dengan_rating` (
-`jumlah_feedback` bigint
-,`nama_alat` varchar(100)
-,`rata_rata_rating` decimal(6,5)
-);
-
--- --------------------------------------------------------
-
---
 -- Stand-in structure for view `view_bukti_pembayaran`
 -- (See below for the actual view)
 --
@@ -466,24 +665,6 @@ CREATE TABLE `view_foto_chat` (
 CREATE TABLE `view_foto_gunung` (
 `foto_gunung` varchar(255)
 );
-
--- --------------------------------------------------------
-
---
--- Structure for view `view_alat_dengan_favorit`
---
-DROP TABLE IF EXISTS `view_alat_dengan_favorit`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_alat_dengan_favorit`  AS SELECT `a`.`nama_alat` AS `nama_alat`, count(`f`.`id_favorit`) AS `jumlah_favorit` FROM (`alat_pendakian` `a` left join `favorit` `f` on((`a`.`id_alat` = `f`.`id_alat`))) GROUP BY `a`.`id_alat`, `a`.`nama_alat``nama_alat`  ;
-
--- --------------------------------------------------------
-
---
--- Structure for view `view_alat_dengan_rating`
---
-DROP TABLE IF EXISTS `view_alat_dengan_rating`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_alat_dengan_rating`  AS SELECT `a`.`nama_alat` AS `nama_alat`, coalesce(avg(`f`.`rating`),0) AS `rata_rata_rating`, count(`f`.`id_feedback`) AS `jumlah_feedback` FROM (`alat_pendakian` `a` left join `feedback` `f` on((`a`.`id_alat` = `f`.`id_alat`))) GROUP BY `a`.`id_alat`, `a`.`nama_alat``nama_alat`  ;
 
 -- --------------------------------------------------------
 
