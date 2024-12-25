@@ -65,7 +65,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             }
                                             ?>
                                         </div>
-                                        <p class="text-center mt-2 fs-6 fw-light"><?= number_format($produk->rata_rata_rating, 1); ?>/5</p>
+                                        <p class="text-center mt-2 fs-6 fw-light"><?= number_format($produk->rata_rata_rating, 1); ?>/5.0</p>
                                     </div>
                                 </div>
                             </div>

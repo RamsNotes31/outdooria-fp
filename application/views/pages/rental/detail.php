@@ -14,14 +14,17 @@
                         <div class="d-flex justify-content-center flex-sm-row flex-column mt-5">
                             <div class="d-flex justify-content-center align-items-center flex-column">
                                 <div class="d-flex">
-                                    <?php for ($i = 0; $i < floor($product['rata_rata_rating']); $i++): ?>
-                                        <i class="bi bi-star-fill text-warning fs-1"></i>
+                                    <?php for ($i = 0; $i < 5; $i++): ?>
+                                        <?php if ($product['rata_rata_rating'] - $i >= 1): ?>
+                                            <i class="bi bi-star-fill text-warning fs-1"></i>
+                                        <?php elseif ($product['rata_rata_rating'] - $i >= 0.5): ?>
+                                            <i class="bi bi-star-half text-warning fs-1"></i>
+                                        <?php else: ?>
+                                            <i class="bi bi-star text-muted fs-1"></i>
+                                        <?php endif; ?>
                                     <?php endfor; ?>
-                                    <?php if ($product['rata_rata_rating'] - floor($product['rata_rata_rating']) >= 0.5): ?>
-                                        <i class="bi bi-star-half text-warning fs-1"></i>
-                                    <?php endif; ?>
                                 </div>
-                                <p class="text-center mt-2 fs-4 fw-bold"><?= number_format($product['rata_rata_rating'], 1); ?>/5</p>
+                                <p class="text-center mt-2 fs-4"><?= number_format($product['rata_rata_rating'], 1); ?>/5.0</p>
                             </div>
                         </div>
                     </div>
@@ -135,11 +138,17 @@
                                 <div class="d-flex justify-content-between">
                                     <p class="card-text"><small class="text-muted">
                                             <?php
-                                            for ($i = 1; $i <= $review['rating']; $i++) {
-                                                echo '<i class="bi bi-star-fill text-warning"></i>';
-                                            }
-                                            if ($review['rating'] < 5) {
-                                                echo '<i class="bi bi-star-half text-warning"></i>';
+                                            $rating = floor($review['rating']);
+                                            $hasHalfStar = ($review['rating'] - $rating) >= 0.5;
+                                            for ($i = 1; $i <= 5; $i++) {
+                                                if ($i <= $rating) {
+                                                    echo '<i class="bi bi-star-fill text-warning"></i>';
+                                                } elseif ($hasHalfStar && $i == $rating + 1) {
+                                                    echo '<i class="bi bi-star-half text-warning"></i>';
+                                                    $hasHalfStar = false;
+                                                } else {
+                                                    echo '<i class="bi bi-star text-muted"></i>';
+                                                }
                                             }
                                             ?>
                                         </small></p>

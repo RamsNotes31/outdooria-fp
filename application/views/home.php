@@ -48,7 +48,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         }
                         ?>
                     </div>
-                    <p class="text-center mt-2 fs-4 fw-light"><?= number_format($average_rating, 1); ?>/5</p>
+                    <p class="text-center mt-2 fs-4 fw-light"><?= number_format($average_rating, 1); ?>/5.0</p>
                 </div>
             </div>
         </div>
@@ -120,7 +120,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <div class="d-block">
                                             <!-- Tanggal Feedback -->
                                             <p class="card-text fw-light"><small
-                                                    class="text-muted"><?= $feedback->tanggal_feedback; ?></small></p>
+                                                    class="text-muted">
+                                                    <?= date('F d, Y H:i:s', strtotime($feedback->tanggal_feedback)); ?>
+                                                    </small></p>
                                             <!-- Nama Alat dan Rating -->
                                             <p class="card-text me-5"><small class="text-muted fw-bold"><?= $feedback->nama_alat; ?></small>
                                                 <?php

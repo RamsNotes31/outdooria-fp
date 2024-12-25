@@ -31,6 +31,7 @@ class Gunung_model extends CI_Model
     {
         $this->db->select('informasi_pendakian.id_informasi, informasi_pendakian.nama_gunung, informasi_pendakian.harga_biaya, informasi_pendakian.lokasi, informasi_pendakian.foto_gunung');
         $this->db->from('informasi_pendakian');
+        $this->db->where_not_in('informasi_pendakian.id_informasi', $this->uri->segment(3));
         $this->db->order_by('rand()');
         $this->db->limit($limit);
         $query = $this->db->get();

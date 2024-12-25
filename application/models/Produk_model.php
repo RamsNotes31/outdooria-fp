@@ -78,6 +78,7 @@ class Produk_model extends CI_Model
     ');
         $this->db->from('alat_pendakian');
         $this->db->join('feedback', 'feedback.id_alat = alat_pendakian.id_alat', 'left');
+        $this->db->where_not_in('alat_pendakian.id_alat', $this->uri->segment(3)); // Filter tidak termasuk id alat yang sedang diakses
         $this->db->group_by('alat_pendakian.id_alat');
         $this->db->order_by('RAND()'); // Urutan acak
         $this->db->limit($limit); // Batasi jumlah produk
