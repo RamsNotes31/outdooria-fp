@@ -15,8 +15,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <option value="2">Price Descending</option>
                     <option value="3">Popularity</option>
                     <option value="4">Rating</option>
-                    <option value="5">New</option>
-                    <option value="6">Favorit</option>
+                    <option value="5">Favorit</option>
                 </select>
             </div>
         </div>
@@ -51,28 +50,41 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <div class="card card-neoraised mb-3 py-3 px-3 d-flex flex-column" style="height: 100%;">
                         <div class="row">
                             <div class="col-md-6">
-                                <!-- Mengambil gambar produk -->
-                                <img src="<?php echo base_url("public/img/produk/" . $produk->foto_produk); ?>" class="img-fluid border border-dark border-3 rounded-3 card-neoraised" alt="<?= $produk->nama_alat; ?>" style="object-fit: cover; height: 200px;">
+                                <!-- Menampilkan gambar produk -->
+                                <img src="<?= base_url("public/img/produk/" . $produk['foto_produk']); ?>"
+                                    class="img-fluid border border-dark border-3 rounded-3 card-neoraised"
+                                    alt="<?= $produk['nama_alat']; ?>"
+                                    style="object-fit: cover; height: 200px;">
                                 <div class="d-flex justify-content-center mt-3 mb-md-2">
-                                    <a href="whist.php" class="btn btn-sm btn-neoraised btn-danger me-md-5 me-4">
+                                    <!-- Tombol Wishlist -->
+                                    <a href="<?= base_url('wishlist/add/' . $produk['id_alat']); ?>"
+                                        class="btn btn-sm btn-neoraised btn-danger me-md-5 me-4">
                                         <i class="bi bi-heart text-white fs-5"></i>
                                     </a>
-                                    <a href="<?= base_url('produk/detail/' . $produk->id_alat); ?>" class="btn btn-sm btn-neoraised btn-primary">
+                                    <!-- Tombol Detail -->
+                                    <a href="<?= base_url('produk/detail/' . $produk['id_alat']); ?>"
+                                        class="btn btn-sm btn-neoraised btn-primary">
                                         <i class="bi bi-cart text-white fs-5"></i>
                                     </a>
                                 </div>
                             </div>
                             <div class="col-md-6 d-flex flex-column justify-content-between">
-                                <!-- Menjaga tinggi card tetap konsisten -->
-                                <h3 class="card-title mt-md-3 fw-bolder mt-4 mb-3 text-center" style="min-height: 60px;"><?= $produk->nama_alat; ?></h3>
+                                <!-- Nama Produk -->
+                                <h3 class="card-title mt-md-3 fw-bolder mt-4 mb-3 text-center" style="min-height: 60px;"><?= $produk['nama_alat']; ?></h3>
 
-                                <h4 class="card-title mt-md-3 mb-3 text-center fw-bold">Stok <span class="badge rounded-pill text-bg-success card-neoraised fw-bold"><?= $produk->stok; ?></span></h4>
+                                <!-- Informasi Stok -->
+                                <h4 class="card-title mt-md-3 mb-3 text-center fw-bold">
+                                    Stok
+                                    <span class="badge rounded-pill text-bg-success card-neoraised fw-bold"><?= $produk['stok']; ?></span>
+                                </h4>
+
+                                <!-- Rating Produk -->
                                 <div class="d-flex justify-content-center flex-sm-row flex-column">
                                     <div class="d-flex justify-content-center align-items-center flex-column">
                                         <div class="d-flex">
                                             <?php
-                                            $rating = floor($produk->rata_rata_rating); // Ambil nilai bulat bawah dari rating
-                                            $hasHalfStar = ($produk->rata_rata_rating - $rating) >= 0.5; // Cek jika ada bintang setengah
+                                            $rating = $produk['rata_rata_rating'] !== null ? floor($produk['rata_rata_rating']) : 0; // Pastikan rating tidak null sebelum floor
+                                            $hasHalfStar = ($produk['rata_rata_rating'] - $rating) >= 0.5; // Cek jika ada bintang setengah
                                             for ($i = 1; $i <= 5; $i++) {
                                                 if ($i <= $rating) {
                                                     echo '<i class="bi bi-star-fill text-warning fs-4"></i>';
@@ -85,15 +97,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             }
                                             ?>
                                         </div>
-                                        <p class="text-center mt-2 fs-6 fw-light"><?= number_format($produk->rata_rata_rating, 1); ?>/5.0</p>
+                                        <p class="text-center mt-2 fs-6 fw-light"><?= is_null($produk['rata_rata_rating']) ? '0.0' : number_format((float) $produk['rata_rata_rating'], 1); ?>/5.0</p>
                                     </div>
                                 </div>
+
+                                <!-- Informasi Favorit dan Popularitas -->
+
                             </div>
                         </div>
                     </div>
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
-            <p class="text-center">No produk data available.</p>
+            <p class="text-center">Tidak ada produk tersedia.</p>
         <?php endif; ?>
     </div>

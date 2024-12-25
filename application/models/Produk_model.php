@@ -102,4 +102,86 @@ class Produk_model extends CI_Model
         $this->db->from('alat_pendakian'); // Nama tabel Anda
         return $this->db->get()->result();
     }
+
+    // Mendapatkan data produk dengan data tambahan untuk sorting
+    public function get_produk_with_criteria($kategori, $search, $sort)
+    {
+        $this->db->select('
+            alat_pendakian.id_alat,
+            alat_pendakian.nama_alat,
+            alat_pendakian.harga_sewa,
+            alat_pendakian.stok,
+            alat_pendakian.foto_produk,
+            favorit_count.favorit_count,
+            popularity_count.popularity_count,
+            feedback.rata_rata_rating
+        ');
+        $this->db->from('alat_pendakian');
+
+        // Subquery untuk favorit
+        $this->db->join(
+            '
+            (SELECT id_alat, COUNT(*) AS favorit_count
+             FROM favorit
+             GROUP BY id_alat
+            ) favorit_count',
+            'favorit_count.id_alat = alat_pendakian.id_alat',
+            'left'
+        );
+
+        // Subquery untuk popularitas (penyewaan)
+        $this->db->join(
+            '
+            (SELECT seri.id_alat, COUNT(*) AS popularity_count
+             FROM penyewaan
+             JOIN seri ON penyewaan.seri_alat = seri.seri_alat
+             GROUP BY seri.id_alat
+            ) popularity_count',
+            'popularity_count.id_alat = alat_pendakian.id_alat',
+            'left'
+        );
+
+        // Subquery untuk rating
+        $this->db->join(
+            '
+            (SELECT id_alat, AVG(rating) AS rata_rata_rating
+             FROM feedback
+             GROUP BY id_alat
+            ) feedback',
+            'feedback.id_alat = alat_pendakian.id_alat',
+            'left'
+        );
+
+        // Filter berdasarkan kategori
+        if (!empty($kategori) && $kategori !== '0') {
+            $this->db->where('alat_pendakian.kategori', $kategori);
+        }
+
+        // Filter berdasarkan pencarian
+        if (!empty($search)) {
+            $this->db->like('alat_pendakian.nama_alat', $search);
+        }
+
+        // Sorting berdasarkan pilihan
+        if ($sort) {
+            if ($sort == '1') { // Harga naik
+                $this->db->order_by('alat_pendakian.harga_sewa', 'ASC');
+            } elseif ($sort == '2') { // Harga turun
+                $this->db->order_by('alat_pendakian.harga_sewa', 'DESC');
+            } elseif ($sort == '3') { // Popularitas
+                $this->db->order_by('popularity_count', 'DESC');
+            } elseif ($sort == '4') { // Rating
+                $this->db->order_by('rata_rata_rating', 'DESC');
+            } elseif ($sort == '5') { // Favorit
+                $this->db->order_by('favorit_count', 'DESC');
+            } else { // Acak
+                $this->db->order_by('rand()');
+            }
+        } else {
+            $this->db->order_by('rand()');
+        }
+
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }

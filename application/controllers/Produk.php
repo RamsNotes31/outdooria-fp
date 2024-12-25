@@ -15,16 +15,28 @@ class Produk extends CI_Controller
     public function index()
     {
         $data['title'] = 'Hikyu | Rental';
-        $this->load->view('templates/header', $data);
         $this->load->model('Produk_model');
-        $data['produks'] = $this->Produk_model->get_produk_with_feedback(); // Ambil data produk dan rating
-        $data['alat_pendakian'] = $this->Produk_model->get_all_kategori(); // Ambil data alat_pendakian
+
+        // Ambil parameter dari form
+        $kategori = $this->input->post('kategori');
+        $search = $this->input->post('search');
+        $sort = $this->input->post('sort');
+
+        // Ambil data alat pendakian (kategori)
+        $data['alat_pendakian'] = $this->Produk_model->get_all_kategori();
+
+        // Ambil produk berdasarkan filter
+        $data['produks'] = $this->Produk_model->get_produk_with_criteria($kategori, $search, $sort);
+
         if (empty($data['produks'])) {
             log_message('error', 'No produk data available for view.');
         }
+
+        $this->load->view('templates/header', $data);
         $this->load->view('pages/rental/rental', $data); // Kirim data ke view
         $this->load->view('templates/footer');
     }
+
 
     // Menampilkan detail produk berdasarkan id_produk
     public function detail($product_id = null)
