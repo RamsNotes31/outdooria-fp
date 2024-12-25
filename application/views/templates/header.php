@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="./assets/img/icon.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="<?= base_url('public/img/icon.png'); ?>" type="image/png" sizes="32x32">
     <title><?= $title; ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -32,7 +32,7 @@
                 <div class="collapse navbar-collapse align-items-center  justify-content-start mb-4 order-2 order-lg-1" id="navbarColor01"">
                 <a href=" <?= base_url('home'); ?>" class="btn btn-lg btn-neoraised btn-light mt-3 me-3 fw-bold">Home</a>
                     <a href="<?= base_url('produk'); ?>" class="btn btn-lg btn-neoraised btn-light mt-3 me-3 fw-bold">Rental</a>
-                    <a href="gunung.php" class="btn btn-lg btn-neoraised btn-light mt-3 me-3 fw-bold">Information</a>
+                    <a href="<?= base_url('gunung'); ?>" class="btn btn-lg btn-neoraised btn-light mt-3 me-3 fw-bold">Information</a>
                     <div class="btn-group btn-group-neoraised mt-3 me-3" role="group" aria-label="Button group with nested dropdown">
                         <button type="button" class="btn btn-lg btn-light fw-bold">Account</button>
                         <div class="btn-group" role="group">

@@ -9,7 +9,7 @@ class Home_model extends CI_Model
 
     public function get_feedback_with_user($limit = 3)
     {
-        $this->db->select('users.nama AS nama_user, alat_pendakian.nama_alat, feedback.komentar, feedback.rating, feedback.tanggal_feedback');
+        $this->db->select('users.nama AS nama_user, foto_profil, alat_pendakian.nama_alat, feedback.komentar, feedback.rating, feedback.tanggal_feedback');
         $this->db->from('feedback');
         $this->db->join('alat_pendakian', 'feedback.id_alat = alat_pendakian.id_alat');
         $this->db->join('users', 'feedback.id_user = users.id_user'); // Join ke tabel users

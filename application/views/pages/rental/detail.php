@@ -4,7 +4,7 @@
         <div class="col-md-6 d-flex justify-content-center mb-5 align-items-center">
             <div class="row">
                 <div class="col-md-12 px-5 text-center">
-                    <img src="<?= base_url('assets/img/' . $product['foto_produk']); ?>" class="img-fluid border border-dark border-3 rounded-5 card-neoraised" alt="<?= $product['nama_alat']; ?>">
+                    <img src="<?= base_url('public/img/produk/' . $product['foto_produk']); ?>" class="img-fluid border border-dark border-3 rounded-5 card-neoraised" alt="<?= $product['nama_alat']; ?>">
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-danger btn-neoraised btn-lg mt-4 fw-bolder">
                             Add to Wishlist<i class="bi bi-heart-fill"></i>
@@ -76,7 +76,7 @@
                         <div class="col-6 col-sm-4 col-lg-6">
                             <div class="card card-neoraised py-2 px-2 mb-4">
                                 <h3 class="card-title text-center mt-2 mb-3 fw-bold"><?= $product['nama_alat']; ?></h3>
-                                <img src="<?= base_url('assets/img/' . $product['foto_produk']); ?>"
+                                <img src="<?= base_url('public/img/produk/' . $product['foto_produk']); ?>"
                                     class="img-fluid border border-dark border-3 rounded-3 card-neoraised"
                                     alt="<?= $product['nama_alat']; ?>">
                                 <div class="d-flex justify-content-center mt-3 mb-md-2">
@@ -129,8 +129,8 @@
                         <div class="card card-neoraised p-3 mb-3">
                             <div class="d-flex">
                                 <!-- Gambar User (dapat disesuaikan dengan gambar pengguna yang terhubung) -->
-                                <img src="<?= $review['foto_profil']; ?>" alt="<?= $review['nama']; ?>" class="rounded-circle me-2 mb-3 border border-2 border-dark" width="32" height="32">
-                                <h5 class="card-title fw-bold"><?= $review['nama']; ?></h5>
+                                <img src="<?= base_url('public/img/user/' . $review['foto_profil']); ?>" alt="<?= $review['nama']; ?>" class="rounded-circle me-2 mb-3 border border-2 border-dark card-neoraised" width="40" height="40">
+                                <h5 class="card-title fw-bold align-self-center"><?= $review['nama']; ?></h5>
                             </div>
                             <p class="card-text"><?= '"' . htmlspecialchars($review['komentar']) . '"'; ?></p>
                             <div class="d-flex justify-content-between">

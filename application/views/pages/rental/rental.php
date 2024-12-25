@@ -1,3 +1,7 @@
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+?>
+
 <div class="container mt-5">
     <form class="d-flex mb-5" role="search">
         <a href="<?= base_url('home'); ?>" class="btn btn-primary btn-neoraised fw-bold me-2" ">Back</a>
@@ -28,7 +32,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <!-- Mengambil gambar produk -->
-                                <img src="<?php echo base_url("public/img/" . $produk->foto_produk); ?>" class="img-fluid border border-dark border-3 rounded-3 card-neoraised" alt="<?= $produk->nama_alat; ?>" style="object-fit: cover; height: 200px;">
+                                <img src="<?php echo base_url("public/img/produk/" . $produk->foto_produk); ?>" class="img-fluid border border-dark border-3 rounded-3 card-neoraised" alt="<?= $produk->nama_alat; ?>" style="object-fit: cover; height: 200px;">
                                 <div class="d-flex justify-content-center mt-3 mb-md-2">
                                     <a href="whist.php" class="btn btn-sm btn-neoraised btn-danger me-md-5 me-4">
                                         <i class="bi bi-heart text-white fs-5"></i>

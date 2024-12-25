@@ -20,6 +20,7 @@ class Produk_model extends CI_Model
         $this->db->from('alat_pendakian');
         $this->db->join('feedback', 'feedback.id_alat = alat_pendakian.id_alat', 'left'); // Left join untuk tetap menampilkan produk tanpa feedback
         $this->db->group_by('alat_pendakian.id_alat'); // Kelompokkan berdasarkan ID alat
+        $this->db->order_by('RAND()'); // Acak produk
         $query = $this->db->get();
 
         // Debugging
@@ -29,6 +30,7 @@ class Produk_model extends CI_Model
 
         return $query->result(); // Pastikan selalu mengembalikan array
     }
+
 
     public function get_produk_by_id($id_alat)
     {

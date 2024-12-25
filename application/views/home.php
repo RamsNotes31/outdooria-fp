@@ -1,3 +1,7 @@
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+?>
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-lg-6 d-flex align-items-center">
@@ -104,12 +108,12 @@
                                     <div class="mx-3 my-3">
                                         <div class="d-flex justify-space-between">
                                             <!-- Gambar Profil Placeholder -->
-                                            <img src="https://via.placeholder.com/32"
+                                            <img src="<?= base_url('public/img/user/' . $feedback->foto_profil); ?>" \
                                                 alt="<?= $feedback->nama_user; ?>"
-                                                class="rounded-circle me-2 mb-3 border border-2 border-dark"
-                                                width="32" height="32">
+                                                class="rounded-circle me-2 mb-3 border border-2 border-dark card-neoraised"
+                                                width="40" height="40">
                                             <!-- Nama User -->
-                                            <h5 class="card-title fw-bold"><?= $feedback->nama_user; ?></h5>
+                                            <h5 class="card-title fw-bold align-self-center"><?= $feedback->nama_user; ?></h5>
                                         </div>
                                         <!-- Komentar -->
                                         <p class="card-text fw-light">"<?= $feedback->komentar; ?>"</p>
