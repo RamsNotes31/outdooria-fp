@@ -1,3 +1,9 @@
 $(document).ready(function() {
-    $('#example').DataTable();
+    $('table.display').DataTable();
 });
+
+        $(document).ready(function() {
+            $('#datatable1').DataTable();
+            $('#datatable2').DataTable();
+        });
+        

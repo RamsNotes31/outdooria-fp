@@ -1,9 +1,9 @@
 <footer class="mt-5 py-3">
     <div class="container">
         <div class="row">
-            <div class="col-md-6 mx-auto text-center">
+            <div class="col-md-6 mx-auto text-center text-black">
                 &copy; Copyright 2024,
-                <a href="https://github.com/RamsNotes31/outdooria-fp" class="text-decoration-none text-dark fw-bold" target="_blank">Outdooria</a>.
+                <a href="https://github.com/RamsNotes31/outdooria-fp" class="text-decoration-none text-black fw-bold" target="_blank">Outdooria</a>.
             </div>
         </div>
     </div>
@@ -23,6 +23,17 @@
             top: 0,
             behavior: "smooth"
         });
+    });
+
+        $(document).ready(function() {
+            $('#datatable1').DataTable();
+            $('#datatable2').DataTable();
+        });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#datatable1').DataTable();
+        $('#datatable2').DataTable();
     });
 </script>
 
