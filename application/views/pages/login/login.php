@@ -1,13 +1,13 @@
-<div class="d-flex justify-content-center align-items-center">
-    <div class="col-lg-6 col-md-6 col-sm-9 col-10 card bg-light card-neoraised mx-auto my-5 p-3 rounded-4 card-neoraised">
+<div class="d-flex justify-content-center align-items-center py-5">
+    <div class="col-lg-6 col-md-6 col-sm-9 col-10 card bg-light card-neoraised mx-auto my-5 p-3 rounded-4 card-neoraised border border-3 border-dark">
         <h1 class="fw-bolder display-5 mb-3 text-center text-dark mt-3">Login First!</h1>
-        <form method="post" action="login_action.php">
+        <form method="post" action="<?= base_url('login/login_action') ?>">
             <div class="mb-3">
-                <label for="username" class="form-label d-block fs-3 mt-3 fw-bold">Email</label>
-                <input type="email" id="username" name="username" class="form-control fs-3 card-neoraised" required>
+                <label for="email" class="form-label d-block fs-3 mt-3 fw-bold">Email</label>
+                <input type="email" id="email" name="email" class="form-control fs-3 card-neoraised" required>
             </div>
             <div class="mb-3">
-                <label for="username" class="form-label d-block fs-3 fw-bold">Password</label>
+                <label for="password" class="form-label d-block fs-3 fw-bold">Password</label>
                 <input type="password" id="password" name="password" class="form-control fs-3 card-neoraised" required>
             </div>
             <div class="form-check mb-sm-4 mb-3 ms-3 ">

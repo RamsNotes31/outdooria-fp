@@ -62,7 +62,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="d-flex justify-content-center flex-lg-row flex-column">
                 <div class="d-flex justify-content-center align-items-center mb-4 flex-lg-row flex-column">
                     <div class="d-flex flex-column align-items-center mx-4">
-                        <img src="https://fotomhs.amikom.ac.id/2023/23_12_2962.jpg" class="rounded-circle img-fluid img-thumbnail border border-dark border-3 card-neoraised" alt="Marcell" style="width: 10rem">
+                        <img src="https://fotomhs.amikom.ac.id/2023/23_12_2966.jpg" class="rounded-circle img-fluid img-thumbnail border border-dark border-3 card-neoraised" alt="Marcell" style="width: 10rem">
                         <p class="text-center fs-1 fw-bolder">Marcell</p>
                         <div class="alert alert-danger-neoraised alert-danger fw-bolder" role="alert">
                             23.12.2966

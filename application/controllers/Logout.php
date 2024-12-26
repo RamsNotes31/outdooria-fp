@@ -13,4 +13,10 @@ class Logout extends CI_Controller
         $this->session->sess_destroy();
         redirect('../login');
     }
+
+    public function logout()
+    {
+        $this->session->sess_destroy(); // Hapus semua sesi
+        redirect('../login'); // Redirect ke halaman login
+    }
 }

@@ -76,8 +76,8 @@
                 <div class="row">
                     <?php if (!empty($products)): ?>
                         <?php foreach ($products as $product): ?>
-                            <div class="col-6 col-sm-4 col-lg-6">
-                                <div class="card card-neoraised py-2 px-2 mb-4">
+                            <div class="col-6 col-sm-4 col-lg-6 mt-5">
+                                <div class="card card-neoraised py-2 px-2 mb-4 d-flex flex-column" style="height: 100%;">
                                     <h3 class="card-title text-center mt-2 mb-3 fw-bold"><?= $product['nama_alat']; ?></h3>
                                     <img src="<?= base_url('public/img/produk/' . $product['foto_produk']); ?>"
                                         class="img-fluid border border-dark border-3 rounded-3 card-neoraised"

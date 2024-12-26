@@ -1,17 +1,22 @@
 <?php
+$CI = &get_instance(); // Mendapatkan instance CodeIgniter
+$CI->load->library('session'); // Memastikan library session dimuat
 
+$role = $CI->session->userdata('role'); // Mendapatkan role dari session
 
-if (empty($_SESSION)) {
-    // echo '<a class="dropdown-item fw-bold" href="' . base_url("login") . '">Login</a>';
-    echo '<a class="dropdown-item fw-bold" href="' . base_url("dashboard") . '">Dashboard</a>';
-    echo '<a class="dropdown-item fw-bold" href="' . base_url("logout") . '">Log Out</a>';
-} else {
-    $result = $conn->query("SELECT nama_admin FROM admin WHERE nama_admin = '$_SESSION[nama]'");
-    if ($result->num_rows > 0) {
-        echo '<a class="dropdown-item fw-bold" href="' . base_url("dashboard") . '">Dashboard</a>';
-        echo '<a class="dropdown-item fw-bold" href="' . base_url("logout") . '">Log Out</a>';
-    } else {
-        echo '<a class="dropdown-item fw-bold" href="akun.php">Settings</a>';
-        echo '<a class="dropdown-item fw-bold" href="chatting.php">Chat Admin</a>';
-    }
-}
+if (!$CI->session->userdata('logged_in')) : ?>
+    <!-- Jika session kosong -->
+    <a class="dropdown-item fw-bold" href="<?php echo base_url('login'); ?>">Login</a>
+<?php else : ?>
+    <!-- Jika session ada -->
+    <?php if ($role == 'admin') : ?>
+        <!-- Opsi untuk admin -->
+        <a class="dropdown-item fw-bold" href="<?php echo base_url('dashboard'); ?>">Dashboard</a>
+        <a class="dropdown-item fw-bold" href="<?php echo base_url('logout'); ?>">Log Out</a>
+    <?php elseif ($role == 'user') : ?>
+        <!-- Opsi untuk user -->
+        <a class="dropdown-item fw-bold" href="<?php echo base_url('logout'); ?>">Log Out</a>
+        <a class="dropdown-item fw-bold" href="<?php echo base_url('akun'); ?>">Settings</a>
+        <a class="dropdown-item fw-bold" href="<?php echo base_url('chatting'); ?>">Chat Admin</a>
+    <?php endif; ?>
+<?php endif; ?>
