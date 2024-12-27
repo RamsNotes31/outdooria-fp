@@ -29,6 +29,8 @@ class Gunung extends CI_Controller
         if (empty($data['informasi']) or empty($data['lokasi_list'])) {
             log_message('error', 'No Gunung data available for view.');
         }
+
+        $data['img_gunung'] = $this->Gunung_model->get_all_foto_gunung();
         $this->load->view('pages/infor/gunung', $data);
         $this->load->view('templates/footer');
     }

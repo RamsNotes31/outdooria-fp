@@ -14,7 +14,14 @@
     <script type="module" crossorigin src="<?= base_url('public/js/all.min.js'); ?>"></script>
     <link rel="stylesheet" crossorigin href="<?= base_url('public/css/all.css'); ?>">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
+    <script defer src="<?= base_url('public/js/all.js'); ?>"></script>
+    <script src="
+https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js
+"></script>
+    <link href="
+https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css
+" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-auto-scroll@0.5.3/dist/js/splide-extension-auto-scroll.min.js"></script>
 </head>
 <style>
     .scroll-top {

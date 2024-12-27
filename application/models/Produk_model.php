@@ -13,6 +13,7 @@ class Produk_model extends CI_Model
             alat_pendakian.foto_produk,
             alat_pendakian.id_alat,
             alat_pendakian.nama_alat,
+            alat_pendakian.kategori,
             alat_pendakian.harga_sewa,
             alat_pendakian.stok,
             COALESCE(AVG(feedback.rating), 0) AS rata_rata_rating
@@ -44,6 +45,7 @@ class Produk_model extends CI_Model
         $this->db->select('
             alat_pendakian.foto_produk,
             alat_pendakian.id_alat,
+            alat_pendakian.kategori,
             alat_pendakian.nama_alat,
             alat_pendakian.harga_sewa,
             alat_pendakian.stok,
@@ -72,6 +74,7 @@ class Produk_model extends CI_Model
         alat_pendakian.id_alat,
         alat_pendakian.nama_alat,
         alat_pendakian.harga_sewa,
+            alat_pendakian.kategori,
         alat_pendakian.stok,
         alat_pendakian.deskripsi,
         COALESCE(AVG(feedback.rating), 0) AS rata_rata_rating
@@ -110,6 +113,7 @@ class Produk_model extends CI_Model
             alat_pendakian.id_alat,
             alat_pendakian.nama_alat,
             alat_pendakian.harga_sewa,
+            alat_pendakian.kategori,
             alat_pendakian.stok,
             alat_pendakian.foto_produk,
             favorit_count.favorit_count,
@@ -183,5 +187,101 @@ class Produk_model extends CI_Model
 
         $query = $this->db->get();
         return $query->result_array();
+    }
+
+    public function get_all_foto_alat()
+    {
+        $this->db->select('view_foto_alat.*');
+        $this->db->from('view_foto_alat');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+
+
+    public function tambah_favorit($id_user, $id_alat)
+    {
+        $this->db->select('id_user, id_alat'); // Pastikan kolom sesuai dengan database
+        $this->db->from('favorit'); // Ganti 'favorit' dengan nama tabel favorit Anda
+        $this->db->where('id_user', $id_user);
+        $this->db->where('id_alat', $id_alat);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) { // Jika data ada
+            $this->db->where('id_user', $id_user);
+            $this->db->where('id_alat', $id_alat);
+            $this->db->delete('favorit');
+        } else { // Jika data tidak ada
+            $this->db->query("CALL tambah_favorit(?, ?)", array($id_user, $id_alat));
+        }
+    }
+
+    public function get_favorit_by_user($id_user)
+    {
+        $this->db->select('id_alat'); // Pilih kolom id_alat
+        $this->db->from('favorit'); // Tabel favorit
+        $this->db->where('id_user', $id_user); // Kondisi berdasarkan id_user
+        $query = $this->db->get();
+
+        return $query->result_array(); // Kembalikan daftar alat favorit
+    }
+
+
+    public function tambah_feedback($id_user, $id_alat, $komentar, $rating)
+    {
+        // Panggil stored procedure menggunakan CALL
+        $this->db->query("CALL tambah_feedback(?, ?, ?, ?)", array($id_user, $id_alat, $komentar, $rating));
+
+        // Periksa apakah query berhasil
+        if ($this->db->affected_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Metode untuk mendapatkan ID alat berdasarkan nama alat
+    public function get_id_by_product($nama_alat)
+    {
+        $this->db->select('id_alat'); // Pastikan kolom sesuai dengan database
+        $this->db->from('alat_pendakian'); // Nama tabel alat
+        $this->db->where('nama_alat', $nama_alat);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->row()->id_alat; // Kembalikan ID alat
+        } else {
+            return null; // Jika tidak ditemukan
+        }
+    }
+
+    public function get_id_by_name($nama)
+    {
+        $this->db->select('id_user');
+        $this->db->from('users');
+        $this->db->where('nama', $nama);
+        $query = $this->db->get();
+
+        return $query->num_rows() > 0 ? $query->row()->id_user : null;
+    }
+
+    public function get_price($seri_alat)
+    {
+        $this->db->select('harga_sewa');
+        $this->db->from('alat_pendakian');
+        $this->db->join('seri', 'alat_pendakian.id_alat = seri.id_alat');
+        $this->db->where('seri.seri_alat', $seri_alat);
+        $query = $this->db->get();
+
+        return $query->num_rows() > 0 ? $query->row()->harga_sewa : 0;
+    }
+
+    public function add_rental($id_user, $seri_alat, $tanggal_pemesanan, $tanggal_pengembalian, $total_harga)
+    {
+        $query = $this->db->query(
+            "CALL tambah_penyewaan(?, ?, ?, ?, ?)",
+            [$id_user, $seri_alat, $tanggal_pemesanan, $tanggal_pengembalian, $total_harga]
+        );
+
+        return $this->db->affected_rows() > 0;
     }
 }

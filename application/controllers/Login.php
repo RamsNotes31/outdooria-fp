@@ -40,6 +40,7 @@ class Login extends CI_Controller
             // Simpan data login ke dalam session
             $session_data = [
                 'role' => $result->role, // Role: user/admin
+                'nama' => $result->nama, // User name
                 'logged_in' => TRUE // Status login
             ];
 

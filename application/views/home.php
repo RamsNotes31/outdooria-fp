@@ -48,7 +48,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         }
                         ?>
                     </div>
-                    <p class="text-center mt-2 fs-4 fw-light"><?= number_format($average_rating, 1); ?>/5.0</p>
+                    <p class="text-center mt-2 fs-4 fw-light"><?= $average_rating !== null ? number_format($average_rating, 1) : '0.0'; ?>/5.0</p>
                 </div>
             </div>
         </div>

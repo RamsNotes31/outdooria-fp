@@ -2,6 +2,52 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 
+<div class="container-fluid mt-5">
+    <h1 class="text-center fw-bolder mb-5">Our Products</h1>
+
+    <div class="row">
+        <div class="col-12 ">
+            <div class="card-body">
+                <div class="splide" id="splide" role="group" aria-label="Main Slider">
+                    <div class="splide__track">
+                        <ul class="splide__list">
+                            <?php foreach ($img_alat as $view) : ?>
+                                <li class="splide__slide d-flex align-items-center justify-content-center me-5">
+                                    <?php if (!empty($view['foto_produk'])): ?>
+                                        <img src="<?= base_url('public/img/produk/' . $view['foto_produk']); ?>" alt="Slide" class="img-fluid mb-3 card-neoraised border border-dark border-3 rounded-3" height="1000" width="1000">
+                                    <?php else: ?>
+                                        <p>Gambar tidak tersedia.</p>
+                                    <?php endif; ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        new Splide('.splide').mount(window.splide.Extensions);
+        const splide = new Splide('.splide', {
+            type: 'loop',
+            arrows: false,
+            focus: 'center',
+            pagination: false,
+            perPage: 1,
+            autoScroll: {
+                speed: 1,
+            },
+        });
+
+        splide.mount()
+    });
+</script>
+
 <div class="container mt-5">
     <form class="mb-5" role="search" method="post" action="<?= base_url('produk'); ?>">
         <div class="row mb-3">
@@ -53,14 +99,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <!-- Menampilkan gambar produk -->
                                 <img src="<?= base_url("public/img/produk/" . $produk['foto_produk']); ?>"
                                     class="img-fluid border border-dark border-3 rounded-3 card-neoraised"
-                                    alt="<?= $produk['nama_alat']; ?>"
-                                    style="object-fit: cover; height: 200px;">
+                                    alt="<?= $produk['nama_alat']; ?>">
                                 <div class="d-flex justify-content-center mt-3 mb-md-2">
-                                    <!-- Tombol Wishlist -->
-                                    <a href="<?= base_url('wishlist/add/' . $produk['id_alat']); ?>"
-                                        class="btn btn-sm btn-neoraised btn-danger me-md-5 me-4">
-                                        <i class="bi bi-heart text-white fs-5"></i>
-                                    </a>
+                                    <?php if (isset($favorit) && in_array($produk['id_alat'], $favorit)): ?>
+                                        <a href="<?= base_url('produk/wishlist/' . $produk['id_alat']); ?>"
+                                            class="btn btn-sm btn-neoraised btn-danger me-md-5 me-4">
+                                            <i class="bi bi-heart-fill text-white fs-5"></i>
+                                        </a>
+                                    <?php else: ?>
+                                        <a href="<?= base_url('produk/wishlist/' . $produk['id_alat']); ?>"
+                                            class="btn btn-sm btn-neoraised btn-light me-md-5 me-4">
+                                            <i class="bi bi-heart-fill text-danger fs-5"></i>
+                                        </a>
+                                    <?php endif; ?>
+
                                     <!-- Tombol Detail -->
                                     <a href="<?= base_url('produk/detail/' . $produk['id_alat']); ?>"
                                         class="btn btn-sm btn-neoraised btn-primary">

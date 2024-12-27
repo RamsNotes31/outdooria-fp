@@ -8,7 +8,13 @@
         <div class="row justify-content-center px-3">
             <div class="col-12 col-lg-4 d-flex justify-content-center mb-5">
                 <div class="alert alert-danger-neoraised alert-danger text-center fs-5 fw-bold text-wrap" role="alert">
-                    <?= htmlspecialchars($detail['nama_gunung']); ?>
+                    <?php
+                    $nama = htmlspecialchars($detail['nama_gunung']);
+                    if (strlen($nama) > 50) {
+                        $nama = wordwrap($nama, 50, "<br>\n");
+                    }
+                    echo $nama;
+                    ?>
                 </div>
 
             </div>

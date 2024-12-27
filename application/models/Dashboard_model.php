@@ -225,7 +225,7 @@ class Dashboard_model extends CI_Model
         $this->db->select('penyewaan.*, users.nama as nama_user, alat_pendakian.nama_alat');
         $this->db->from('penyewaan');
         $this->db->join('users', 'penyewaan.id_user = users.id_user');
-        $this->db->join('seri', 'penyewaan.seri_alat = seri.seri_alat AND seri.status_produk = "tersedia"');
+        $this->db->join('seri', 'penyewaan.seri_alat = seri.seri_alat AND seri.status_produk = "menunggu"');
         $this->db->join('alat_pendakian', 'seri.id_alat = alat_pendakian.id_alat');
         $this->db->where('penyewaan.status_sewa', 'menunggu');
         $query = $this->db->get();

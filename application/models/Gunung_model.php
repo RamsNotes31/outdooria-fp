@@ -77,4 +77,12 @@ class Gunung_model extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    public function get_all_foto_gunung()
+    {
+        $this->db->select('view_foto_gunung.*');
+        $this->db->from('view_foto_gunung');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
