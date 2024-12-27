@@ -13,6 +13,9 @@ class Register extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Register_model');
+
+        $this->load->library('form_validation');
+        $this->load->library('session');
     }
 
     public function index()
@@ -25,6 +28,7 @@ class Register extends CI_Controller
 
     public function register_action()
     {
+
         $data = array(
             'nama' => $this->input->post('nama'),
             'email' => $this->input->post('username'),
@@ -41,24 +45,31 @@ class Register extends CI_Controller
             // Konfigurasi upload file
             $config['upload_path'] = './public/img/user/';
             $config['allowed_types'] = 'heic|jpg|jpeg|png';
+            $config['file_name'] = $this->input->post('nama'); // Set default file name
 
             $this->upload->initialize($config);
 
-            if (!$this->upload->do_upload('foto')) {
-                $error = $this->upload->display_errors();
+            if ($_FILES['foto']['name']) {
+                if (!$this->upload->do_upload('foto')) {
+                    $error = $this->upload->display_errors();
 
-                // Hapus user jika file yang diupload bukan gambar yang diizinkan
-                $this->db->where('email', $this->input->post('username'));
-                $this->db->delete('users');
+                    // Hapus user jika file yang diupload bukan gambar yang diizinkan
+                    $this->db->where('email', $this->input->post('username'));
+                    $this->db->delete('users');
 
-                redirect('../register');
+                    redirect('../register');
+                } else {
+                    $upload_data = $this->upload->data();
+                    $new_file_name = $this->input->post('nama') . $upload_data['file_ext'];
+                    rename($upload_data['full_path'], $upload_data['file_path'] . $new_file_name);
+
+                    $this->db->where('email', $this->input->post('username'));
+                    $this->db->update('users', array('foto_profil' => $new_file_name));
+                }
             } else {
-                $upload_data = $this->upload->data();
-                $new_file_name = $this->input->post('nama') . $upload_data['file_ext'];
-                rename($upload_data['full_path'], $upload_data['file_path'] . $new_file_name);
-
+                // Set default image if no file is selected
                 $this->db->where('email', $this->input->post('username'));
-                $this->db->update('users', array('foto_profil' => $new_file_name));
+                $this->db->update('users', array('foto_profil' => 'default.png'));
             }
 
             redirect('../login');

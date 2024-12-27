@@ -53,4 +53,7 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+// $route['akun/see_profil/(:any)'] = 'akun/see_profil/$1';
+
+
 // $route['produk/detail/(:num)'] = 'produk/detail/$1';

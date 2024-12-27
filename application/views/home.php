@@ -48,7 +48,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         }
                         ?>
                     </div>
-                    <p class="text-center mt-2 fs-4 fw-light"><?= $average_rating !== null ? number_format($average_rating, 1) : '0.0'; ?>/5.0</p>
+                    <p class="text-center mt-2 fs-4 fw-light">(<?= $count_feedback; ?>) <?= $average_rating !== null ? number_format($average_rating, 1) : '0.0'; ?>/5.0</p>
                 </div>
             </div>
         </div>
@@ -62,7 +62,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="d-flex justify-content-center flex-lg-row flex-column">
                 <div class="d-flex justify-content-center align-items-center mb-4 flex-lg-row flex-column">
                     <div class="d-flex flex-column align-items-center mx-4">
-                        <img src="https://fotomhs.amikom.ac.id/2023/23_12_2966.jpg" class="rounded-circle img-fluid img-thumbnail border border-dark border-3 card-neoraised" alt="Marcell" style="width: 10rem">
+                        <img src="https://fotomhs.amikom.ac.id/2023/23_12_2925.jpg" class="rounded-circle img-fluid img-thumbnail border border-dark border-3 card-neoraised" alt="Marcell" style="width: 10rem">
                         <p class="text-center fs-1 fw-bolder">Marcell</p>
                         <div class="alert alert-danger-neoraised alert-danger fw-bolder" role="alert">
                             23.12.2966
@@ -108,12 +108,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <div class="mx-3 my-3">
                                         <div class="d-flex justify-space-between">
                                             <!-- Gambar Profil Placeholder -->
-                                            <img src="<?= base_url('public/img/user/' . $feedback->foto_profil); ?>" \
-                                                alt="<?= $feedback->nama_user; ?>"
+                                            <img src="<?= empty($feedback->foto_profil) ? base_url('public/img/user/deleted.jpg') : base_url('public/img/user/' . $feedback->foto_profil); ?>" \
+                                                alt="<?= $feedback->nama_user; ?>" \
                                                 class="rounded-circle me-2 mb-3 border border-2 border-dark card-neoraised"
                                                 width="40" height="40">
                                             <!-- Nama User -->
-                                            <h5 class="card-title fw-bold align-self-center"><?= $feedback->nama_user; ?></h5>
+                                            <a href="<?= base_url('akun/profil/' . ($feedback->nama_user)); ?>" class="d-flex align-items-center text-decoration-none">
+                                                <h5 class="card-title fw-bold align-self-center"><?= htmlspecialchars($feedback->nama_user, ENT_QUOTES, 'UTF-8'); ?></h5>
+                                            </a>
+
+
                                         </div>
                                         <!-- Komentar -->
                                         <p class="card-text fw-light">"<?= $feedback->komentar; ?>"</p>
@@ -177,10 +181,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </div>
         </div>
         <div class="col-12 col-lg-3">
-            <h2 class="fw-bolder mt-5 text-center mb-5">Contact Info</h2>
+            <h2 class="fw-bolder mt-5 text-center mb-5">Contact Info</h2><br>
             <p class="fw-light text-center">Location :
                 Tridadi, Sleman Regency, Special Region of Yogyakarta.
-                <br><br>
+                <br>
                 <?php if (!empty($admins)): ?>
                     <?php foreach ($admins as $admin): ?>
                         <hr>
@@ -189,7 +193,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <img src="<?= base_url('public/img/admin/' . $admin->foto_admin); ?>"
                     alt="Admin Photo" class="rounded-circle img-fluid me-3 card-neoraised border border-dark border-1" width="30" height="30">
                 <!-- Display Admin Name -->
-                <p class="fw-bold mb-0"><?php echo $admin->nama_admin; ?></p>
+                <a href="<?= base_url('akun/admin/' . ($admin->nama_admin)); ?>" class="text-decoration-none">
+                    <p class="fw-bold mb-0"><?php echo $admin->nama_admin; ?></p>
+                </a>
             </div>
 
             <!-- Display Admin Email -->
@@ -204,8 +210,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </a><br>
 
                 <!-- Display Admin WhatsApp Link -->
-                <a href="https://wa.me/<?php echo preg_replace('/[^0-9]/', '', $admin->no_telp_admin); ?>" class="text-decoration-none">
-                    <i class="bi bi-whatsapp me-2 text-success"></i>+<?php echo $admin->no_telp_admin; ?>
+                <a href="https://wa.me/+62<?php echo preg_replace('/^0/', '', $admin->no_telp_admin); ?>" class="text-decoration-none" target="_blank">
+                    <i class="bi bi-whatsapp me-2 text-success"></i>+62<?php echo preg_replace('/^0/', '', $admin->no_telp_admin); ?>
                 </a><br>
             </div>
         <?php endforeach; ?>

@@ -70,6 +70,14 @@ class Produk extends CI_Controller
         $favorit = $this->Produk_model->get_favorit_by_user($id_user); // Ambil daftar favorit user
         $data['favorit'] = array_column($favorit, 'id_alat'); // Ambil hanya ID alat dari daftar favorit
 
+        // Ambil data dari model
+        $data['s'] = $this->Produk_model->get_total_feedback_by_alat($product_id);
+
+        // Contoh: Hitung rata-rata rating untuk produk (dummy value, sesuaikan dengan logika Anda)
+        $data['product']['rata_rata_rating'] = $this->Produk_model->get_average_rating_by_alat($product_id) ?? 0;
+        $data['d'] = $this->Produk_model->join_popularity_count($product_id);
+        $data['t'] = $this->Produk_model->join_favorit_count($product_id);
+
         $this->load->view('pages/rental/detail', $data);
         $this->load->view('templates/footer');
     }
@@ -193,7 +201,7 @@ class Produk extends CI_Controller
 
         if (empty($nama_user)) {
             $this->session->set_flashdata('error', 'Anda harus login untuk melakukan booking.');
-            redirect('login');
+            redirect('../login');
         }
 
         if ($role === 'admin') {
@@ -206,7 +214,7 @@ class Produk extends CI_Controller
 
         if (!$id_user) {
             $this->session->set_flashdata('error', 'Pengguna tidak ditemukan.');
-            redirect('login');
+            redirect('../login');
         }
 
         // Ambil data dari form
@@ -250,8 +258,11 @@ class Produk extends CI_Controller
         );
 
         if ($result) {
+            $inv = $this->Produk_model->get_latest_penyewaan_by_user($id_user, $seri_alat);
+
             $this->session->set_flashdata('success', 'Penyewaan berhasil ditambahkan.');
-            redirect('produk');
+            redirect(base_url('invoice/kode/' . $inv)); // Redirect ke halaman invoice
+
         } else {
             $this->session->set_flashdata('error', 'Terjadi kesalahan saat menambahkan penyewaan.');
             redirect($_SERVER['HTTP_REFERER']);

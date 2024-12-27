@@ -3,7 +3,12 @@ $(document).ready(function() {
 });
 
         $(document).ready(function() {
+            $('#example').DataTable();
             $('#datatable1').DataTable();
             $('#datatable2').DataTable();
+        });
+
+        $(document).ready(function() {
+            $('#example').DataTable();
         });
         

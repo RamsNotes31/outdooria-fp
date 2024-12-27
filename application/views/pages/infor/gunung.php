@@ -125,7 +125,7 @@
                                 <div class="col-12">
                                     <img src="<?= base_url('public/img/gunung/' . $info['foto_gunung']); ?>" class="img-fluid border border-dark border-3 rounded-3 card-neoraised" alt="<?= htmlspecialchars($info['nama_gunung']); ?>">
                                     <p class="text-center mt-3 fw-bold">
-                                        Oleh Admin: <span class="badge rounded-pill card-neoraised bg-primary text-white"><?= htmlspecialchars($info['nama_admin']); ?></span>
+                                        Oleh Admin: <a href="<?= base_url('akun/admin/' . $info['nama_admin']); ?>" class="badge rounded-pill card-neoraised bg-primary text-white text-decoration-none"><?= htmlspecialchars($info['nama_admin']); ?></a>
                                     </p>
                                     <div class="row">
                                         <div class="col-12 col-md-9">

@@ -30,11 +30,11 @@
                 alt="<?= htmlspecialchars($detail['nama_gunung']); ?>"
                 class="img-fluid card-neoraised border border-dark border-3 rounded-5 text-center">
         </div>
-        <p class="text-center mt-3 mb-5 fw-bolder">
+        <p class="text-center mt-3 mb-5 fw-bolder justify-content-center">
             Oleh Admin: <br>
             <img src="<?= base_url('public/img/admin/' . $detail['foto_admin']); ?>" alt="<?= htmlspecialchars($detail['nama_admin']); ?>" class="rounded-circle me-2 border border-2 border-dark card-neoraised p-1" width="40" height="40">
-            <span class="badge rounded-pill bg-primary text-white card-neoraised">
-                <?= htmlspecialchars($detail['nama_admin']); ?>
+            <span class="text-center mt-3 fw-bold">
+                <a href="<?= base_url('akun/admin/' . $detail['nama_admin']); ?>" class="badge rounded-pill card-neoraised bg-primary text-white text-decoration-none"><?= htmlspecialchars($detail['nama_admin']); ?></a>
             </span>
         </p>
 

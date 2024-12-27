@@ -21,7 +21,13 @@
                                     <i class="bi bi-heart-fill text-danger fs-5"></i>
                                 </a>
                             <?php endif; ?>
+
                         </div>
+                        <div class="text-center text-muted mt-3">
+                            Favorit: (<?= isset($t['favorit_count']) ? htmlspecialchars($t['favorit_count'], ENT_QUOTES, 'UTF-8') : 0; ?>)<br>
+                            Telah dipinjam: (<?= isset($d['popularity_count']) ? htmlspecialchars($d['popularity_count'], ENT_QUOTES, 'UTF-8') : 0; ?>)<br>
+                        </div>
+
                         <div class="d-flex justify-content-center flex-sm-row flex-column mt-5">
                             <div class="d-flex justify-content-center align-items-center flex-column">
                                 <div class="d-flex">
@@ -35,7 +41,11 @@
                                         <?php endif; ?>
                                     <?php endfor; ?>
                                 </div>
-                                <p class="text-center mt-2 fs-4"><?= number_format($product['rata_rata_rating'], 1); ?>/5.0</p>
+                                <p class="text-center mt-2 fs-4">
+                                    (<?= htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); ?>)
+                                    <?= number_format(htmlspecialchars($product['rata_rata_rating'], ENT_QUOTES, 'UTF-8'), 1); ?>/5.0
+                                </p>
+
                             </div>
                         </div>
                     </div>
@@ -66,7 +76,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="returnDate" class="form-label">Tanggal Pengembalian</label>
-                        <input type="date" class="form-control card-neoraised" id="returnDate" name="returnDate" value="<?= date('Y-m-d', strtotime('+2 days')); ?>" required readonly>
+                        <input type="date" class="form-control card-neoraised" id="returnDate" name="returnDate" value="<?= date('Y-m-d', strtotime('+3 days')); ?>" required readonly>
                     </div>
                     <div class="mb-3">
                         <label for="itemSelect" class="form-label">Pilih Barang</label>
@@ -179,8 +189,12 @@
                         <?php foreach ($reviews as $review): ?>
                             <div class="card card-neoraised p-3 mb-3">
                                 <div class="d-flex">
-                                    <img src="<?= base_url('public/img/user/' . $review['foto_profil']); ?>" alt="<?= $review['nama']; ?>" class="rounded-circle me-2 mb-3 border border-2 border-dark card-neoraised" width="40" height="40">
-                                    <h5 class="card-title fw-bold align-self-center"><?= $review['nama']; ?></h5>
+
+                                    <img src="<?= empty($review['foto_profil']) ? base_url('public/img/user/deleted.jpg') : base_url('public/img/user/' . $review['foto_profil']); ?>" \
+                                        alt="<?= $review['nama']; ?>" \
+                                        class="rounded-circle me-2 mb-3 border border-2 border-dark card-neoraised"
+                                        width="40" height="40">
+                                    <h5 class="card-title fw-bold align-self-center"><a href="<?= base_url('akun/profil/' . ($review['nama'])); ?>" style="text-decoration: none;"><?= $review['nama']; ?></a></h5>
                                 </div>
                                 <p class="card-text"><?= '"' . htmlspecialchars($review['komentar']) . '"'; ?></p>
                                 <div class="d-flex justify-content-between">

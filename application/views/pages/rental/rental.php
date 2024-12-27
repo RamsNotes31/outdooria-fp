@@ -101,6 +101,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     class="img-fluid border border-dark border-3 rounded-3 card-neoraised"
                                     alt="<?= $produk['nama_alat']; ?>">
                                 <div class="d-flex justify-content-center mt-3 mb-md-2">
+
+
                                     <?php if (isset($favorit) && in_array($produk['id_alat'], $favorit)): ?>
                                         <a href="<?= base_url('produk/wishlist/' . $produk['id_alat']); ?>"
                                             class="btn btn-sm btn-neoraised btn-danger me-md-5 me-4">
@@ -118,6 +120,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         class="btn btn-sm btn-neoraised btn-primary">
                                         <i class="bi bi-cart text-white fs-5"></i>
                                     </a>
+                                </div>
+                                <div class="text-center text-muted mt-3">
+                                    Favorit : (<?= $produk['favorit_count'] ?? 0; ?>)<br>
+                                    Telah dipinjam : (<?= $produk['popularity_count'] ?? 0; ?>)<br>
                                 </div>
                             </div>
                             <div class="col-md-6 d-flex flex-column justify-content-between">
@@ -149,7 +155,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             }
                                             ?>
                                         </div>
-                                        <p class="text-center mt-2 fs-6 fw-light"><?= is_null($produk['rata_rata_rating']) ? '0.0' : number_format((float) $produk['rata_rata_rating'], 1); ?>/5.0</p>
+                                        <p class="text-center mt-2 fs-6 fw-light">(<?= $produk['total_feedback'] ?? 0; ?>) <?= is_null($produk['rata_rata_rating']) ? '0.0' : number_format((float) $produk['rata_rata_rating'], 1); ?>/5.0</p>
                                     </div>
                                 </div>
 

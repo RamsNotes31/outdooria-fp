@@ -1,19 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="./assets/img/icon.png" type="image/png" sizes="32x32">
-    <title class="fw-bold">Hikyu<?= $title; ?></title>
+    <link rel="icon" href="<?= base_url('public/img/icon.png'); ?>" type="image/png" sizes="32x32">
+    <title><?= $title; ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap"
         rel="stylesheet" />
-    <script type="module" crossorigin src="./assets/bundled/js/all.min.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/bundled/css/all.css" />
+    <link rel="stylesheet" crossorigin href="<?= base_url('public/css/all.css'); ?>">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+
+    <script defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script defer src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script defer src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+
+    <script defer src="<?= base_url('public/js/all.js'); ?>"></script>
+    <script src="
+https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js
+"></script>
+    <link href="
+https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css
+" rel="stylesheet">
 </head>
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable();
+    });
+</script>
 <style>
     .scroll-top {
         position: fixed;
@@ -23,6 +42,7 @@
         z-index: 1000;
     }
 </style>
+
 <body>
     <div class="bs-component">
         <nav class="navbar navbar-neoraised-bottom navbar-expand-lg bg-success navbar-dark p-3">
@@ -40,11 +60,13 @@
             </div>
             <div class="offcanvas-body small card-neoraised">
                 <div class="d-flex flex-column gap-3">
-                    <a href="akun.php" class="btn btn-neoraised btn-success fw-bold">Ubah Data</a>
-                    <a href="riwayat.php" class="btn btn-neoraised btn-warning fw-bold">Riwayat</a>
-                    <a href="favorit.php" class="btn btn-neoraised btn-danger fw-bold">Daftar Favorit</a>
-                    <a href="home.php" class="btn btn-neoraised btn-primary fw-bold">Back to Home</a>
-                    <a href="./logout.php" class="btn btn-neoraised btn-info fw-bold">Logout</a>
+                    <a href="<?php echo base_url("akun"); ?>" class="btn btn-neoraised btn-secondary fw-bold">Profile</a>
+                    <a href="<?php echo base_url("akun/ubah"); ?>" class="btn btn-neoraised btn-success fw-bold">Ubah Data</a>
+                    <a href="<?php echo base_url("akun/riwayat"); ?>" class="btn btn-neoraised btn-warning fw-bold">Riwayat</a>
+                    <a href="<?php echo base_url("akun/favorit"); ?>" class="btn btn-neoraised btn-danger fw-bold">Daftar Favorit</a>
+                    <a href="<?php echo base_url("akun/feedback"); ?>" class="btn btn-neoraised btn-secondary fw-bold">Feedback Saya</a>
+                    <a href="<?php echo base_url("home"); ?>" class="btn btn-neoraised btn-primary fw-bold">Back to Home</a>
+                    <a href="<?php echo base_url("logout"); ?>" class="btn btn-neoraised btn-info fw-bold">Logout</a>
                 </div>
             </div>
         </div>

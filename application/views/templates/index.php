@@ -1,2 +1,2 @@
 <?php
-header("Location: ../403.php");
+header("Location: ../../403.php");

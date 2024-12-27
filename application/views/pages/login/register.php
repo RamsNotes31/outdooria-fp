@@ -11,11 +11,11 @@
         </div>
         <div class="mb-3">
             <label for="username" class="form-label d-block fs-3 fw-bold">Password</label>
-            <input type="password" id="password" name="password" class="form-control fs-3 card-neoraised" required>
+            <input type="password" id="password" name="password" class="form-control fs-3 card-neoraised" minlength="6" required>
         </div>
         <div class="mb-3">
             <label for="no_hp" class="form-label d-block fs-3 mt-3 fw-bold">No. HP</label>
-            <input type="text" id="no_hp" name="no_hp" class="form-control fs-3 card-neoraised" pattern="08[0-9]{9,12}" title="Masukkan nomor HP yang benar" required>
+            <input type="text" id="no_hp" name="no_hp" class="form-control fs-3 card-neoraised" pattern="^(\+62|62|0)8[1-9][0-9]{6,9}$" title="Masukkan nomor HP yang benar" required>
         </div>
         <div class="mb-3">
             <label for="alamat" class="form-label d-block fs-3 mt-3 fw-bold">Alamat</label>
@@ -23,7 +23,7 @@
         </div>
         <div class="mb-3">
             <label for="foto" class="form-label d-block fs-3 mt-3 fw-bold">Foto Profile <span class="text-danger fs-6"><br>*Format : heic, jpg, jpeg, png</span></label>
-            <input type="file" class="form-control card-neoraised fs-5" id="foto" name="foto" accept=".heic,.jpg,.jpeg,.png" required>
+            <input type="file" class="form-control card-neoraised fs-5" id="foto" name="foto" accept=".heic,.jpg,.jpeg,.png">
         </div>
         <div class="form-check mb-sm-4 mb-3 ms-3">
             <input class="form-check-input fs-5 card-neoraised" type="checkbox" value="" id="flexCheckDefault" required>
