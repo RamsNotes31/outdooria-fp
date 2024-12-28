@@ -1,5 +1,6 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') or
+    header("Location: error");
 
 class Akun_model extends CI_Model
 {
@@ -94,14 +95,7 @@ class Akun_model extends CI_Model
         $this->db->update('users', $data);
     }
 
-    public function get_admin_by_name($name)
-    {
-        // Pilih kolom termasuk foto_admin
-        $this->db->select('id_admin, nama_admin, email_admin, no_telp_admin, foto_admin, tanggal_ditambahkan');
-        $this->db->where('LOWER(nama_admin)', strtolower($name)); // Case-insensitive
-        $query = $this->db->get('admin');
-        return $query->row_array();
-    }
+   
 
     // public function get_id_by_name($nama)
     // {
@@ -113,7 +107,7 @@ class Akun_model extends CI_Model
     //     return $query->num_rows() > 0 ? $query->row()->id_user : null;
     // }
 
-    
+
     public function get_id_by_name($nama)
     {
         $this->db->where('nama', $nama);
@@ -168,5 +162,94 @@ class Akun_model extends CI_Model
         return $this->db->get('users')->row(); // Returns the user object
     }
 
-    
+    public function get_riwayat_penyewaan($id_user)
+    {
+        $this->db->select('
+        alat_pendakian.nama_alat,
+        penyewaan.seri_alat,
+        penyewaan.tanggal_penyewaan,
+        penyewaan.tanggal_pengembalian,
+        penyewaan.total_harga,
+        penyewaan.status_sewa,
+        penyewaan.bukti_pembayaran  ,
+        penyewaan.id_penyewaan
+    ');
+        $this->db->from('penyewaan');
+        $this->db->join('seri', 'penyewaan.seri_alat = seri.seri_alat', 'left');
+        $this->db->join('alat_pendakian', 'seri.id_alat = alat_pendakian.id_alat', 'left');
+        $this->db->where('penyewaan.id_user', $id_user);
+        $query = $this->db->get();
+        return $query->result(); // Mengembalikan array objek hasil query
+    }
+
+    public function get_feedback_stats($id_user)
+    {
+        $this->db->select('COUNT(*) AS total_feedback, AVG(rating) AS rata_rata_feedback');
+        $this->db->from('feedback');
+        $this->db->where('id_user', $id_user);
+        $query = $this->db->get();
+        return $query->row(); // Mengembalikan total dan rata-rata feedback
+    }
+
+    public function get_total_penyewaan($id_user)
+    {
+        $this->db->select('COUNT(*) AS total_penyewaan');
+        $this->db->from('penyewaan');
+        $this->db->where('id_user', $id_user);
+        $query = $this->db->get();
+        return $query->row(); // Mengembalikan total penyewaan
+    }
+
+    public function get_top_barang($id_user)
+    {
+        $this->db->select('alat_pendakian.nama_alat, COUNT(penyewaan.id_penyewaan) AS jumlah_disewa');
+        $this->db->from('penyewaan');
+        $this->db->join('seri', 'penyewaan.seri_alat = seri.seri_alat', 'left');
+        $this->db->join('alat_pendakian', 'seri.id_alat = alat_pendakian.id_alat', 'left');
+        $this->db->where('penyewaan.id_user', $id_user);
+        $this->db->group_by('alat_pendakian.id_alat');
+        $this->db->order_by('jumlah_disewa', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get();
+        return $query->row(); // Mengembalikan barang yang paling sering disewa
+    }
+
+    // Mendapatkan ID admin dari nama_admin
+    public function get_id_admin_by_name($nama_admin)
+    {
+        $this->db->select('id_admin');
+        $this->db->from('admin');
+        $this->db->where('nama_admin', $nama_admin);
+        $query = $this->db->get();
+        return $query->row(); // Mengembalikan ID admin sebagai objek
+    }
+
+    // Menampilkan jumlah informasi pendakian yang diposting oleh ID admin
+    public function get_total_informasi_pendakian($id_admin)
+    {
+        $this->db->select('COUNT(*) AS total_informasi');
+        $this->db->from('informasi_pendakian');
+        $this->db->where('id_admin', $id_admin);
+        $query = $this->db->get();
+        return $query->row(); // Mengembalikan jumlah informasi sebagai objek
+    }
+
+    // Menampilkan jumlah chat dari ID admin tertentu
+    public function get_total_chats_by_admin($id_admin)
+    {
+        $this->db->select('COUNT(*) AS total_chats');
+        $this->db->from('chat');
+        $this->db->where('id_admin', $id_admin);
+        $query = $this->db->get();
+        return $query->row(); // Mengembalikan jumlah chat sebagai objek
+    }
+
+    public function get_admin_by_name($name)
+    {
+        // Pilih kolom termasuk foto_admin
+        $this->db->select('id_admin, nama_admin, email_admin, no_telp_admin, foto_admin, tanggal_ditambahkan');
+        $this->db->where('LOWER(nama_admin)', strtolower($name)); // Case-insensitive
+        $query = $this->db->get('admin');
+        return $query->row_array();
+    }
 }

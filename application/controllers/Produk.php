@@ -1,5 +1,6 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') or
+    header("Location: error");
 
 
 
@@ -128,70 +129,114 @@ class Produk extends CI_Controller
         redirect($_SERVER['HTTP_REFERER']);
     }
 
-    public function review()
-    {
-        // Load session library
-        $this->load->library('session');
+    // public function give_feedback($id_alat)
+    // {
+    //     // Cek apakah user sudah login
+    //     if (!$this->session->userdata('nama')) {
+    //         redirect('../login'); // Redirect ke login jika belum login
+    //     }
 
-        // Ambil nama user dari session
-        $nama_user = $this->session->userdata('nama');
-        $role = $this->session->userdata('role');
+    //     // Ambil ID user dari session
+    //     $nama_user = $this->session->userdata('nama');
+    //     $id_user = $this->Akun_model->get_id_by_name($nama_user);
 
-        // Validasi apakah user sudah login
+    //     if (!$id_user) {
+    //         redirect('../akun'); // Redirect jika user tidak ditemukan
+    //     }
+
+    //     // Cek apakah user pernah menyewa alat ini dengan status selesai
+    //     $rentals = $this->Feedback_model->check_user_rental_status($id_user, $id_alat);
+    //     if (empty($rentals)) {
+    //         $this->session->set_flashdata('error', 'Anda harus menyewa alat ini terlebih dahulu dan menyelesaikan penyewaan untuk memberikan feedback.');
+    //         redirect('../home');
+    //     }
+
+    //     // Filter penyewaan yang belum diberikan feedback
+    //     $valid_rentals = [];
+    //     foreach ($rentals as $rental) {
+    //         if (!$this->Feedback_model->check_feedback_exists_for_rental($rental->id_penyewaan)) {
+    //             $valid_rentals[] = $rental->id_penyewaan;
+    //         }
+    //     }
+
+    //     if (empty($valid_rentals)) {
+    //         $this->session->set_flashdata('error', 'Anda sudah memberikan feedback untuk semua penyewaan alat ini.');
+    //         redirect('../home');
+    //     }
+
+    //     // Tampilkan form feedback untuk penyewaan terakhir yang valid
+    //     $data['title'] = 'Berikan Feedback';
+    //     $data['id_alat'] = $id_alat;
+    //     $data['id_penyewaan'] = $valid_rentals[0]; // Ambil penyewaan pertama yang valid
+    //     $this->load->view('templates/header', $data);
+    //     redirect('../produk/detail/' . $id_alat);
+    //     $this->load->view('templates/footer', $data);
+    // }
+
+    // public function review()
+    // {
+    //     // Load session library
+    //     $this->load->library('session');
+
+    //     // Ambil nama user dari session
+    //     $nama_user = $this->session->userdata('nama');
+    //     $role = $this->session->userdata('role');
+
+    //     // Validasi apakah user sudah login
 
 
-        // Validasi role admin
-        if ($role === 'admin') {
-            redirect($_SERVER['HTTP_REFERER']);
-        } else {
-            if (empty($nama_user)) {
-                $this->session->set_flashdata('error', 'Anda harus login untuk memberikan review.');
-                redirect('../login');
-            }
-        }
+    //     // Validasi role admin
+    //     if ($role === 'admin') {
+    //         redirect($_SERVER['HTTP_REFERER']);
+    //     } else {
+    //         if (empty($nama_user)) {
+    //             $this->session->set_flashdata('error', 'Anda harus login untuk memberikan review.');
+    //             redirect('../login');
+    //         }
+    //     }
 
 
-        // Ambil ID user berdasarkan nama
-        $id_user = $this->Produk_model->get_id_by_name($nama_user);
+    //     // Ambil ID user berdasarkan nama
+    //     $id_user = $this->Produk_model->get_id_by_name($nama_user);
 
-        // Validasi jika user tidak ditemukan
-        if (!$id_user) {
-            $this->session->set_flashdata('error', 'Gagal menemukan ID pengguna.');
-            redirect('../login');
-        }
+    //     // Validasi jika user tidak ditemukan
+    //     if (!$id_user) {
+    //         $this->session->set_flashdata('error', 'Gagal menemukan ID pengguna.');
+    //         redirect('../login');
+    //     }
 
-        $nama_alat = $this->input->post('nama_alat');
-        // Ambil ID alat berdasarkan nama produk
-        $product_id = $this->Produk_model->get_id_by_product($nama_alat);
+    //     $nama_alat = $this->input->post('nama_alat');
+    //     // Ambil ID alat berdasarkan nama produk
+    //     $product_id = $this->Produk_model->get_id_by_product($nama_alat);
 
-        // Validasi apakah ID alat ditemukan
-        if (is_null($product_id)) {
-            $this->session->set_flashdata('error', 'Produk yang Anda review tidak valid.');
-            redirect('../produk');
-        }
+    //     // Validasi apakah ID alat ditemukan
+    //     if (is_null($product_id)) {
+    //         $this->session->set_flashdata('error', 'Produk yang Anda review tidak valid.');
+    //         redirect('../produk');
+    //     }
 
-        // Ambil data dari form
-        $rating = $this->input->post('rating');
-        $comment = $this->input->post('comment');
+    //     // Ambil data dari form
+    //     $rating = $this->input->post('rating');
+    //     $comment = $this->input->post('comment');
 
-        // Validasi input
-        if (empty($rating) || empty($comment) || empty($product_id) || empty($id_user)) {
-            $this->session->set_flashdata('error', 'Semua field wajib diisi.');
-            redirect($_SERVER['HTTP_REFERER']);
-        }
+    //     // Validasi input
+    //     if (empty($rating) || empty($comment) || empty($product_id) || empty($id_user)) {
+    //         $this->session->set_flashdata('error', 'Semua field wajib diisi.');
+    //         redirect($_SERVER['HTTP_REFERER']);
+    //     }
 
-        // Simpan data ke database menggunakan model
-        $is_inserted = $this->Produk_model->tambah_feedback($id_user, $product_id, $comment, $rating);
+    //     // Simpan data ke database menggunakan model
+    //     $is_inserted = $this->Produk_model->tambah_feedback($id_user, $product_id, $comment, $rating);
 
-        // Berikan feedback kepada user
-        if ($is_inserted) {
-            $this->session->set_flashdata('success', 'Review berhasil ditambahkan.');
-        } else {
-            $this->session->set_flashdata('error', 'Terjadi kesalahan saat menambahkan review.');
-        }
+    //     // Berikan feedback kepada user
+    //     if ($is_inserted) {
+    //         $this->session->set_flashdata('success', 'Review berhasil ditambahkan.');
+    //     } else {
+    //         $this->session->set_flashdata('error', 'Terjadi kesalahan saat menambahkan review.');
+    //     }
 
-        redirect($_SERVER['HTTP_REFERER']);
-    }
+    //     redirect($_SERVER['HTTP_REFERER']);
+    // }
 
     public function submit()
     {

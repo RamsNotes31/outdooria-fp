@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 25, 2024 at 01:45 PM
+-- Generation Time: Dec 28, 2024 at 01:30 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -41,12 +41,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_alat_pendakian` (IN `p_nama_
     VALUES (id_alat_baru, p_nama_alat, p_kategori, p_stok, p_harga_sewa, p_foto_produk, p_deskripsi);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_chat` (IN `p_id_user` VARCHAR(10), IN `p_id_admin` VARCHAR(10), IN `p_pesan` TEXT, IN `p_foto_chat` VARCHAR(255))   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_chat` (IN `p_id_user` VARCHAR(10), IN `p_id_admin` VARCHAR(10), IN `p_role` ENUM('user','admin'), IN `p_pesan` TEXT, IN `p_foto_chat` VARCHAR(255))   BEGIN
     DECLARE id_chat_baru VARCHAR(10);
     SET id_chat_baru = id_chat_baru();
     
-    INSERT INTO chat (id_chat, id_user, id_admin, pesan, tanggal_kirim, foto_chat)
-    VALUES (id_chat_baru, p_id_user, p_id_admin, p_pesan, CURRENT_TIMESTAMP, p_foto_chat);
+    INSERT INTO chat (id_chat, id_user, id_admin, role, pesan, tanggal_kirim, foto_chat)
+    VALUES (id_chat_baru, p_id_user, p_id_admin, p_role, p_pesan, CURRENT_TIMESTAMP, p_foto_chat);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_favorit` (IN `p_id_user` VARCHAR(10), IN `p_id_alat` VARCHAR(10))   BEGIN
@@ -57,12 +57,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_favorit` (IN `p_id_user` VAR
     VALUES (id_favorit_baru, p_id_user, p_id_alat, CURRENT_TIMESTAMP);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_feedback` (IN `p_id_user` VARCHAR(10), IN `p_id_alat` VARCHAR(10), IN `p_komentar` TEXT, IN `p_rating` DECIMAL(2,1))   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_feedback` (IN `p_id_user` VARCHAR(10), IN `p_id_alat` VARCHAR(10), IN `p_id_penyewaan` VARCHAR(10), IN `p_komentar` TEXT, IN `p_rating` DECIMAL(2,1))   BEGIN
     DECLARE id_feedback_baru VARCHAR(10);
+
     SET id_feedback_baru = id_feedback_baru();
-    
-    INSERT INTO feedback (id_feedback, id_user, id_alat, komentar, rating, tanggal_feedback)
-    VALUES (id_feedback_baru, p_id_user, p_id_alat, p_komentar, p_rating, CURRENT_TIMESTAMP);
+
+    INSERT INTO feedback (id_feedback, id_user, id_alat, id_penyewaan, komentar, rating, tanggal_feedback)
+    VALUES (id_feedback_baru, p_id_user, p_id_alat, p_id_penyewaan, p_komentar, p_rating, CURRENT_TIMESTAMP);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_informasi_pendakian` (IN `p_id_admin` VARCHAR(10), IN `p_nama_gunung` VARCHAR(100), IN `p_lokasi` VARCHAR(255), IN `p_harga_biaya` DECIMAL(10,0), IN `p_deskripsi` TEXT, IN `p_foto_gunung` VARCHAR(255))   BEGIN
@@ -73,12 +74,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_informasi_pendakian` (IN `p_
     VALUES (id_informasi_baru, p_id_admin, p_nama_gunung, p_lokasi, p_harga_biaya, p_deskripsi, CURRENT_TIMESTAMP, p_foto_gunung);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_penyewaan` (IN `p_id_user` VARCHAR(10), IN `p_seri_alat` VARCHAR(10), IN `p_tanggal_penyewaan` DATETIME, IN `p_tanggal_pengembalian` DATETIME, IN `p_total_harga` DECIMAL(10,0), IN `p_bukti_pembayaran` VARCHAR(255))   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_penyewaan` (IN `p_id_user` VARCHAR(10), IN `p_seri_alat` VARCHAR(10), IN `p_tanggal_penyewaan` DATETIME, IN `p_tanggal_pengembalian` DATETIME, IN `p_total_harga` DECIMAL(10,0))   BEGIN
     DECLARE id_penyewaan_baru VARCHAR(10);
     SET id_penyewaan_baru = id_penyewaan_baru();
     
-    INSERT INTO penyewaan (id_penyewaan, id_user, seri_alat, tanggal_penyewaan, tanggal_pengembalian, total_harga, status_sewa, bukti_pembayaran)
-    VALUES (id_penyewaan_baru, p_id_user, p_seri_alat, p_tanggal_penyewaan, p_tanggal_pengembalian, p_total_harga, 'menunggu', p_bukti_pembayaran);
+    INSERT INTO penyewaan (id_penyewaan, id_user, seri_alat, tanggal_penyewaan, tanggal_pengembalian, total_harga)
+    VALUES (id_penyewaan_baru, p_id_user, p_seri_alat, p_tanggal_penyewaan, p_tanggal_pengembalian, p_total_harga);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_seri` (IN `p_id_alat` VARCHAR(10), IN `p_kondisi` ENUM('baru','baik','minus'), IN `p_status_produk` ENUM('tersedia','disewa','dalam perawatan','rusak'))   BEGIN
@@ -310,11 +311,10 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id_admin`, `nama_admin`, `email_admin`, `no_telp_admin`, `password_admin`, `tanggal_ditambahkan`, `foto_admin`) VALUES
-('1', 'Rama Danadipa', 'rama@gmail.com', '089697100997', 'ramadanadipa', '2024-11-27 12:13:25', NULL),
-('2', 'Panji Ihsanudin Fajri', 'panji@gmail.com', '085777419874', 'pnj1165', '2024-11-27 12:13:25', NULL),
-('A00005', 'adada', 'admdain@example.com', '083334567890', 'pasdasword123', '2024-12-07 08:08:53', 'foto_admin.jpg'),
-('N00003', 'Nama Admin', 'admin@example.com', '081234567890', 'password123', '2024-12-07 03:39:29', 'foto_admin.jpg'),
-('N00005', 'Nama Admin2', 'admin2@example.com', '081234567892', 'password1232', '2024-12-07 03:39:29', 'foto_admin.jpg');
+('1', 'Rama Danadipa', 'rama@gmail.com', '089697100997', 'ramadanadipa', '2024-11-27 12:13:25', 'default.png'),
+('2', 'Panji Ihsanudin Fajri', 'panji@gmail.com', '085777419874', 'pnj1165', '2024-11-27 12:13:25', 'default.png'),
+('A00005', 'adada', 'admdain@example.com', '083334567890', 'pasdasword123', '2024-12-07 08:08:53', 'default.png'),
+('N00003', 'Nama Admin', 'admin@example.com', '081234567890', 'password123', '2024-12-07 03:39:29', 'default.png');
 
 -- --------------------------------------------------------
 
@@ -337,11 +337,11 @@ CREATE TABLE `alat_pendakian` (
 --
 
 INSERT INTO `alat_pendakian` (`id_alat`, `nama_alat`, `kategori`, `stok`, `harga_sewa`, `foto_produk`, `deskripsi`) VALUES
-('1', 'Tenda 4P', 'primary', 88, '55000', '', 'Tenda Untuk 4 Orang'),
-('2', 'Tracking Pole', 'secondary', 67, '15000', '', 'Alat Bantuan'),
-('A-J-00001', 'jam', 'accessory', 3, '21000', 'jam.jpg', 'jam'),
-('O-K-00001', 'kompor', 'others', 6, '50000', 'kompor.jpg', 'untuk memasak'),
-('S-L-00002', 'lampu', 'secondary', 11, '50000', 'tenda4p.jpg', 'untuk penerangan');
+('1', 'Tenda 4P', 'primary', 89, '55000', 'default.jpg', 'Tenda Untuk 4 Orang'),
+('2', 'Tracking Pole', 'secondary', 66, '15000', 'default.jpg', 'Alat Bantuan'),
+('A-J-00001', 'jam', 'accessory', 4, '21000', 'default.jpg', 'jam'),
+('O-K-00001', 'kompor', 'others', 6, '50000', 'default.jpg', 'untuk memasak'),
+('S-L-00002', 'lampu', 'secondary', 12, '50000', 'default.jpg', 'untuk penerangan');
 
 --
 -- Triggers `alat_pendakian`
@@ -372,7 +372,8 @@ DELIMITER ;
 CREATE TABLE `chat` (
   `id_chat` varchar(11) NOT NULL,
   `id_user` varchar(11) NOT NULL,
-  `id_admin` varchar(11) NOT NULL,
+  `id_admin` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `role` enum('user','admin') NOT NULL,
   `pesan` text NOT NULL,
   `tanggal_kirim` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `foto_chat` varchar(255) DEFAULT NULL
@@ -382,11 +383,9 @@ CREATE TABLE `chat` (
 -- Dumping data for table `chat`
 --
 
-INSERT INTO `chat` (`id_chat`, `id_user`, `id_admin`, `pesan`, `tanggal_kirim`, `foto_chat`) VALUES
-('1', '2', '1', 'Ready min?', '2024-11-27 12:22:54', NULL),
-('2', '1', '2', 'Stock masih ada?', '2024-11-27 12:22:54', NULL),
-('C-00003', 'N00003', 'N00003', 'Halo, apakah stok masih ada?', '2024-12-07 03:46:28', 'foto_chat.jpg'),
-('C-00004', 'W00004', 'A00005', 'Halo, apakah stok masih ada?', '2024-12-07 08:11:25', 'foto_chat.jpg');
+INSERT INTO `chat` (`id_chat`, `id_user`, `id_admin`, `role`, `pesan`, `tanggal_kirim`, `foto_chat`) VALUES
+('2', '2', '2', 'admin', 'masih', '2024-11-27 12:22:59', ''),
+('C-00002', '2', NULL, 'user', 'oopok', '2024-12-28 01:18:15', NULL);
 
 -- --------------------------------------------------------
 
@@ -406,10 +405,9 @@ CREATE TABLE `favorit` (
 --
 
 INSERT INTO `favorit` (`id_favorit`, `id_user`, `id_alat`, `tanggal_ditambahkan`) VALUES
-('1', '2', '1', '2024-11-27 12:23:40'),
-('2', '1', '2', '2024-11-27 12:23:40'),
 ('K-00003', 'N00003', 'S-L-00002', '2024-12-07 03:47:04'),
-('K-00004', 'W00004', 'S-L-00002', '2024-12-07 08:11:55');
+('K-00004', 'W00004', 'S-L-00002', '2024-12-07 08:11:55'),
+('K-00005', 'C00006', '1', '2024-12-27 06:20:58');
 
 -- --------------------------------------------------------
 
@@ -421,20 +419,11 @@ CREATE TABLE `feedback` (
   `id_feedback` varchar(11) NOT NULL,
   `id_user` varchar(11) NOT NULL,
   `id_alat` varchar(11) NOT NULL,
+  `id_penyewaan` varchar(11) NOT NULL,
   `komentar` text,
   `rating` decimal(2,1) DEFAULT NULL,
   `tanggal_feedback` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `feedback`
---
-
-INSERT INTO `feedback` (`id_feedback`, `id_user`, `id_alat`, `komentar`, `rating`, `tanggal_feedback`) VALUES
-('1', '2', '1', 'Mantap', '4.5', '2024-11-27 12:21:59'),
-('2', '1', '2', 'Kualitas Bagus', '4.0', '2024-11-27 12:21:59'),
-('F-00003', 'N00003', 'S-L-00002', 'Kualitas bagus', '4.5', '2024-12-07 03:45:45'),
-('F-00004', 'W00004', 'S-L-00002', 'Kualitas bagus', '4.5', '2024-12-07 08:10:54');
 
 -- --------------------------------------------------------
 
@@ -458,10 +447,11 @@ CREATE TABLE `informasi_pendakian` (
 --
 
 INSERT INTO `informasi_pendakian` (`id_informasi`, `id_admin`, `nama_gunung`, `lokasi`, `harga_biaya`, `deskripsi`, `tanggal_update`, `foto_gunung`) VALUES
-('1', '1', 'Gunung Lawu', 'Karanganyar, Jawa Tengah', '35000', 'Gunung Lawu adalah gunung berapi yang terletak di perbatasan antara Jawa Tengah dan Jawa Timur, Indonesia. Dengan ketinggian sekitar 3.265 meter di atas permukaan laut, Gunung Lawu dikenal sebagai salah satu gunung yang populer untuk pendakian. Gunung ini memiliki tiga puncak utama, yaitu Hargo Dumilah, Hargo Dalem, dan Hargo Dumiling. Selain itu, Gunung Lawu juga memiliki beberapa situs bersejarah dan spiritual, seperti Candi Cetho dan Candi Sukuh, yang menambah daya tariknya. Pendakian Gunung Lawu menawarkan pemandangan alam yang indah, hutan yang lebat, dan udara yang sejuk, menjadikannya destinasi favorit bagi para pendaki dan pecinta alam.', '2024-11-27 12:19:54', ''),
-('2', '2', 'Gunung Prau', 'Temanggung, Jawa Tengah', '25000', 'Gunung Prau adalah salah satu gunung yang terletak di kawasan Dieng, Temanggung, Jawa Tengah, Indonesia. Dengan ketinggian sekitar 2.565 meter di atas permukaan laut, Gunung Prau dikenal sebagai salah satu destinasi favorit bagi para pendaki. Gunung ini menawarkan pemandangan yang menakjubkan, termasuk panorama matahari terbit dan terbenam yang spektakuler, serta pemandangan pegunungan di sekitarnya seperti Gunung Sindoro, Gunung Sumbing, dan Gunung Merbabu. Selain itu, Gunung Prau juga terkenal dengan padang bunga daisy yang indah di puncaknya, menjadikannya tempat yang ideal untuk berkemah dan menikmati keindahan alam. Pendakian Gunung Prau relatif mudah, sehingga cocok untuk pendaki pemula maupun berpengalaman.', '2024-11-27 12:19:54', ''),
-('I-00003', 'N00003', 'Gunung Merapi', 'Yogyakarta, Indonesia', '50000', 'Gunung berapi aktif di Indonesia.', '2024-12-07 03:42:16', 'merapi.jpg'),
-('I-00004', 'A00005', 'Gunung Merapi1', 'Yogyakarta, Indonesia', '50000', 'Gunung berapi aktif di Indonesia.', '2024-12-07 08:09:55', 'merapi.jpg');
+('1', '1', 'Gunung Lawu', 'Karanganyar, Jawa Tengah', '35000', 'Gunung Lawu adalah gunung berapi yang terletak di perbatasan antara Jawa Tengah dan Jawa Timur, Indonesia. Dengan ketinggian sekitar 3.265 meter di atas permukaan laut, Gunung Lawu dikenal sebagai salah satu gunung yang populer untuk pendakian. Gunung ini memiliki tiga puncak utama, yaitu Hargo Dumilah, Hargo Dalem, dan Hargo Dumiling. Selain itu, Gunung Lawu juga memiliki beberapa situs bersejarah dan spiritual, seperti Candi Cetho dan Candi Sukuh, yang menambah daya tariknya. Pendakian Gunung Lawu menawarkan pemandangan alam yang indah, hutan yang lebat, dan udara yang sejuk, menjadikannya destinasi favorit bagi para pendaki dan pecinta alam.', '2024-11-27 12:19:54', 'default.jpg'),
+('2', '2', 'Gunung Prau', 'Temanggung, Jawa Tengah', '25000', 'Gunung Prau adalah salah satu gunung yang terletak di kawasan Dieng, Temanggung, Jawa Tengah, Indonesia. Dengan ketinggian sekitar 2.565 meter di atas permukaan laut, Gunung Prau dikenal sebagai salah satu destinasi favorit bagi para pendaki. Gunung ini menawarkan pemandangan yang menakjubkan, termasuk panorama matahari terbit dan terbenam yang spektakuler, serta pemandangan pegunungan di sekitarnya seperti Gunung Sindoro, Gunung Sumbing, dan Gunung Merbabu. Selain itu, Gunung Prau juga terkenal dengan padang bunga daisy yang indah di puncaknya, menjadikannya tempat yang ideal untuk berkemah dan menikmati keindahan alam. Pendakian Gunung Prau relatif mudah, sehingga cocok untuk pendaki pemula maupun berpengalaman.', '2024-11-27 12:19:54', 'default.jpg'),
+('6', '1', 'Gunung Lawuty', 'Karanganyar, Jawa Tengah', '35000', 'Gunung Lawu adalah gunung berapi yang terletak di perbatasan antara Jawa Tengah dan Jawa Timur, Indonesia. Dengan ketinggian sekitar 3.265 meter di atas permukaan laut, Gunung Lawu dikenal sebagai salah satu gunung yang populer untuk pendakian. Gunung ini memiliki tiga puncak utama, yaitu Hargo Dumilah, Hargo Dalem, dan Hargo Dumiling. Selain itu, Gunung Lawu juga memiliki beberapa situs bersejarah dan spiritual, seperti Candi Cetho dan Candi Sukuh, yang menambah daya tariknya. Pendakian Gunung Lawu menawarkan pemandangan alam yang indah, hutan yang lebat, dan udara yang sejuk, menjadikannya destinasi favorit bagi para pendaki dan pecinta alam.', '2024-11-27 12:19:54', 'default.jpg'),
+('I-00003', 'N00003', 'Gunung Merapi', 'Yogyakarta, Indonesia', '50000', 'Gunung berapi aktif di Indonesia.', '2024-12-07 03:42:16', 'default.jpg'),
+('I-00004', 'A00005', 'Gunung Merapi1 dadad  dada adadadadadada da aaaada', 'Yogyakarta, Indonesia', '50000', 'Gunung berapi aktif di Indonesia.', '2024-12-07 08:09:55', 'default.jpg');
 
 -- --------------------------------------------------------
 
@@ -473,8 +463,8 @@ CREATE TABLE `penyewaan` (
   `id_penyewaan` varchar(11) NOT NULL,
   `id_user` varchar(11) NOT NULL,
   `seri_alat` varchar(11) NOT NULL,
-  `tanggal_penyewaan` datetime NOT NULL,
-  `tanggal_pengembalian` datetime NOT NULL,
+  `tanggal_penyewaan` date NOT NULL,
+  `tanggal_pengembalian` date NOT NULL,
   `total_harga` decimal(10,0) NOT NULL,
   `status_sewa` enum('menunggu','disewa','selesai','batal') NOT NULL DEFAULT 'menunggu',
   `bukti_pembayaran` varchar(255) DEFAULT NULL
@@ -485,22 +475,66 @@ CREATE TABLE `penyewaan` (
 --
 
 INSERT INTO `penyewaan` (`id_penyewaan`, `id_user`, `seri_alat`, `tanggal_penyewaan`, `tanggal_pengembalian`, `total_harga`, `status_sewa`, `bukti_pembayaran`) VALUES
-('1', '2', '1', '2024-11-27 19:28:52', '2024-11-28 19:28:52', '110000', 'menunggu', NULL),
-('2', '1', '2', '2024-11-27 19:28:52', '2024-11-28 19:28:52', '30000', 'batal', NULL),
-('P-00003', 'N00003', 'S-00003', '2024-12-07 10:00:00', '2024-12-08 10:00:00', '100000', 'selesai', 'bukti_pembayaran.jpg'),
-('P-00004', 'N00003', 'S-00004', '2024-12-07 10:00:00', '2024-12-08 10:00:00', '100000', 'selesai', 'bukti_pembayaran.jpg'),
-('P-00005', 'W00004', 'S-00005', '2024-12-07 10:00:00', '2024-12-08 10:00:00', '100000', 'disewa', 'bukti_pembayaran.jpg');
+('1', '2', '1', '2024-11-27', '2024-11-28', '110000', 'batal', NULL),
+('11', '2', '1', '2024-11-27', '2024-11-28', '110000', 'selesai', NULL),
+('2', '1', '2', '2024-11-27', '2024-11-28', '30000', 'batal', NULL),
+('20', '1', '2', '2024-11-27', '2024-11-28', '30000', 'selesai', NULL),
+('26', '1', '2', '2024-11-27', '2024-11-28', '30000', 'batal', NULL),
+('3', '1', '2', '2024-11-27', '2024-11-28', '30000', 'selesai', NULL),
+('P-00003', 'N00003', 'S-00003', '2024-12-07', '2024-12-08', '100000', 'selesai', 'bukti.png'),
+('P-00004', 'N00003', 'S-00004', '2024-12-07', '2024-12-08', '100000', 'selesai', 'bukti.png'),
+('P-00005', 'W00004', 'S-00005', '2024-12-07', '2024-12-08', '100000', 'selesai', 'bukti.png'),
+('P-00010', 'C00006', 'S-00022', '2024-12-27', '2024-12-29', '50000', 'selesai', NULL),
+('P-00011', 'C00006', 'S-00018', '2024-12-27', '2024-12-29', '50000', 'batal', NULL),
+('P-00012', 'C00006', '2', '2024-12-27', '2024-12-29', '55000', 'batal', NULL),
+('P-00013', 'C00006', '1', '2024-12-27', '2024-12-29', '15000', 'batal', NULL),
+('P-00014', 'C00005', 'S-00022', '2024-12-27', '2024-12-30', '50000', 'batal', NULL),
+('P-00015', 'C00005', 'S-00022', '2024-12-27', '2024-12-30', '50000', 'batal', NULL),
+('P-00016', 'C00005', 'S-00022', '2024-12-27', '2024-12-30', '50000', 'batal', NULL),
+('P-00017', 'C00005', 'S-00019', '2024-12-27', '2024-12-30', '50000', 'selesai', NULL),
+('P-00018', 'C00005', 'S-00022', '2024-12-27', '2024-12-30', '50000', 'batal', NULL),
+('P-00019', 'C00005', 'S-00022', '2024-12-27', '2024-12-30', '50000', 'batal', NULL),
+('P-00020', 'C00005', 'S-00022', '2024-12-27', '2024-12-30', '50000', 'batal', NULL),
+('P-00021', 'C00005', 'S-00022', '2024-12-27', '2024-12-30', '50000', 'batal', NULL),
+('P-00022', 'C00005', 'S-00022', '2024-12-27', '2024-12-30', '50000', 'batal', 'bukti.png'),
+('P-00023', 'C00005', 'S-00022', '2024-12-27', '2024-12-30', '50000', 'batal', NULL),
+('P-00024', 'C00005', 'S-00022', '2024-12-27', '2024-12-30', '50000', 'batal', NULL),
+('P-00025', 'C00005', 'S-00019', '2024-12-27', '2024-12-30', '50000', 'batal', NULL),
+('P-00026', 'C00005', 'S-00022', '2024-12-27', '2024-12-30', '50000', 'batal', NULL),
+('P-00027', 'C00005', 'S-00014', '2024-12-27', '2024-12-30', '50000', 'batal', NULL);
 
 --
 -- Triggers `penyewaan`
 --
 DELIMITER $$
-CREATE TRIGGER `update_stok_dan_status_produk` AFTER UPDATE ON `penyewaan` FOR EACH ROW BEGIN
-    IF OLD.status_sewa = 'menunggu' AND NEW.status_sewa = 'disewa' THEN
+CREATE TRIGGER `after_insert_penyewaan` AFTER INSERT ON `penyewaan` FOR EACH ROW BEGIN
+        UPDATE seri
+        SET status_produk = 'menunggu'
+        WHERE seri_alat = NEW.seri_alat;
+        
         UPDATE alat_pendakian
         SET stok = stok - 1
         WHERE id_alat = (SELECT id_alat FROM seri WHERE seri_alat = NEW.seri_alat);
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `after_reject` AFTER UPDATE ON `penyewaan` FOR EACH ROW BEGIN
+    IF OLD.status_sewa = 'menunggu' AND NEW.status_sewa = 'batal' THEN
+        UPDATE alat_pendakian
+        SET stok = stok + 1
+        WHERE id_alat = (SELECT id_alat FROM seri WHERE seri_alat = NEW.seri_alat);
 
+        UPDATE seri
+        SET status_produk = 'tersedia'
+        WHERE seri_alat = NEW.seri_alat;
+    END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `update_stok_dan_status_produk` AFTER UPDATE ON `penyewaan` FOR EACH ROW BEGIN
+    IF OLD.status_sewa = 'menunggu' AND NEW.status_sewa = 'disewa' THEN
         UPDATE seri
         SET status_produk = 'disewa'
         WHERE seri_alat = NEW.seri_alat;
@@ -533,7 +567,7 @@ CREATE TABLE `seri` (
   `seri_alat` varchar(11) NOT NULL,
   `id_alat` varchar(11) NOT NULL,
   `kondisi` enum('baru','baik','minus') NOT NULL DEFAULT 'baik',
-  `status_produk` enum('tersedia','disewa','dalam perawatan','rusak') NOT NULL DEFAULT 'tersedia',
+  `status_produk` enum('tersedia','disewa','dalam perawatan','rusak','menunggu') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'tersedia',
   `tanggal_ditambahkan` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -543,10 +577,10 @@ CREATE TABLE `seri` (
 
 INSERT INTO `seri` (`seri_alat`, `id_alat`, `kondisi`, `status_produk`, `tanggal_ditambahkan`) VALUES
 ('1', '2', 'baru', 'tersedia', '2024-11-27 12:27:00'),
-('2', '1', 'minus', 'dalam perawatan', '2024-11-27 12:27:00'),
+('2', '1', 'minus', 'tersedia', '2024-11-27 12:27:00'),
 ('S-00003', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
 ('S-00004', 'S-L-00002', 'baru', 'tersedia', '2024-12-07 03:40:42'),
-('S-00005', 'S-L-00002', 'baik', 'disewa', '2024-12-07 03:40:42'),
+('S-00005', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
 ('S-00006', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
 ('S-00007', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
 ('S-00008', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
@@ -621,10 +655,13 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `nama`, `email`, `password`, `no_telepon`, `alamat`, `tanggal_daftar`, `foto_profil`) VALUES
-('1', 'Marcellinus Sorongan', 'marcel@gmail.com', 'acell123', '0987654321', 'Sleman City Hall', '2024-11-27 12:10:17', NULL),
-('2', 'Fahmi Aziz', 'fahmi@gmail.com', 'mii321', '1234567890', 'Godean', '2024-11-27 12:10:17', NULL),
-('N00003', 'Nama User', 'user@example.com', 'password123', '081234567891', 'Alamat User', '2024-12-07 03:39:43', 'foto_profil.jpg'),
-('W00004', 'wfawf', 'ufwawfafer@example.com', 'pfwafassword123', '081224567891', 'Alamat User', '2024-12-07 08:09:12', 'foto_profil.jpg');
+('1', 'Marcellinus Sorongan', 'marcel@gmail.com', 'acell123', '087654321444', 'Sleman City Hall', '2024-11-27 12:10:17', 'marcellinus_sorongan.jpg'),
+('2', 'Fahmi Aziz dad da a dadd d ada', 'fahmi@gmail.com', 'mii321', '08654378861', 'Godean', '2024-11-27 12:10:17', 'fahmi_aziz_dad_da_a_dadd_d_ada.jpg'),
+('C00006', 'cobaadad', 'dadatry@gmail.com', 'trytryadadad', '081217419874', 'daddad', '2024-12-27 20:05:22', 'cobaadad.png'),
+('C00007', 'coba', 'coba@gmail.com', 'cobacoba', '08528066498', 'cobain', '2024-12-27 20:08:44', 'default.png'),
+('N00003', 'Nama User', 'user@example.com', 'password123', '081234567891', 'Alamat User', '2024-12-07 03:39:43', 'default.png'),
+('T00006', 'try', 'try@gmail.com', 'trytry', '081318897775', 'try', '2024-12-27 18:15:51', 'try.jpg'),
+('W00004', 'wfawf', 'ufwawfafer@example.com', 'pfwafassword123', '081224567891', 'Alamat User', '2024-12-07 08:09:12', 'default.png');
 
 -- --------------------------------------------------------
 
@@ -745,7 +782,8 @@ ALTER TABLE `favorit`
 ALTER TABLE `feedback`
   ADD PRIMARY KEY (`id_feedback`),
   ADD KEY `id_user` (`id_user`),
-  ADD KEY `id_alat` (`id_alat`);
+  ADD KEY `id_alat` (`id_alat`),
+  ADD KEY `id_penyewaan` (`id_penyewaan`);
 
 --
 -- Indexes for table `informasi_pendakian`
@@ -803,7 +841,8 @@ ALTER TABLE `favorit`
 --
 ALTER TABLE `feedback`
   ADD CONSTRAINT `feedback_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`),
-  ADD CONSTRAINT `feedback_ibfk_2` FOREIGN KEY (`id_alat`) REFERENCES `alat_pendakian` (`id_alat`);
+  ADD CONSTRAINT `feedback_ibfk_2` FOREIGN KEY (`id_alat`) REFERENCES `alat_pendakian` (`id_alat`),
+  ADD CONSTRAINT `feedback_ibfk_4` FOREIGN KEY (`id_penyewaan`) REFERENCES `penyewaan` (`id_penyewaan`);
 
 --
 -- Constraints for table `informasi_pendakian`
@@ -823,6 +862,26 @@ ALTER TABLE `penyewaan`
 --
 ALTER TABLE `seri`
   ADD CONSTRAINT `seri_ibfk_1` FOREIGN KEY (`id_alat`) REFERENCES `alat_pendakian` (`id_alat`);
+
+DELIMITER $$
+--
+-- Events
+--
+CREATE DEFINER=`root`@`localhost` EVENT `auto_cancel_penyewaan` ON SCHEDULE EVERY 1 HOUR STARTS '2024-12-27 13:10:34' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
+    UPDATE `penyewaan`
+    SET `status_sewa` = 'batal'
+    WHERE `status_sewa` = 'menunggu' 
+      AND TIMESTAMPDIFF(HOUR, `tanggal_penyewaan`, NOW()) >= 12;
+END$$
+
+CREATE DEFINER=`root`@`localhost` EVENT `auto_complete_penyewaan` ON SCHEDULE EVERY 1 HOUR STARTS '2024-12-27 14:03:15' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
+    UPDATE `penyewaan`
+    SET `status_sewa` = 'selesai'
+    WHERE `status_sewa` = 'disewa'
+      AND CURDATE() >= `tanggal_pengembalian`;
+END$$
+
+DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

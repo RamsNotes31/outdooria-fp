@@ -1,5 +1,6 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') or
+    header("Location: error");
 
 class Akun extends CI_Controller
 {
@@ -10,7 +11,6 @@ class Akun extends CI_Controller
         $this->load->model('Akun_model');
 
         // Load form validation library
-        $this->load->library('form_validation');
     }
 
     public function index()
@@ -34,6 +34,19 @@ class Akun extends CI_Controller
         if ($user) {
             // Pass user data to the view
             $data['user'] = $user;
+            // Ambil ID user dari session
+            $id_user = $this->Akun_model->get_id_by_name($nama);
+
+            if (!$id_user) {
+                redirect('../akun'); // Redirect jika user tidak ditemukan
+            }
+
+            // Ambil data dari model
+            $data['feedback_stats'] = $this->Akun_model->get_feedback_stats($id_user);
+            $data['total_penyewaan'] = $this->Akun_model->get_total_penyewaan($id_user);
+            $data['top_barang'] = $this->Akun_model->get_top_barang($id_user);
+
+            // Kirim data ke view
             $this->load->view('pages/setting/akun', $data);
         } else {
             // If user not found, redirect to error page or login
@@ -56,6 +69,19 @@ class Akun extends CI_Controller
         if ($userr) {
             $data['title'] = 'Hikyu | Profile';
             $data['user'] = $userr;
+            // Ambil ID user dari session
+            $id_user = $this->Akun_model->get_id_by_name($names);
+
+            if (!$id_user) {
+                redirect('../akun'); // Redirect jika user tidak ditemukan
+            }
+
+            // Ambil data dari model
+            $data['feedback_stats'] = $this->Akun_model->get_feedback_stats($id_user);
+            $data['total_penyewaan'] = $this->Akun_model->get_total_penyewaan($id_user);
+            $data['top_barang'] = $this->Akun_model->get_top_barang($id_user);
+
+            // Kirim data ke view
 
             $this->load->view('templates/header', $data);
             $this->load->view('pages/setting/akun', $data);
@@ -175,6 +201,9 @@ class Akun extends CI_Controller
     {
         // Check if form is submitted
         if ($this->input->post()) {
+            $this->load->library('form_validation');
+
+
             // Validation for password matching
             $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
             $this->form_validation->set_rules('ulangi_password', 'Ulangi Password', 'required|matches[password]');
@@ -250,16 +279,22 @@ class Akun extends CI_Controller
         // Load Akun_model
         $this->load->model('Akun_model');
 
+        // Decode nama admin dan ambil data admin
         $name = urldecode($name);
-        // Ambil data admin dari model
         $admin = $this->Akun_model->get_admin_by_name($name);
 
-        // Jika admin ditemukan
         if ($admin) {
             $data['title'] = 'Hikyu | Admin';
             $data['admin'] = $admin;
 
-            // Load views
+            // ID Admin sudah tersedia dari data admin
+            $id_admin = $admin['id_admin'];
+
+            // Ambil data jumlah informasi dan chat
+            $data['total_informasi'] = $this->Akun_model->get_total_informasi_pendakian($id_admin)->total_informasi;
+            $data['total_chats'] = $this->Akun_model->get_total_chats_by_admin($id_admin)->total_chats;
+
+            // Kirim data ke view
             $this->load->view('templates/header', $data);
             $this->load->view('pages/setting/admin', $data);
             $this->load->view('templates/footer', $data);
@@ -268,6 +303,7 @@ class Akun extends CI_Controller
             redirect('../kesalahan');
         }
     }
+
 
     public function feedback()
     {
@@ -382,6 +418,34 @@ class Akun extends CI_Controller
             $this->session->set_flashdata('error', 'Gagal menghapus alat dari favorit.');
         }
 
-        redirect('akun/favorit'); // Redirect ke halaman favorit
+        redirect('../akun/favorit'); // Redirect ke halaman favorit
+    }
+
+    public function riwayat()
+    {
+        $data['title'] = 'Hikyu | Riwayat';
+
+        // Cek apakah user sudah login
+        if (!$this->session->userdata('nama')) {
+            redirect('../login'); // Redirect ke login jika belum login
+        }
+
+        // Ambil nama user dari session
+        $nama = $this->session->userdata('nama');
+        $id_user = $this->Akun_model->get_id_by_name($nama);
+
+        if (!$id_user) {
+            redirect('../akun'); // Redirect jika user tidak ditemukan
+        }
+
+        // Ambil data penyewaan berdasarkan id_user
+        $riwayat = $this->Akun_model->get_riwayat_penyewaan($id_user);
+
+        // Kirim data ke view
+        $data['riwayat'] = $riwayat;
+
+        $this->load->view('templates/header2', $data);
+        $this->load->view('pages/setting/riwayat', $data);
+        $this->load->view('templates/footer', $data);
     }
 }

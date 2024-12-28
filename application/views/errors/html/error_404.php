@@ -1,5 +1,6 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') or
+	header("Location: error");
 ?>
 <?php
 $ci = new CI_Controller();
@@ -13,7 +14,7 @@ $ci->load->helper('url');
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="icon" href="<?= base_url('public/img/icon.png') ?>" type="image/png" sizes="32x32">
-	<title>404 | Page Not Found</title>
+	<title>404 | Error</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link
@@ -39,10 +40,10 @@ $ci->load->helper('url');
 		<div class="text-center">
 			<h1 class="display-1 fw-bold text-dark mb-0">404</h1>
 			<h2 class="display-6 fw-semibold text-secondary mb-3">
-				<?php echo $heading; ?>
+				404 Not Found
 			</h2>
 			<p class="text-muted mb-4 fs-4">
-				<?php echo $message; ?>
+				Sorry, the page you are looking for could not be found. Please check the URL and try again.
 			</p>
 			<div class="d-flex justify-content-center">
 				<a href="<?= base_url('home'); ?>" class="btn btn-primary btn-neoraised btn-lg fw-bold">Kembali Ke Beranda</a>

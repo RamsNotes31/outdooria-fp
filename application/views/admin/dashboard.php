@@ -332,7 +332,7 @@
         ];
 
         foreach ($cardss as $carda):
-            $value = (is_array($carda['value']) && !empty($carda['value'])) ? $carda['value'][0] : null;
+            $value = (is_array($carda['value']) && array_key_exists(0, $carda['value'])) ? $carda['value'][0] : null;
         ?>
             <div class="col-xl-4 col-md-6 mb-4">
                 <div class="card card-neoraised border border-dark border-3">

@@ -1,5 +1,6 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') or
+    header("Location: error");
 
 class Logout extends CI_Controller
 {
@@ -7,15 +8,21 @@ class Logout extends CI_Controller
     {
         parent::__construct();
         $this->load->library('session');
+        $this->load->helper('cookie');
     }
     public function index()
     {
+        delete_cookie('email');
+        delete_cookie('password');
+
         $this->session->sess_destroy();
         redirect('../login');
     }
 
     public function logout()
     {
+        delete_cookie('email');
+        delete_cookie('password');
         $this->session->sess_destroy(); // Hapus semua sesi
         redirect('../login'); // Redirect ke halaman login
     }

@@ -279,19 +279,43 @@ class Produk_model extends CI_Model
         return $query->result_array(); // Kembalikan daftar alat favorit
     }
 
+    // Cek apakah user sudah menyewa alat tertentu dengan status selesai
+    // public function check_user_rental_status($id_user, $id_alat)
+    // {
+    //     $this->db->select('penyewaan.id_penyewaan');
+    //     $this->db->from('penyewaan');
+    //     $this->db->join('seri', 'penyewaan.seri_alat = seri.seri_alat', 'left');
+    //     $this->db->where('penyewaan.id_user', $id_user);
+    //     $this->db->where('seri.id_alat', $id_alat);
+    //     $this->db->where('penyewaan.status', 'selesai'); // Status harus selesai
+    //     $this->db->order_by('penyewaan.tanggal_selesai', 'DESC'); // Urutkan penyewaan terbaru
+    //     $query = $this->db->get();
+    //     return $query->result(); // Mengembalikan array penyewaan
+    // }
 
-    public function tambah_feedback($id_user, $id_alat, $komentar, $rating)
-    {
-        // Panggil stored procedure menggunakan CALL
-        $this->db->query("CALL tambah_feedback(?, ?, ?, ?)", array($id_user, $id_alat, $komentar, $rating));
+    // // Cek apakah feedback sudah diberikan untuk penyewaan tertentu
+    // public function check_feedback_exists_for_rental($id_penyewaan)
+    // {
+    //     $this->db->select('id_feedback');
+    //     $this->db->from('feedback');
+    //     $this->db->where('id_penyewaan', $id_penyewaan);
+    //     $query = $this->db->get();
+    //     return $query->row(); // Mengembalikan feedback jika ada
+    // }
 
-        // Periksa apakah query berhasil
-        if ($this->db->affected_rows() > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // Simpan feedback baru ke database
+    // public function tambah_feedback($id_user, $id_alat, $id_penyewaan, $komentar, $rating)
+    // {
+    //     // Panggil stored procedure menggunakan CALL
+    //     $this->db->query("CALL tambah_feedback(?, ?, ?, ?, ?)", array($id_user, $id_alat, $id_penyewaan, $komentar, $rating));
+
+    //     // Periksa apakah query berhasil
+    //     if ($this->db->affected_rows() > 0) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
     // Metode untuk mendapatkan ID alat berdasarkan nama alat
     public function get_id_by_product($nama_alat)

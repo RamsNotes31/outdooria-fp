@@ -1,5 +1,6 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') or
+	header("Location: error");
 ?>
 <?php
 $ci = new CI_Controller();
@@ -13,7 +14,7 @@ $ci->load->helper('url');
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="icon" href="<?= base_url('public/img/icon.png') ?>" type="image/png" sizes="32x32">
-	<title>Error</title>
+	<title>500 | Error</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link
@@ -37,12 +38,12 @@ $ci->load->helper('url');
 <body>
 	<div class="d-flex align-items-center justify-content-center vh-100">
 		<div class="text-center">
-			<h1 class="display-1 fw-bold text-dark mb-0">404</h1>
+			<h1 class="display-1 fw-bold text-dark mb-0">500</h1>
 			<h2 class="display-6 fw-semibold text-secondary mb-3">
-				<?php echo $heading; ?>
+				500 Internal Server Error
 			</h2>
 			<p class="text-muted mb-4 fs-4">
-				<?php echo $message; ?>
+				Sorry, something went wrong on our end. Please try again later.
 			</p>
 			<div class="d-flex justify-content-center">
 				<a href="<?= base_url('home'); ?>" class="btn btn-primary btn-neoraised btn-lg fw-bold">Kembali Ke Beranda</a>

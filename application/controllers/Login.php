@@ -1,5 +1,6 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') or
+    header("Location: error");
 
 class Login extends CI_Controller
 {
@@ -25,6 +26,16 @@ class Login extends CI_Controller
         $this->load->library('session');
         $email = $this->input->post('email', TRUE);
         $password = $this->input->post('password', TRUE);
+        $this->input->set_cookie(array(
+            'name'   => 'email',
+            'value'  => $email,
+            'expire' => 2592000 // 30 hari
+        ));
+        $this->input->set_cookie(array(
+            'name'   => 'password',
+            'value'  => $password,
+            'expire' => 2592000 // 30 hari
+        ));
 
         // Validasi input kosong
         if (empty($email) || empty($password)) {

@@ -127,46 +127,14 @@
 
             <div class="col-lg-7 order-1 order-lg-2">
                 <h2 class="text-center mb-4 mt-md-5 mt-0 fw-bolder">Rating & Review</h2>
-                <div class="rating-review-form">
-                    <form method="post" action="<?= base_url('produk/review') ?>" class="mb-4">
-                        <div class="form-group">
-                            <label for="nama_alat" class="visually-hidden">Nama Alat</label>
-                            <input type="hidden" id="nama_alat" name="nama_alat" value="<?= $product['nama_alat'] ?>">
-                            <label for="userRating" class="form-label mt-5">Your Rating: <span id="rating-text"><i class="bi bi-star text-muted"></i><i class="bi bi-star text-muted"></i><i class="bi bi-star text-muted"></i><i class="bi bi-star text-muted"></i><i class="bi bi-star text-muted"></i></span></label>
-                            <div class="d-flex align-items-center">
-                                <input type="range" id="userRating" name="rating" class="form-control card-neoraised" min="0" max="5" step="0.5" value="0" required>
 
-                            </div>
-                            <script>
-                                const ratingInput = document.getElementById('userRating');
-                                const ratingText = document.getElementById('rating-text');
-                                ratingInput.addEventListener('input', function() {
-                                    const rating = Number(ratingInput.value);
-                                    const stars = [];
-                                    for (let i = 0; i < 5; i++) {
-                                        if (rating >= (i + 1)) {
-                                            stars.push('<i class="bi bi-star-fill text-warning"></i>');
-                                        } else if (rating >= (i + 0.5)) {
-                                            stars.push('<i class="bi bi-star-half text-warning"></i>');
-                                        } else {
-                                            stars.push('<i class="bi bi-star text-muted"></i>');
-                                        }
-                                    }
-                                    ratingText.innerHTML = stars.join('');
-                                });
-                            </script>
-                        </div>
-                        <div class="form-group mt-3">
-                            <label for="userComment" class="form-label">Your Comment:</label>
-                            <textarea id="userComment" name="comment" class="form-control card-neoraised" rows="4" required style="resize: none;"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-neoraised btn-success mt-3 fw-bold">Submit Review</button>
-                    </form>
-
-                </div>
 
                 <div class="user-reviews">
-                    <h3 class="text-center mb-4 mt-5 fw-bolder">User Reviews</h3>
+                    <h3 class="text-center mb-4 mt-5 fw-lighter">This is what our customers say </h3>
+                    <div class="d-flex flex-column justify-content-center">
+                        <span class="text-center text-danger">*Silahkan melakukan penyewaan terlebih dahulu untuk membuat ulasan</span><br>
+                        <span class="text-center text-danger mb-5">*Untuk memberikan ulasan, silahkan ke menu profile bagian riwayat takan lihat detail</span>
+                    </div>
                     <!-- <div class="d-flex justify-content-center gap-3 mb-3">
                         <div class="form-check">
                             <input class="form-check-input btn-neoraised fs-5" type="radio" name="sort" id="tertinggi" value="tertinggi" checked>
@@ -219,7 +187,7 @@
                             </div>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <p class="text-center">No reviews available for this product.</p>
+                        <p class="text-center mt-5 fw-bold">No reviews available for this product.</p>
                     <?php endif; ?>
                 </div>
             </div>
