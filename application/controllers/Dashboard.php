@@ -13,6 +13,11 @@ class Dashboard extends CI_Controller
     {
         $data['title'] = 'Hikyu | Dashboard';
         $this->load->view('templates/header4', $data);
+
+        if (!$this->session->userdata('role') || $this->session->userdata('role') != 'admin') {
+            redirect('../login');
+        }
+
         $this->load->model('Dashboard_model');
 
         $data = [
@@ -32,6 +37,13 @@ class Dashboard extends CI_Controller
             'top_admin' => $this->Dashboard_model->get_top_admin(),
             'stok_terbanyak' => $this->Dashboard_model->get_stok_terbanyak(),
             'top_user' => $this->Dashboard_model->get_top_user(),
+
+            'top_admin_chat' => $this->Dashboard_model->get_top_admin_chat(),
+            'top_user_feedback' => $this->Dashboard_model->get_top_user_feedback(),
+            'top_admin_posting' => $this->Dashboard_model->get_top_admin_posting(),
+            'top_user_rented_item' => $this->Dashboard_model->get_top_user_rented_item(),
+
+            'pendapatan_bulanan' => $this->Dashboard_model->get_pendapatan_bulanan_bulan_ini(),
         ];
 
         $data['perbandingan'] = $this->Dashboard_model->get_perbandingan_online_offline();
@@ -96,6 +108,8 @@ class Dashboard extends CI_Controller
 
         $data['bukti_pembayaranya'] = $this->Dashboard_model->get_all_bukti_pembayaran();
         $data['chat_img'] = $this->Dashboard_model->get_all_chat_img();
+
+        $data['user_statistics'] = $this->Dashboard_model->get_user_statistics();
 
         $this->load->view('admin/dashboard', $data);
 

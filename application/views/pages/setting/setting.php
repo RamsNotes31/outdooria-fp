@@ -56,12 +56,73 @@
                             <input type="password" class="form-control card-neoraised" id="ulangi_password" name="ulangi_password" minlength="6" required>
                         </div>
                         <div class="mb-3">
+                            <label class="form-label d-block">Jenis Kelamin</label>
+                            <div class="d-flex gap-3 align-items-center ms-2 ">
+                                <div class="form-check">
+                                    <input class="form-check-input card-neoraised fs-5" type="radio" value="L" id="L" name="jenkel" <?php echo ($user['jenis_kelamin'] == 'L') ? 'checked' : ''; ?> required>
+                                    <label class="form-check-label text-center" for="L">
+                                        Pria
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input card-neoraised fs-5" type="radio" value="P" id="P" name="jenkel" <?php echo ($user['jenis_kelamin'] == 'P') ? 'checked' : ''; ?> required>
+                                    <label class="form-check-label text-center" for="P">
+                                        Wanita
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input card-neoraised fs-5" type="radio" value="O" id="O" name="jenkel" <?php echo ($user['jenis_kelamin'] == 'O') ? 'checked' : ''; ?> required>
+                                    <label class="form-check-label text-center" for="O">
+                                        Others
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
                             <label for="alamat" class="form-label">Alamat</label>
                             <textarea class="form-control card-neoraised" id="alamat" name="alamat" rows="4" style="resize: none;" required><?php echo $user['alamat']; ?></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="foto" class="form-label">Foto Profile</label>
-                            <input type="file" class="form-control card-neoraised" id="foto" name="foto" accept=".jpeg, .jpg, .png, .heic">
+                            <label for="foto" class="form-label">Priview Profile : </label>
+                            <img src="<?php echo base_url('public/img/user/' . $user['foto_profil']); ?>" alt="<?= $user['nama']; ?>" class="img-fluid border border-dark border-3 card-neoraised rounded-pill" style="width: 5rem; height: 5rem; object-fit: contain;" id="preview-image">
+                            <p id="error-format" class="text-danger mt-2 d-none">*Format file hanya jpeg, jpg, png, heic</p>
+                            <input type="file" class="form-control card-neoraised mt-3" id="foto" name="foto" accept=".jpeg, .jpg, .png, .heic" onchange="previewFile()">
+                            <p id="error-message" class="text-danger mt-2 d-none">*File tidak support</p>
+
+                            <script>
+                                function previewFile() {
+                                    const preview = document.getElementById('preview-image');
+                                    const file = document.getElementById('foto').files[0];
+                                    const errorFormat = document.getElementById('error-format');
+                                    const submitButton = document.querySelector('button[type="submit"]');
+
+                                    if (file) {
+                                        const fileType = file.type;
+                                        if (fileType.startsWith('image/')) {
+                                            const reader = new FileReader();
+                                            reader.onloadend = function() {
+                                                preview.src = reader.result;
+                                                preview.alt = file.name;
+                                                errorFormat.classList.add('d-none');
+                                                submitButton.disabled = false;
+                                            };
+                                            reader.readAsDataURL(file);
+                                        } else {
+                                            preview.src = "";
+                                            preview.alt = "";
+                                            preview.classList.add('d-none');
+                                            errorFormat.classList.remove('d-none');
+                                            submitButton.disabled = true;
+                                        }
+                                    } else {
+                                        preview.src = "";
+                                        preview.alt = "";
+                                        errorFormat.classList.add('d-none');
+                                        submitButton.disabled = false;
+                                    }
+                                }
+                            </script>
+
                         </div>
                         <div class="d-flex justify-content-between">
                             <button type="submit" class="btn btn-neoraised btn-success mb-3 mt-4 btn-md fw-bold">Ubah</button>

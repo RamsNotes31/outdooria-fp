@@ -133,28 +133,81 @@
                     <h3 class="text-center mb-4 mt-5 fw-lighter">This is what our customers say </h3>
                     <div class="d-flex flex-column justify-content-center">
                         <span class="text-center text-danger">*Silahkan melakukan penyewaan terlebih dahulu untuk membuat ulasan</span><br>
-                        <span class="text-center text-danger mb-5">*Untuk memberikan ulasan, silahkan ke menu profile bagian riwayat takan lihat detail</span>
+                        <span class="text-center text-danger mb-5">*Untuk memberikan ulasan, silahkan ke menu profile bagian riwayat tekan lihat detail</span>
                     </div>
-                    <!-- <div class="d-flex justify-content-center gap-3 mb-3">
-                        <div class="form-check">
-                            <input class="form-check-input btn-neoraised fs-5" type="radio" name="sort" id="tertinggi" value="tertinggi" checked>
-                            <label class="form-check-label" for="tertinggi">Highest Rating</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input btn-neoraised fs-5" type="radio" name="sort" id="terendah" value="terendah">
-                            <label class="form-check-label" for="terendah">Lowest Rating</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input btn-neoraised fs-5" type="radio" name="sort" id="terbaru" value="terbaru">
-                            <label class="form-check-label" for="terbaru">Newest</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input btn-neoraised fs-5" type="radio" name="sort" id="terlama" value="terlama">
-                            <label class="form-check-label" for="terlama">Oldest</label>
-                        </div>
-                    </div> -->
-                    <?php if (!empty($reviews)): ?>
-                        <?php foreach ($reviews as $review): ?>
+                    <!-- Sorting Options -->
+                    <div class="d-flex justify-content-center align-items-center mb-5">
+                        <form id="sortForm" action="" method="get" class="d-flex flex-wrap gap-3 justify-content-center">
+                            <div class="form-check d-flex align-items-center">
+                                <input
+                                    class="form-check-input btn-neoraised fs-5"
+                                    type="radio"
+                                    name="order_by"
+                                    id="tertinggi"
+                                    value="rating_tertinggi"
+                                    <?= (isset($_GET['order_by']) && $_GET['order_by'] === 'rating_tertinggi') ? 'checked' : ''; ?>>
+                                <label class="form-check-label ms-2" for="tertinggi"> Highest Rating</label>
+                            </div>
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input btn-neoraised fs-5"
+                                    type="radio"
+                                    name="order_by"
+                                    id="terendah"
+                                    value="rating_terendah"
+                                    <?= (isset($_GET['order_by']) && $_GET['order_by'] === 'rating_terendah') ? 'checked' : ''; ?>>
+                                <label class="form-check-label" for="terendah">Lowest Rating</label>
+                            </div>
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input btn-neoraised fs-5"
+                                    type="radio"
+                                    name="order_by"
+                                    id="gambar"
+                                    value="gambar"
+                                    <?= (isset($_GET['order_by']) && $_GET['order_by'] === 'gambar') ? 'checked' : ''; ?>>
+                                <label class="form-check-label" for="gambar">Images</label>
+                            </div>
+
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input btn-neoraised fs-5"
+                                    type="radio"
+                                    name="order_by"
+                                    id="terbaru"
+                                    value="terbaru"
+                                    <?= (!isset($_GET['order_by']) || $_GET['order_by'] === 'terbaru') ? 'checked' : ''; ?>>
+                                <label class="form-check-label" for="terbaru">Terbaru</label>
+                            </div>
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input btn-neoraised fs-5"
+                                    type="radio"
+                                    name="order_by"
+                                    id="terlama"
+                                    value="terlama"
+                                    <?= (isset($_GET['order_by']) && $_GET['order_by'] === 'terlama') ? 'checked' : ''; ?>>
+                                <label class="form-check-label" for="terlama">Terlama</label>
+                            </div>
+
+                        </form>
+                    </div>
+                    <script>
+                        // Handle sorting radio button change without page refresh
+                        const form = document.getElementById('sortForm');
+                        const radios = document.querySelectorAll('input[name="order_by"]');
+                        radios.forEach(radio => {
+                            radio.addEventListener('change', () => {
+                                const formData = new FormData(form);
+                                const queryString = new URLSearchParams(formData).toString();
+                                history.pushState(null, '', `${window.location.pathname}?${queryString}`);
+                                window.location.reload(); // Reload the page without changing the scroll position
+                            });
+                        });
+                    </script>
+
+                    <?php if (!empty($feedback)): ?>
+                        <?php foreach ($feedback as $review): ?>
                             <div class="card card-neoraised p-3 mb-3">
                                 <div class="d-flex">
 
@@ -164,9 +217,16 @@
                                         width="40" height="40">
                                     <h5 class="card-title fw-bold align-self-center"><a href="<?= base_url('akun/profil/' . ($review['nama'])); ?>" style="text-decoration: none;"><?= $review['nama']; ?></a></h5>
                                 </div>
-                                <p class="card-text"><?= '"' . htmlspecialchars($review['komentar']) . '"'; ?></p>
+                                <p class="card-text fw-light mt-3"><?= '"' . htmlspecialchars($review['komentar']) . '"'; ?></p>
+                                <?php if (!empty($review['foto'])): ?>
+                                    <?php if (file_exists(FCPATH . 'public/img/feedback/' . $review['foto'])): ?>
+                                        <img src="<?= base_url('public/img/feedback/' . $review['foto']); ?>" class="img-fluid card-neoraised border border-dark border-1 rounded-3 mb-5" alt="Foto Feedback" width="150" height="150">
+                                    <?php else: ?>
+                                        <p class="card-text text-muted card card-neoraised p-1">Foto Telah dihapus.</p>
+                                    <?php endif; ?>
+                                <?php endif; ?>
                                 <div class="d-flex justify-content-between">
-                                    <p class="card-text"><small class="text-muted">
+                                    <p class="card-text"><small class="text-muted fw-bold"><?= number_format(htmlspecialchars($review['rating'], ENT_QUOTES, 'UTF-8'), 1); ?>/5.0</small>
                                             <?php
                                             $rating = floor($review['rating']);
                                             $hasHalfStar = ($review['rating'] - $rating) >= 0.5;

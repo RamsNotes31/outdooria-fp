@@ -90,11 +90,12 @@ class Produk_model extends CI_Model
 
     public function get_reviews_by_product($product_id)
     {
-        $this->db->select('feedback.rating, feedback.komentar, IFNULL(users.nama, "Deleted User") AS nama, IFNULL(users.foto_profil, "deleted.jpg") AS foto_profil, feedback.tanggal_feedback');
+        $this->db->select('feedback.rating, feedback.komentar, feedback.foto, IFNULL(users.nama, "Deleted User") AS nama, IFNULL(users.foto_profil, "deleted.jpg") AS foto_profil, feedback.tanggal_feedback');
         $this->db->from('feedback');
-        $this->db->join('users', 'users.id_user = feedback.id_user', 'left');  // Sesuaikan nama kolom
-        $this->db->where('feedback.id_alat', $product_id);  // Filter berdasarkan id produk
-        $this->db->order_by('feedback.tanggal_feedback', 'DESC');  // Urutkan berdasarkan waktu ulasan terbaru
+        $this->db->join('users', 'users.id_user = feedback.id_user', 'left');
+        $this->db->where('feedback.id_alat', $product_id);
+        $this->db->order_by('feedback.tanggal_feedback', 'DESC');
+        $this->db->limit(3);
         return $this->db->get()->result_array();
     }
 
@@ -279,43 +280,7 @@ class Produk_model extends CI_Model
         return $query->result_array(); // Kembalikan daftar alat favorit
     }
 
-    // Cek apakah user sudah menyewa alat tertentu dengan status selesai
-    // public function check_user_rental_status($id_user, $id_alat)
-    // {
-    //     $this->db->select('penyewaan.id_penyewaan');
-    //     $this->db->from('penyewaan');
-    //     $this->db->join('seri', 'penyewaan.seri_alat = seri.seri_alat', 'left');
-    //     $this->db->where('penyewaan.id_user', $id_user);
-    //     $this->db->where('seri.id_alat', $id_alat);
-    //     $this->db->where('penyewaan.status', 'selesai'); // Status harus selesai
-    //     $this->db->order_by('penyewaan.tanggal_selesai', 'DESC'); // Urutkan penyewaan terbaru
-    //     $query = $this->db->get();
-    //     return $query->result(); // Mengembalikan array penyewaan
-    // }
-
-    // // Cek apakah feedback sudah diberikan untuk penyewaan tertentu
-    // public function check_feedback_exists_for_rental($id_penyewaan)
-    // {
-    //     $this->db->select('id_feedback');
-    //     $this->db->from('feedback');
-    //     $this->db->where('id_penyewaan', $id_penyewaan);
-    //     $query = $this->db->get();
-    //     return $query->row(); // Mengembalikan feedback jika ada
-    // }
-
-    // Simpan feedback baru ke database
-    // public function tambah_feedback($id_user, $id_alat, $id_penyewaan, $komentar, $rating)
-    // {
-    //     // Panggil stored procedure menggunakan CALL
-    //     $this->db->query("CALL tambah_feedback(?, ?, ?, ?, ?)", array($id_user, $id_alat, $id_penyewaan, $komentar, $rating));
-
-    //     // Periksa apakah query berhasil
-    //     if ($this->db->affected_rows() > 0) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
+    
 
     // Metode untuk mendapatkan ID alat berdasarkan nama alat
     public function get_id_by_product($nama_alat)
@@ -372,5 +337,45 @@ class Produk_model extends CI_Model
         $this->db->limit(1); // Ambil hanya 1 data paling atas
         $query = $this->db->get('penyewaan');
         return $query->row()->id_penyewaan; // Kembalikan id_penyewaannya saja
+    }
+
+    public function get_feedback($product_id, $order_by = 'terbaru')
+    {
+        $this->db->select('
+            feedback.rating AS rating,
+            feedback.komentar AS komentar,
+            feedback.foto AS foto,
+            IFNULL(users.nama, "Deleted User") AS nama,
+            IFNULL(users.foto_profil, "deleted.jpg") AS foto_profil,
+            feedback.tanggal_feedback AS tanggal_feedback
+        ');
+        $this->db->from('feedback');
+        $this->db->join('users', 'users.id_user = feedback.id_user', 'left');
+        $this->db->where('feedback.id_alat', $product_id);
+
+        // Apply sorting based on the $order_by parameter
+        switch ($order_by) {
+            case 'rating_tertinggi':
+                $this->db->order_by('rating', 'DESC');
+                break;
+            case 'rating_terendah':
+                $this->db->order_by('rating', 'ASC');
+                break;
+            case 'terlama':
+                $this->db->order_by('tanggal_feedback', 'ASC');
+                break;
+            case 'gambar':
+                $this->db->order_by("CASE WHEN foto IS NOT NULL AND foto != '' THEN 1 ELSE 0 END", "DESC");
+                $this->db->order_by('tanggal_feedback', 'DESC');
+                break;
+            case 'terbaru': // Default case
+            default:
+                $this->db->order_by('tanggal_feedback', 'DESC');
+                break;
+        }
+
+        // Execute query and return result
+        $query = $this->db->get();
+        return $query->result_array();
     }
 }

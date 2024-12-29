@@ -322,4 +322,89 @@ class Dashboard_model extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    public function get_user_statistics()
+    {
+        $query = $this->db->query("
+            SELECT 
+                COUNT(*) AS total_users,
+                SUM(jenis_kelamin = 'L') AS total_male,
+                SUM(jenis_kelamin = 'P') AS total_female,
+                SUM(jenis_kelamin = 'O') AS total_other,
+                ROUND((SUM(jenis_kelamin = 'L') / COUNT(*)) * 100, 2) AS male_percentage,
+                ROUND((SUM(jenis_kelamin = 'P') / COUNT(*)) * 100, 2) AS female_percentage,
+                ROUND((SUM(jenis_kelamin = 'O') / COUNT(*)) * 100, 2) AS other_percentage
+            FROM users
+        ");
+        return $query->row_array(); // Kembalikan data sebagai array
+    }
+
+    // Get top admin who has replied the most
+    public function get_top_admin_chat()
+    {
+        $this->db->select('a.nama_admin, COUNT(p.id_chat) AS total_replies');
+        $this->db->from('chat p');
+        $this->db->join('admin a', 'p.id_admin = a.id_admin');
+        $this->db->group_by('p.id_admin');
+        $this->db->order_by('total_replies', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get();
+        return $query->row_array();  // Return the first result (top admin)
+    }
+
+    // Get top user who has the most feedback and highest average rating
+    public function get_top_user_feedback()
+    {
+        $this->db->select('u.nama AS user_name, COUNT(f.id_feedback) AS total_feedback, AVG(f.rating) AS average_rating');
+        $this->db->from('feedback f');
+        $this->db->join('users u', 'f.id_user = u.id_user');
+        $this->db->group_by('f.id_user');
+        $this->db->order_by('total_feedback', 'DESC');
+        $this->db->order_by('average_rating', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get();
+        return $query->row_array();  // Return the first result (top user)
+    }
+
+    // Get top admin who posted the most information
+    public function get_top_admin_posting()
+    {
+        $this->db->select('a.nama_admin, COUNT(ip.id_informasi) AS total_posting');
+        $this->db->from('informasi_pendakian ip');
+        $this->db->join('admin a', 'ip.id_admin = a.id_admin');
+        $this->db->group_by('ip.id_admin');
+        $this->db->order_by('total_posting', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get();
+        return $query->row_array();  // Return the first result (top admin)
+    }
+
+    // Get top user who rented the most items and the most rented item
+    public function get_top_user_rented_item()
+    {
+        $this->db->select('users.nama AS nama_user, alat_pendakian.nama_alat, COUNT(penyewaan.id_penyewaan) AS jumlah_disewa');
+        $this->db->from('penyewaan');
+        $this->db->join('users', 'penyewaan.id_user = users.id_user');
+        $this->db->join('seri', 'penyewaan.seri_alat = seri.seri_alat');
+        $this->db->join('alat_pendakian', 'seri.id_alat = alat_pendakian.id_alat');
+        $this->db->group_by('users.id_user, alat_pendakian.id_alat');
+        $this->db->order_by('jumlah_disewa', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get();
+        return $query->row_array();  // Return the first result (top user and rented item)
+    }
+
+    // Mendapatkan total pendapatan berdasarkan bulan dan tahun saat ini
+    public function get_pendapatan_bulanan_bulan_ini()
+    {
+        $this->db->select_sum('total_harga');
+        $this->db->from('penyewaan');
+        $this->db->where_in('status_sewa', ['disewa', 'selesai']);
+        $this->db->where('YEAR(tanggal_penyewaan)', date('Y'));  // Filter berdasarkan tahun saat ini
+        $this->db->where('MONTH(tanggal_penyewaan)', date('m'));  // Filter berdasarkan bulan saat ini
+        $query = $this->db->get();
+        return $query->row()->total_harga;  // Mengambil hasil total pendapatan
+    }
+
+    // Mendapatkan pendapatan bulanan berdasarkan bulan dan tahun saat ini
 }

@@ -9,7 +9,7 @@ class Home_model extends CI_Model
 
     public function get_feedback_with_user($limit = 3)
     {
-        $this->db->select('IFNULL(users.nama, "Deleted User") AS nama_user, foto_profil, alat_pendakian.nama_alat, feedback.komentar, feedback.rating, feedback.tanggal_feedback');
+        $this->db->select('IFNULL(users.nama, "Deleted User") AS nama_user, foto_profil, alat_pendakian.nama_alat, feedback.komentar, feedback.rating, feedback.tanggal_feedback, feedback.foto');
         $this->db->from('feedback');
         $this->db->join('alat_pendakian', 'feedback.id_alat = alat_pendakian.id_alat');
         $this->db->join('users', 'feedback.id_user = users.id_user', 'left'); // Join ke tabel users dengan left join
@@ -40,6 +40,7 @@ class Home_model extends CI_Model
     public function get_admin_details()
     {
         // Query to get the admin details
+        $this->db->where('nama_admin !=', 'bot');
         $this->db->select('nama_admin, foto_admin, email_admin, no_telp_admin');
         $query = $this->db->get('admin');
 

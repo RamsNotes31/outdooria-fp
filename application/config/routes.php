@@ -50,11 +50,6 @@ defined('BASEPATH') or
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'welcome';
+$route['default_controller'] = 'home';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
-
-// $route['akun/see_profil/(:any)'] = 'akun/see_profil/$1';
-
-
-// $route['produk/detail/(:num)'] = 'produk/detail/$1';

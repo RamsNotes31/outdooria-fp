@@ -8,6 +8,7 @@ class Akun extends CI_Controller
     {
         parent::__construct();
         $this->load->library('session');
+        $this->load->library('form_validation');
         $this->load->model('Akun_model');
 
         // Load form validation library
@@ -199,43 +200,49 @@ class Akun extends CI_Controller
 
     public function update()
     {
-        // Check if form is submitted
         if ($this->input->post()) {
             $this->load->library('form_validation');
 
-
-            // Validation for password matching
+            // Validasi form
             $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
             $this->form_validation->set_rules('ulangi_password', 'Ulangi Password', 'required|matches[password]');
 
             if ($this->form_validation->run() == FALSE) {
-                // Validation failed, load the view again with validation errors
+                // Redirect kembali jika validasi gagal
                 redirect($_SERVER['HTTP_REFERER']);
             } else {
-                // Data to update
+                // Pastikan pengguna login
+                if (!$this->session->userdata('nama')) {
+                    redirect('../login');
+                }
+
+                // Dapatkan ID pengguna dari session
+                $nama = $this->session->userdata('nama');
+                $id_user = $this->Akun_model->get_id_by_name($nama);
+                if (!$id_user) {
+                    redirect('../login'); // Jika pengguna tidak ditemukan
+                }
+
+                // Ambil data pengguna lama
+                $user_data = $this->Akun_model->get_user_by_id($id_user);
+
+                // Data untuk update
                 $data = array(
                     'nama' => $this->input->post('nama'),
                     'no_telepon' => $this->input->post('no_hp'),
                     'email' => $this->input->post('email'),
-                    'password' => $this->input->post('password'),
+                    'jenis_kelamin' => $this->input->post('jenkel'),
                     'alamat' => $this->input->post('alamat'),
                 );
 
-                // Check if a new photo is uploaded
+                // Perbarui password hanya jika berbeda
+                if ($this->input->post('password') !== $user_data->password) {
+                    $data['password'] = $this->input->post('password'); // Simpan password terenkripsi
+                }
+
+                // Proses unggah file foto baru
                 if (!empty($_FILES['foto']['name'])) {
-                    // Ensure the user is logged in
-                    if (!$this->session->userdata('nama')) {
-                        redirect('../login'); // Redirect to login if not logged in
-                    }
-
-                    // Get user ID based on session name
-                    $nama = $this->session->userdata('nama');
-                    $id_user = $this->Akun_model->get_id_by_name($nama);
-
-                    // Retrieve existing user data to check for old photo
-                    $user_data = $this->Akun_model->get_user_by_id($id_user); // Method to get user data by ID
-
-                    // Remove the old photo if it exists
+                    // Hapus foto lama jika ada dan bukan default
                     if (!empty($user_data->foto_profil) && $user_data->foto_profil !== 'default.png') {
                         $old_photo_path = './public/img/user/' . $user_data->foto_profil;
                         if (file_exists($old_photo_path)) {
@@ -243,32 +250,36 @@ class Akun extends CI_Controller
                         }
                     }
 
-                    // Clean the filename
-                    $nama_user = $this->input->post('nama');
-                    $nama_file = strtolower(preg_replace('/[^a-zA-Z0-9]/', '_', $nama_user)); // Ensure valid filename
-
+                    // Config upload
+                    $nama_file = strtolower(preg_replace('/[^a-zA-Z0-9]/', '_', $this->input->post('nama')));
                     $config['upload_path'] = './public/img/user/';
                     $config['allowed_types'] = 'jpg|png|jpeg|heic';
-                    $config['file_name'] = $nama_file; // Set file name
+                    $config['file_name'] = $nama_file;
 
                     $this->load->library('upload', $config);
 
                     if ($this->upload->do_upload('foto')) {
-                        $data['foto_profil'] = $this->upload->data('file_name'); // Save file name to the database
+                        $data['foto_profil'] = $this->upload->data('file_name');
+                    } else {
+                        // Handle error jika upload gagal
+                        redirect($_SERVER['HTTP_REFERER']);
                     }
                 }
 
-                // Update the user data in the database
+                // Update ke database
                 $this->Akun_model->update_user($id_user, $data);
 
-                // Update session 'nama' with the new name
-                $this->session->set_userdata('nama', $data['nama']);
+                // Update session nama jika nama berubah
+                if ($this->session->userdata('nama') !== $data['nama']) {
+                    $this->session->set_userdata('nama', $data['nama']);
+                }
 
-                // Redirect to profile or success page
+                // Redirect ke halaman profil
                 redirect($_SERVER['HTTP_REFERER']);
             }
         }
     }
+
 
     public function admin($name = null)
     {
@@ -336,9 +347,18 @@ class Akun extends CI_Controller
     public function hapusfeed($id_feedback)
     {
         $this->load->model('Akun_model'); // Load model
-
-        // Menghapus feedback berdasarkan id_feedback
         if ($this->Akun_model->delete_feedback($id_feedback)) {
+
+            // Hapus foto jika ada
+            $this->db->where('id_feedback', $id_feedback);
+            $feedback = $this->db->get('feedback')->row();
+            if ($feedback->foto) {
+                $file_path = './public/img/feedback/' . $feedback->foto;
+                if (file_exists($file_path)) {
+                    unlink($file_path);
+                }
+            }
+
             $this->session->set_flashdata('success', 'Feedback berhasil dihapus.');
         } else {
             $this->session->set_flashdata('error', 'Gagal menghapus feedback.');
@@ -347,9 +367,13 @@ class Akun extends CI_Controller
         redirect('../akun/feedback'); // Redirect ke halaman feedback
     }
 
+  
+
     public function editfeed($id_feedback)
     {
         $this->load->model('Akun_model'); // Load model
+        $nama = $this->session->userdata('nama'); // Ambil nama dari session
+        $id_sewa = $this->Akun_model->get_feedback_penyewaan($id_feedback);
 
         // Data yang akan diperbarui
         $data = [
@@ -358,7 +382,35 @@ class Akun extends CI_Controller
             'tanggal_feedback' => $this->input->post('tanggal_feedback')
         ];
 
-        // Memperbarui feedback berdasarkan id_feedback
+        // Cek apakah ada file foto yang diunggah
+        if (!empty($_FILES['foto']['name'])) {
+            $config['upload_path'] = './public/img/feedback/'; // Direktori penyimpanan
+            $config['allowed_types'] = 'jpg|jpeg|png|heic'; // Format file yang diizinkan
+            $config['file_name'] = $nama . '_' . $id_sewa; // Nama file berdasarkan id_feedback
+
+
+            $this->load->library('upload', $config);
+
+            if ($this->upload->do_upload('foto')) {
+                // Jika upload berhasil
+                $uploaded_data = $this->upload->data();
+
+                // Hapus foto lama setelah upload berhasil
+                $old_photo = $this->Akun_model->get_feedback_photo($id_feedback);
+                if ($old_photo && file_exists('./public/img/feedback/' . $old_photo)) {
+                    unlink('./public/img/feedback/' . $old_photo);
+                }
+
+                // Simpan nama file baru ke database
+                $data['foto'] = $uploaded_data['file_name'];
+            } else {
+                // Jika gagal upload, set pesan error dan hentikan proses
+                $this->session->set_flashdata('error', 'Gagal mengunggah foto: ' . $this->upload->display_errors());
+                redirect('../akun/feedback');
+            }
+        }
+
+        // Update feedback berdasarkan id_feedback
         if ($this->Akun_model->update_feedback($id_feedback, $data)) {
             $this->session->set_flashdata('success', 'Feedback berhasil diperbarui.');
         } else {
@@ -366,6 +418,20 @@ class Akun extends CI_Controller
         }
 
         redirect('../akun/feedback'); // Redirect ke halaman feedback
+    }
+
+
+
+    public function hapusfoto($id_feedback)
+    {
+        $this->load->model('Akun_model'); // Load model
+
+        // Menghapus feedback berdasarkan id_feedback
+        if ($this->Akun_model->delete_feedback_foto($id_feedback)) {
+            $this->session->set_flashdata('success', 'Foto berhasil dihapus.');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus foto.');
+        }
     }
 
     public function favorit()

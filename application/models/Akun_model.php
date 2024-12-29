@@ -82,7 +82,7 @@ class Akun_model extends CI_Model
 
     public function get_user_by_names($names)
     {
-        $this->db->select('foto_profil, nama, tanggal_daftar');
+        $this->db->select('foto_profil, nama, tanggal_daftar, jenis_kelamin');
         $this->db->where('LOWER(nama)', strtolower($names)); // Membandingkan secara case-insensitive
         $query = $this->db->get('users');
         return $query->row_array(); // Mengembalikan satu baris sebagai array
@@ -95,9 +95,9 @@ class Akun_model extends CI_Model
         $this->db->update('users', $data);
     }
 
-   
 
-    // public function get_id_by_name($nama)
+
+    // public function get_id_by_names($nama)
     // {
     //     $this->db->select('id_user');
     //     $this->db->from('users');
@@ -117,7 +117,7 @@ class Akun_model extends CI_Model
 
     public function get_feedback_by_user($id_user)
     {
-        $this->db->select('feedback.id_feedback, feedback.id_user, feedback.id_alat, feedback.komentar, feedback.rating, feedback.tanggal_feedback, alat_pendakian.nama_alat');
+        $this->db->select('feedback.id_feedback, feedback.id_user, feedback.id_alat, feedback.komentar, feedback.rating, feedback.tanggal_feedback, feedback.foto, alat_pendakian.nama_alat');
         $this->db->from('feedback');
         $this->db->join('alat_pendakian', 'feedback.id_alat = alat_pendakian.id_alat');
         $this->db->where('feedback.id_user', $id_user); // Gunakan id_user, bukan nama
@@ -128,8 +128,56 @@ class Akun_model extends CI_Model
 
     public function delete_feedback($id_feedback)
     {
+        // Hapus foto jika ada
         $this->db->where('id_feedback', $id_feedback);
+        $feedback = $this->db->get('feedback')->row();
+        if ($feedback->foto) {
+            $file_path = './public/img/feedback/' . $feedback->foto;
+            if (file_exists($file_path)) {
+                unlink($file_path);
+            }
+        }
+
+        $this->db->where('id_feedback', $id_feedback);
+
         return $this->db->delete('feedback'); // Menghapus data dan mengembalikan status
+    }
+
+    public function delete_feedback_foto($id_feedback)
+    {
+        $this->db->where('id_feedback', $id_feedback);
+        $feedback = $this->db->get('feedback')->row();
+        if ($feedback->foto) {
+            $file_path = './public/img/feedback/' . $feedback->foto;
+            if (file_exists($file_path)) {
+                unlink($file_path);
+            }
+        }
+        $this->db->where('id_feedback', $id_feedback);
+        $this->db->set('foto', null);
+        if ($this->db->update('feedback')) { // Menghapus foto dan mengembalikan status
+            redirect($_SERVER['HTTP_REFERER']);
+        }
+    }
+
+    public function get_feedback_photo($id_feedback)
+    {
+        $this->db->select('foto');
+        $this->db->from('feedback');
+        $this->db->where('id_feedback', $id_feedback);
+        $query = $this->db->get();
+        $result = $query->row();
+        return $result ? $result->foto : null;
+    }
+
+    public function get_feedback_penyewaan($id_feedback)
+    {
+        $this->db->select('id_penyewaan');
+        $this->db->from('feedback');
+        $this->db->where('id_feedback', $id_feedback);
+        $query = $this->db->get();
+        $result = $query->row();
+        return $result ? $result->id_penyewaan : null;
     }
 
     public function update_feedback($id_feedback, $data)
@@ -196,6 +244,7 @@ class Akun_model extends CI_Model
         $this->db->select('COUNT(*) AS total_penyewaan');
         $this->db->from('penyewaan');
         $this->db->where('id_user', $id_user);
+        $this->db->where('status_sewa', 'selesai');
         $query = $this->db->get();
         return $query->row(); // Mengembalikan total penyewaan
     }
@@ -207,6 +256,7 @@ class Akun_model extends CI_Model
         $this->db->join('seri', 'penyewaan.seri_alat = seri.seri_alat', 'left');
         $this->db->join('alat_pendakian', 'seri.id_alat = alat_pendakian.id_alat', 'left');
         $this->db->where('penyewaan.id_user', $id_user);
+        $this->db->where('status_sewa', 'selesai');
         $this->db->group_by('alat_pendakian.id_alat');
         $this->db->order_by('jumlah_disewa', 'DESC');
         $this->db->limit(1);
@@ -247,7 +297,7 @@ class Akun_model extends CI_Model
     public function get_admin_by_name($name)
     {
         // Pilih kolom termasuk foto_admin
-        $this->db->select('id_admin, nama_admin, email_admin, no_telp_admin, foto_admin, tanggal_ditambahkan');
+        $this->db->select('id_admin, nama_admin, email_admin, no_telp_admin, foto_admin, tanggal_ditambahkan, jenis_kelamin');
         $this->db->where('LOWER(nama_admin)', strtolower($name)); // Case-insensitive
         $query = $this->db->get('admin');
         return $query->row_array();

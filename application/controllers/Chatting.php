@@ -9,14 +9,22 @@ class Chatting extends CI_Controller
         $this->load->library('session');
         $this->load->model('Chatting_model');
         $this->load->helper(array('form', 'url'));
+        $this->load->library('form_validation');
     }
 
     public function index()
     {
         $data['title'] = "Hikyu | Chatting";
 
+        $this->load->library('session');
+
         $nama = $this->session->userdata('nama');
         $id_user = $this->Chatting_model->get_id_by_name($nama);
+
+        if (!$nama) {
+            // Jika user tidak login, arahkan ke halaman login
+            redirect('../login');
+        }
 
         // Ambil data chat dari model
         $data['chats'] = $this->Chatting_model->get_all_chats($id_user);
@@ -154,6 +162,17 @@ class Chatting extends CI_Controller
             $this->session->set_flashdata('success', 'Pesan berhasil diperbarui.');
         } else {
             $this->session->set_flashdata('error', 'Gagal memperbarui pesan.');
+        }
+
+        redirect('../chatting');
+    }
+
+    public function hapusFile($id_chat)
+    {
+        if ($this->Chatting_model->delete_chat_files($id_chat)) {
+            $this->session->set_flashdata('success', 'File berhasil dihapus.');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus file.');
         }
 
         redirect('../chatting');

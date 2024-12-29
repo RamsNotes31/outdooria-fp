@@ -21,11 +21,12 @@ class Register_model extends CI_Model
         }
 
         // Proceed to register new user
-        $query = "CALL tambah_user(?, ?, ?, ?, ?, ?)";
+        $query = "CALL tambah_user(?, ?, ?, ?, ?, ?, ?)";
         $bindings = [
             $data['nama'],
             $data['email'],
             $data['password'],
+            $data['jenkel'],
             $data['no_telepon'],
             $data['alamat'],
             $data['foto_profil'],

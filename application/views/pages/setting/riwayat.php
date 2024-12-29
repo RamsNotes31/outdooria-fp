@@ -23,10 +23,19 @@
                             <td class="text-center"><?= htmlspecialchars($item->tanggal_penyewaan); ?></td>
                             <td class="text-center"><?= htmlspecialchars($item->tanggal_pengembalian); ?></td>
                             <td class="text-center">Rp <?= number_format($item->total_harga, 0, ',', '.'); ?></td>
-                            <td class="text-center"><?= htmlspecialchars($item->status_sewa); ?></td>
                             <td class="text-center">
-                                <?php if (!empty($item->bukti_pembayaran) && $item->status_sewa !== 'batal' ): ?>
-                                    <img src="<?= base_url('public/img/bukti/' . $item->bukti_pembayaran); ?>" width="100" height="100" class="img-thumbnail card-neoraised border border-dark border-2" alt="Bukti Bayar">
+                                <span class="card-neoraised border border-dark badge 
+                                    <?= $item->status_sewa == 'menunggu' ? 'bg-warning' : ($item->status_sewa == 'batal' ? 'bg-danger' : ($item->status_sewa == 'disewa' ? 'bg-primary' : ($item->status_sewa == 'selesai' ? 'bg-success' : ''))) ?>">
+                                    <?= htmlspecialchars($item->status_sewa); ?>
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <?php if (!empty($item->bukti_pembayaran) && $item->status_sewa !== 'batal'): ?>
+                                    <?php if (file_exists(FCPATH . 'public/img/bukti/' . $item->bukti_pembayaran)): ?>
+                                        <img src="<?= base_url('public/img/bukti/' . $item->bukti_pembayaran); ?>" width="100" height="100" class="img-thumbnail card-neoraised border border-dark border-2" alt="Bukti Bayar">
+                                    <?php else: ?>
+                                        <p class="card-text text-muted card card-neoraised p-1">Foto Telah dihapus.</p>
+                                    <?php endif; ?>
                                 <?php else: ?>
                                     <?php if ($item->status_sewa === 'menunggu'): ?>
                                         <span class="text-muted">Tidak ada</span>

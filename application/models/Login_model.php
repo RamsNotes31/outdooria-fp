@@ -25,6 +25,7 @@ class Login_model extends CI_Model
         if ($query->num_rows() == 1) {
             $admin = $query->row();
             $admin->role = 'admin';
+            $this->session->set_userdata('nama_admin', $admin->nama_admin);
             return $admin;
         }
 

@@ -4,6 +4,9 @@ defined('BASEPATH') or
 ?>
 
 <div class="container mt-4">
+    <?php if ($this->session->userdata('nama')): ?>
+        <h1 class="text-center fw-bolder mt-5 mb-5">Welcome back <span class="text-danger"><?php echo $this->session->userdata('nama'); ?>!</span></h1>
+    <?php endif; ?>
     <div class="row">
         <div class="col-lg-6 d-flex align-items-center">
             <img src="<?php echo base_url("public/img/gunung.png"); ?>" alt="Gunung" class="img-fluid mx-auto">
@@ -121,7 +124,15 @@ defined('BASEPATH') or
 
                                         </div>
                                         <!-- Komentar -->
-                                        <p class="card-text fw-light">"<?= $feedback->komentar; ?>"</p>
+                                        <p class="card-text fw-light mt-3">"<?= $feedback->komentar; ?>"</p>
+                                        <?php if (!empty($feedback->foto)): ?>
+                                            <?php if (file_exists(FCPATH . 'public/img/feedback/' . $feedback->foto)): ?>
+                                                <img src="<?= base_url('public/img/feedback/' . $feedback->foto); ?>" class="img-fluid card-neoraised border border-dark border-1 rounded-3 mb-5" alt="Foto Feedback" width="150" height="150">
+                                            <?php else: ?>
+                                                <p class="card-text text-muted card card-neoraised p-1">Foto Telah dihapus.</p>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+
                                         <div class="d-block">
                                             <!-- Tanggal Feedback -->
                                             <p class="card-text fw-light"><small
@@ -144,7 +155,7 @@ defined('BASEPATH') or
                                                         echo '<i class="bi bi-star text-muted"></i>'; // Bintang kosong
                                                     }
                                                 }
-                                                ?></p>
+                                                ?><small class="text-muted fw-bold"> <?= number_format(htmlspecialchars($rating, ENT_QUOTES, 'UTF-8'), 1); ?>/5.0</small></p>
                                         </div>
                                     </div>
                                 </div>

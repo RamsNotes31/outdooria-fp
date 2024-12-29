@@ -8,11 +8,18 @@
                 style="width: 13rem; height: 13rem; object-fit: contain;">
         </div>
         <h1 class="fs-1 fw-light mb-4 mt-5 text-center fw-bold">
+            <?php if ($admin['jenis_kelamin'] === 'L') : ?>
+                <i class="bi bi-gender-male me-2"></i>
+            <?php elseif ($admin['jenis_kelamin'] === 'P') : ?>
+                <i class="bi bi-gender-female me-2"></i>
+            <?php else : ?>
+                <i class="bi bi-gender-ambiguous me-2"></i>
+            <?php endif; ?>
             <?= htmlspecialchars($admin['nama_admin'], ENT_QUOTES, 'UTF-8'); ?>
         </h1>
         <span class="fw-bold fs-6">Joined</span>
         <span class="fw-light fs-6 mb-3">
-            <?= date('d F Y', strtotime($admin['tanggal_ditambahkan'])); ?>
+            <?= date('d F Y H:i:s', strtotime($admin['tanggal_ditambahkan'])); ?>
         </span>
 
         <h1 class="fs-1 fw-light mb-4 mt-5 text-center fw-bold">
@@ -27,18 +34,20 @@
             <?= htmlspecialchars($total_chats); ?> Pesan
         </span>
 
-        <div class="text-center mt-5">
-            <h1 class="fs-1 fw-light mb-4 mt-5 text-center fw-bold">Contact Us</h1>
-            <a href="mailto:<?php echo $admin['email_admin']; ?>" class="text-decoration-none" target="_blank">
-                <i class="bi bi-envelope me-2 text-danger"></i><?php echo htmlspecialchars($admin['email_admin']); ?>
-            </a><br>
-            <a href="tel:<?php echo $admin['no_telp_admin']; ?>" class="text-decoration-none" target="_blank">
-                <i class="bi bi-telephone me-2 text-primary"></i><?php echo htmlspecialchars($admin['no_telp_admin']); ?>
-            </a><br>
-            <a href="https://wa.me/+62<?php echo preg_replace('/^0/', '', $admin['no_telp_admin']); ?>" class="text-decoration-none" target="_blank">
-                <i class="bi bi-whatsapp me-2 text-success"></i>+62<?php echo preg_replace('/^0/', '', $admin['no_telp_admin']); ?>
-            </a><br>
-        </div>
+        <?php if ($admin['nama_admin'] !== 'Bot') : ?>
+            <div class="text-center mt-5">
+                <h1 class="fs-1 fw-light mb-4 mt-5 text-center fw-bold">Contact Us</h1>
+                <a href="mailto:<?php echo $admin['email_admin']; ?>" class="text-decoration-none" target="_blank">
+                    <i class="bi bi-envelope me-2 text-danger"></i><?php echo htmlspecialchars($admin['email_admin']); ?>
+                </a><br>
+                <a href="tel:<?php echo $admin['no_telp_admin']; ?>" class="text-decoration-none" target="_blank">
+                    <i class="bi bi-telephone me-2 text-primary"></i><?php echo htmlspecialchars($admin['no_telp_admin']); ?>
+                </a><br>
+                <a href="https://wa.me/+62<?php echo preg_replace('/^0/', '', $admin['no_telp_admin']); ?>" class="text-decoration-none" target="_blank">
+                    <i class="bi bi-whatsapp me-2 text-success"></i>+62<?php echo preg_replace('/^0/', '', $admin['no_telp_admin']); ?>
+                </a><br>
+            </div>
+        <?php endif; ?>
         <a href="<?= base_url('home'); ?>" class="btn btn-lg btn-neoraised btn-primary mt-5 mb-4 fw-bold">Back</a>
     </div>
 </div>

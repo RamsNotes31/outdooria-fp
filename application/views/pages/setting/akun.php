@@ -8,11 +8,18 @@
                 style="width: 13rem; height: 13rem; object-fit: contain;">
         </div>
         <h1 class="fs-1 fw-light mb-4 mt-5 text-center fw-bold">
+            <?php if ($user['jenis_kelamin'] === 'L') : ?>
+                <i class="bi bi-gender-male me-2"></i>
+            <?php elseif ($user['jenis_kelamin'] === 'P') : ?>
+                <i class="bi bi-gender-female me-2"></i>
+            <?php else : ?>
+                <i class="bi bi-gender-ambiguous me-2"></i>
+            <?php endif; ?>
             <?= htmlspecialchars($user['nama'], ENT_QUOTES, 'UTF-8'); ?>
         </h1>
         <span class="fw-bold fs-6">Joined</span>
         <span class="fw-light fs-6">
-            <?= date('d F Y', strtotime($user['tanggal_daftar'])); ?>
+            <?= date('d F Y H:i:s', strtotime($user['tanggal_daftar'])); ?>
         </span>
 
         <h1 class="fs-1 fw-light mb-4 mt-5 text-center fw-bold">

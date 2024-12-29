@@ -1,12 +1,11 @@
 <?php
 defined('BASEPATH') or
 	header("Location: error");
-?>
-<?php
 $ci = new CI_Controller();
 $ci = &get_instance();
-$ci->load->helper('url');
+$ci->load->library('url');
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 

@@ -33,6 +33,7 @@ class Register extends CI_Controller
             'nama' => $this->input->post('nama'),
             'email' => $this->input->post('username'),
             'password' => $this->input->post('password'),
+            'jenkel' => $this->input->post('jenkel'),
             'no_telepon' => $this->input->post('no_hp'),
             'alamat' => $this->input->post('alamat'),
         );

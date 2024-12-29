@@ -1,12 +1,11 @@
 <?php
 defined('BASEPATH') or
 	header("Location: error");
-?>
-<?php
 $ci = new CI_Controller();
 $ci = &get_instance();
-$ci->load->helper('url');
+$ci->load->library('url');
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,7 +39,8 @@ $ci->load->helper('url');
 		<div class="text-center">
 			<h1 class="display-1 fw-bold text-dark mb-0">503</h1>
 			<h2 class="display-6 fw-semibold text-secondary mb-3">
-				503 Service Unavailable
+				<!-- 503 Service Unavailable -->
+				<?= $message; ?>
 			</h2>
 			<p class="text-muted mb-4 fs-4">
 				Sorry, the service is currently unavailable. Please try again later.
