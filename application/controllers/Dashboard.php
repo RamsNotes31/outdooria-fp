@@ -8,6 +8,8 @@ class Dashboard extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Dashboard_model');
+        $this->load->library('session');
+
     }
     public function index()
     {
@@ -110,6 +112,7 @@ class Dashboard extends CI_Controller
         $data['chat_img'] = $this->Dashboard_model->get_all_chat_img();
 
         $data['user_statistics'] = $this->Dashboard_model->get_user_statistics();
+        $data['admin_statistics'] = $this->Dashboard_model->get_admin_statistics();
 
         $this->load->view('admin/dashboard', $data);
 

@@ -1,9 +1,7 @@
 <?php
 defined('BASEPATH') or
 	header("Location: error");
-$ci = new CI_Controller();
-$ci = &get_instance();
-$ci->load->library('url');
+
 ?>
 
 <!DOCTYPE html>

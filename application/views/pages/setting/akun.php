@@ -2,10 +2,17 @@
     <div class="d-flex flex-column align-items-center">
         <h1 class="fs-1 fw-bolder mb-5">Profile User</h1>
         <div class="d-flex align-items-center justify-content-center">
-            <img src="<?php echo base_url('public/img/user/' . $user['foto_profil']); ?>"
-                alt="<?= htmlspecialchars($user['nama'], ENT_QUOTES, 'UTF-8'); ?>"
-                class="img-fluid border border-dark border-3 card-neoraised rounded-pill"
-                style="width: 13rem; height: 13rem; object-fit: contain;">
+            <?php if (file_exists(FCPATH . 'public/img/user/' . $user['foto_profil'])) : ?>
+                <img src="<?php echo base_url('public/img/user/' . $user['foto_profil']); ?>"
+                    alt="<?= htmlspecialchars($user['nama'], ENT_QUOTES, 'UTF-8'); ?>"
+                    class="img-fluid border border-dark border-3 card-neoraised rounded-pill"
+                    style="width: 13rem; height: 13rem; object-fit: contain;">
+            <?php else : ?>
+                <img src="<?php echo base_url('public/img/user/default.png'); ?>"
+                    alt="<?= htmlspecialchars($user['nama'], ENT_QUOTES, 'UTF-8'); ?>"
+                    class="img-fluid border border-dark border-3 card-neoraised rounded-pill"
+                    style="width: 13rem; height: 13rem; object-fit: contain;">
+            <?php endif; ?>
         </div>
         <h1 class="fs-1 fw-light mb-4 mt-5 text-center fw-bold">
             <?php if ($user['jenis_kelamin'] === 'L') : ?>

@@ -147,73 +147,59 @@ class Invoice extends CI_Controller
 
     public function review()
     {
-        // Load session library
-        $this->load->library('session');
-        $this->load->library('upload'); // Untuk upload file gambar
+        ini_set('memory_limit', '-1');
+        $this->load->library('upload');
 
-        // Ambil nama user dari session
         $nama_user = $this->session->userdata('nama');
         $role = $this->session->userdata('role');
 
-        // Validasi apakah user sudah login
         if (empty($nama_user)) {
             $this->session->set_flashdata('error', 'Anda harus login untuk memberikan review.');
-            redirect('../login');
+            redirect(base_url('login'));
         }
 
-        // Validasi role admin
         if ($role === 'admin') {
-            redirect('../home');
+            redirect(base_url('home'));
         }
 
-        // Ambil ID user berdasarkan nama
         $id_user = $this->Invoice_model->get_id_by_name($nama_user);
-
-        // Validasi jika user tidak ditemukan
         if (!$id_user) {
             $this->session->set_flashdata('error', 'Gagal menemukan ID pengguna.');
-            redirect('../login');
+            redirect(base_url('login'));
         }
 
+        $nama_alat = htmlspecialchars($this->input->post('nama_alat'), ENT_QUOTES, 'UTF-8');
+        $id_penyewaan = htmlspecialchars($this->input->post('id_penyewaan'), ENT_QUOTES, 'UTF-8');
+        $rating = htmlspecialchars($this->input->post('rating'), ENT_QUOTES, 'UTF-8');
+        $comment = htmlspecialchars($this->input->post('comment'), ENT_QUOTES, 'UTF-8');
 
-
-        // Ambil data form
-        $nama_alat = $this->input->post('nama_alat');
-        $id_penyewaan = $this->input->post('id_penyewaan');
-        $rating = $this->input->post('rating');
-        $comment = $this->input->post('comment');
-
-        $cekfeed = $this->Invoice_model->check_feedback_exists_for_rental($id_penyewaan);
-
-        if ($cekfeed) {
-            $this->session->set_flashdata('sudah', 'Anda sudah memberikan review untuk penyewaan kali ini ini.');
+        if ($this->Invoice_model->check_feedback_exists_for_rental($id_penyewaan)) {
+            $this->session->set_flashdata('sudah', 'Anda sudah memberikan review untuk penyewaan ini.');
             redirect($_SERVER['HTTP_REFERER']);
         }
 
-        // Validasi apakah ID alat ditemukan
         $product_id = $this->Invoice_model->get_id_by_product($nama_alat);
         if (is_null($product_id)) {
             $this->session->set_flashdata('error', 'Produk yang Anda review tidak valid.');
             redirect($_SERVER['HTTP_REFERER']);
         }
 
-        // Validasi input rating dan komentar
         if (empty($rating) || empty($comment)) {
             $this->session->set_flashdata('error', 'Semua field wajib diisi.');
             redirect($_SERVER['HTTP_REFERER']);
         }
 
-        // Proses upload foto
+        // Proses upload file
         $foto = null;
         if (!empty($_FILES['photo']['name'])) {
             $config['upload_path'] = './public/img/feedback/';
             $config['allowed_types'] = 'jpeg|jpg|png|heic';
-            $config['file_name'] = $nama_user . '_' . $id_penyewaan; // Nama file berdasarkan id_feedback
+            $config['max_size'] = 2048; // Maksimal 2 MB
+            $config['file_name'] = $nama_user . '_' . $id_penyewaan;
 
             $this->upload->initialize($config);
 
             if ($this->upload->do_upload('photo')) {
-                // Ambil nama file yang diupload
                 $foto = $this->upload->data('file_name');
             } else {
                 $this->session->set_flashdata('error', $this->upload->display_errors());
@@ -221,14 +207,12 @@ class Invoice extends CI_Controller
             }
         }
 
-        // Simpan data feedback ke database
         $is_inserted = $this->Invoice_model->tambah_feedback($id_user, $product_id, $id_penyewaan, $comment, $rating, $foto);
 
-        // Berikan feedback kepada user
         if ($is_inserted) {
-            $this->session->set_flashdata('successs', 'Review berhasil ditambahkan.');
+            $this->session->set_flashdata('success', 'Review berhasil ditambahkan.');
         } else {
-            $this->session->set_flashdata('errorr', 'Terjadi kesalahan saat menambahkan review.');
+            $this->session->set_flashdata('error', 'Terjadi kesalahan saat menambahkan review.');
         }
 
         redirect($_SERVER['HTTP_REFERER']);

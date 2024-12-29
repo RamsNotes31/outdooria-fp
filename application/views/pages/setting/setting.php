@@ -13,7 +13,11 @@
 
                 <div class="card-body">
                     <div class="d-flex justify-content-center mb-3">
-                        <img src="<?php echo base_url('public/img/user/' . $user['foto_profil']); ?>" alt="<?= $user['nama']; ?>" class="img-fluid border border-dark border-3 card-neoraised rounded-pill" style="width: 10rem; height: 10rem; object-fit: contain;">
+                        <?php if (file_exists('public/img/user/' . $user['foto_profil'])): ?>
+                            <img src="<?php echo base_url('public/img/user/' . $user['foto_profil']); ?>" alt="<?= $user['nama']; ?>" class="img-fluid border border-dark border-3 card-neoraised rounded-pill" style="width: 10rem; height: 10rem; object-fit: contain;">
+                        <?php else: ?>
+                            <img src="<?= base_url('public/img/default.png') ?>" alt="<?= $user['nama']; ?>" class="img-fluid border border-dark border-3 card-neoraised rounded-pill" style="width: 10rem; height: 10rem; object-fit: contain;">
+                        <?php endif; ?>
                         <?php if ($user['foto_profil'] !== 'default.png'): ?>
                             <button type="button" class="btn btn-neoraised btn-danger btn-sm ms-2 mt-auto mb-auto rounded-circle" onclick="confirmDeleteFoto()">
                                 <i class="bi bi-trash-fill"></i>

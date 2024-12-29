@@ -78,7 +78,7 @@
     </div>
 
     <div class="row">
-        <div class="col-12">
+        <div class="col-lg-6 col-12">
             <div class="card card-neoraised mb-4 border border-dark border-3">
                 <div class="card shadow border border-dark border-3">
                     <div class="card-header py-3 text-center fw-bold">
@@ -113,6 +113,42 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-lg-6 col-12">
+            <div class="card card-neoraised mb-4 border border-dark border-3">
+                <div class="card shadow border border-dark border-3">
+                    <div class="card-header py-3 text-center fw-bold">
+                        <h6 class="m-0 fw-bolder text-black fw-bold">
+                            Total Admin: <span class="badge card-neoraised bg-secondary text-light border border-dark border-3"><?= $admin_statistics['total_admins'] ?></span>
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-neoraised progress-stacked">
+                            <div class="progress border border-dark border-3" role="progressbar" aria-label="Laki-laki" aria-valuenow="<?= $admin_statistics['male_percentage'] ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $admin_statistics['male_percentage'] ?>%">
+                                <div class="progress-bar bg-info"></div>
+                            </div>
+                            <div class="progress border border-dark border-3" role="progressbar" aria-label="Perempuan" aria-valuenow="<?= $admin_statistics['female_percentage'] ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $admin_statistics['female_percentage'] ?>%">
+                                <div class="progress-bar bg-success"></div>
+                            </div>
+                            <div class="progress border border-dark border-3" role="progressbar" aria-label="Lainnya" aria-valuenow="<?= $admin_statistics['other_percentage'] ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $admin_statistics['other_percentage'] ?>%">
+                                <div class="progress-bar bg-warning"></div>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-center small">
+                            <span class="mr-2 fw-bolder">
+                                <i class="bi bi-circle-fill text-info"></i> Laki-laki: <?= $admin_statistics['total_male'] ?> (<?= $admin_statistics['male_percentage'] ?>%)
+                            </span>
+                            <span class="mr-2 fw-bolder">
+                                <i class="bi bi-circle-fill text-success"></i> Perempuan: <?= $admin_statistics['total_female'] ?> (<?= $admin_statistics['female_percentage'] ?>%)
+                            </span>
+                            <span class="mr-2 fw-bolder">
+                                <i class="bi bi-circle-fill text-warning"></i> Lainnya: <?= $admin_statistics['total_other'] ?> (<?= $admin_statistics['other_percentage'] ?>%)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 
@@ -131,6 +167,7 @@
                                 <table id="datatable1" class="display table table-borderless card-neoraised border border-dark border-3" style="width:100%">
                                     <thead>
                                         <tr>
+                                            <th class="text-center">Invoice</th>
                                             <th class="text-center">Nama User</th>
                                             <th class="text-center">Nama Alat</th>
                                             <th class="text-center">Seri Alat</th>
@@ -145,6 +182,7 @@
                                     <tbody>
                                         <?php foreach ($rentals as $rental): ?>
                                             <tr>
+                                                <td class="text-center">#<?= $rental['id_penyewaan'] ?></td>
                                                 <td class="text-center"><?= $rental['nama_user'] ?></td>
                                                 <td class="text-center"><?= $rental['nama_alat'] ?></td>
                                                 <td class="text-center"><?= $rental['seri_alat'] ?></td>
@@ -156,7 +194,11 @@
                                                     <?php if ($rental['bukti_pembayaran'] == null) { ?>
                                                         <span class="badge rounded-pill bg-success text-black fs-6 card-neoraised border border-dark">Bayar Ditempat</span>
                                                     <?php } else { ?>
-                                                        <img src="<?= base_url('public/img/bukti/' . $rental['bukti_pembayaran']) ?>" alt="Bukti Pembayaran" width="50" height="50" class="rounded-3 border border-dark card-neoraised img-fluid">
+                                                        <?php if (file_exists(FCPATH . 'public/img/bukti/' . $rental['bukti_pembayaran'])): ?>
+                                                            <img src="<?= base_url('public/img/bukti/' . $rental['bukti_pembayaran']) ?>" alt="Bukti Pembayaran" width="250" height="250" class="rounded-3 border border-dark card-neoraised img-fluid">
+                                                        <?php else: ?>
+                                                            <p>Gambar tidak tersedia.</p>
+                                                        <?php endif; ?>
                                                     <?php } ?>
                                                 </td>
                                                 <td class="d-flex justify-content-center gap-3 text-center">
@@ -168,6 +210,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
+                                            <th class="text-center">Invoice</th>
                                             <th class="text-center">Nama User</th>
                                             <th class="text-center">Nama Alat</th>
                                             <th class="text-center">Seri Alat</th>
@@ -201,6 +244,7 @@
                                 <table id="datatable2" class="display table table-borderless card-neoraised border border-dark border-3" style="width:100%">
                                     <thead>
                                         <tr>
+                                            <th class="text-center">Invoice</th>
                                             <th class="text-center">Nama User</th>
                                             <th class="text-center">Nama Alat</th>
                                             <th class="text-center">Seri Alat</th>
@@ -212,20 +256,24 @@
                                     <tbody>
                                         <?php foreach ($rentalss as $rent): ?>
                                             <tr>
-                                                <td class="text-center"><?= $rent['nama_user'] ?></td>
-                                                <td class="text-center"><?= $rent['nama_alat'] ?></td>
-                                                <td class="text-center"><?= $rent['seri_alat'] ?></td>
-                                                <td class="text-center"><?= $rent['tanggal_pengembalian'] ?></td>
-                                                <td class="text-center"><?= $rent['status_sewa'] ?></td>
+                                                <td class="text-center"><?php if (isset($rent['id_penyewaan'])) echo '#' . $rent['id_penyewaan']; ?></td>
+                                                <td class="text-center"><?php if (isset($rent['nama_user'])) echo $rent['nama_user']; ?></td>
+                                                <td class="text-center"><?php if (isset($rent['nama_alat'])) echo $rent['nama_alat']; ?></td>
+                                                <td class="text-center"><?php if (isset($rent['seri_alat'])) echo $rent['seri_alat']; ?></td>
+                                                <td class="text-center"><?php if (isset($rent['tanggal_pengembalian'])) echo $rent['tanggal_pengembalian']; ?></td>
+                                                <td class="text-center"><?php if (isset($rent['status_sewa'])) echo $rent['status_sewa']; ?></td>
 
                                                 <td class="d-flex justify-content-center gap-3 text-center">
-                                                    <a href="<?= base_url('dashboard/complete/' . $rent['id_penyewaan']) ?>" class="btn btn-success btn-sm fw-bold border border-dark btn-neoraised">Finished</a>
+                                                    <?php if (isset($rent['id_penyewaan'])): ?>
+                                                        <a href="<?= base_url('dashboard/complete/' . $rent['id_penyewaan']) ?>" class="btn btn-success btn-sm fw-bold border border-dark btn-neoraised">Finished</a>
+                                                    <?php endif; ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
                                     <tfoot>
                                         <tr>
+                                            <th class="text-center">Invoice</th>
                                             <th class="text-center">Nama User</th>
                                             <th class="text-center">Nama Alat</th>
                                             <th class="text-center">Seri Alat</th>
@@ -676,7 +724,7 @@
                                                 <li class="splide__slide d-flex align-items-center justify-content-center">
                                                     <?php if (!empty($bukti['bukti_pembayaran'])): ?>
                                                         <?php if (file_exists(FCPATH . 'public/img/bukti/' . $bukti['bukti_pembayaran'])): ?>
-                                                            <img src="<?= base_url('public/img/bukti/' . $bukti['bukti_pembayaran']); ?>" alt="Slide" class="img-fluid mb-5" style="max-width: 100%;">
+                                                            <img src="<?= base_url('public/img/bukti/' . $bukti['bukti_pembayaran']); ?>" alt="Slide" class="img-fluid mb-5 card-neoraised border border-dark border-3" style="max-width: 100%;">
                                                         <?php else: ?>
                                                             <p>Gambar tidak tersedia.</p>
                                                         <?php endif; ?>

@@ -65,16 +65,18 @@ https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css
             </div>
             <div class="offcanvas-body small card-neoraised">
                 <div class="d-flex flex-column gap-3">
-                    <a href="admin.php" class="btn btn-neoraised btn-success fw-bold border border-dark border-3">Data Admin</a>
-                    <a href="users.php" class="btn btn-neoraised btn-warning fw-bold border border-dark border-3">Data Users</a>
-                    <a href="alat.php" class="btn btn-neoraised btn-danger fw-bold border border-dark border-3">Data Alat</a>
-                    <a href="fav.php" class="btn btn-neoraised btn-primary fw-bold border border-dark border-3">Data Favorit</a>
-                    <a href="feedback.php" class="btn btn-neoraised btn-info fw-bold border border-dark border-3">Data Feedback</a>
-                    <a href="seri.php" class="btn btn-neoraised btn-success fw-bold border border-dark border-3">Data Seri Alat</a>
-                    <a href="sewa.php" class="btn btn-neoraised btn-warning fw-bold border border-dark border-3">Data Penyewaan</a>
-                    <a href="informasi.php" class="btn btn-neoraised btn-danger fw-bold border border-dark border-3">Data Informasi</a>
-                    <a href="chat.php" class="btn btn-neoraised btn-primary fw-bold border border-dark border-3">Data Chat</a>
-                    <a href="../../logout.php" class="btn btn-neoraised btn-info fw-bold border border-dark border-3">Logout</a>
+                    <a href="<?= base_url('akun/admin/' . $this->session->userdata('nama_admin')) ?>" class="btn btn-neoraised btn-secondary fw-bold border border-dark border-3">Profil</a>
+                    <a href="<?= base_url('admin/data_admin') ?>" class="btn btn-neoraised btn-success fw-bold border border-dark border-3">Data Admin</a>
+                    <a href="<?= base_url('admin/data_users') ?>" class="btn btn-neoraised btn-warning fw-bold border border-dark border-3">Data Users</a>
+                    <a href="<?= base_url('admin/data_alat') ?>" class="btn btn-neoraised btn-danger fw-bold border border-dark border-3">Data Alat</a>
+                    <a href="<?= base_url('admin/data_favorit') ?>" class="btn btn-neoraised btn-primary fw-bold border border-dark border-3">Data Favorit</a>
+                    <a href="<?= base_url('admin/data_feedback') ?>" class="btn btn-neoraised btn-info fw-bold border border-dark border-3">Data Feedback</a>
+                    <a href="<?= base_url('admin/data_seri_alat') ?>" class="btn btn-neoraised btn-success fw-bold border border-dark border-3">Data Seri Alat</a>
+                    <a href="<?= base_url('admin/data_penyewaan') ?>" class="btn btn-neoraised btn-warning fw-bold border border-dark border-3">Data Penyewaan</a>
+                    <a href="<?= base_url('admin/data_informasi') ?>" class="btn btn-neoraised btn-danger fw-bold border border-dark border-3">Data Informasi</a>
+                    <a href="<?= base_url('admin/data_chat') ?>" class="btn btn-neoraised btn-primary fw-bold border border-dark border-3">Data Chat</a>
+                    <a href="<?= base_url('admin/ubah_data') ?>" class="btn btn-neoraised btn-secondary fw-bold border border-dark border-3">Ubah Data</a>
+                    <a href="<?= base_url('logout') ?>" class="btn btn-neoraised btn-info fw-bold border border-dark border-3">Logout</a>
                 </div>
             </div>
         </div>

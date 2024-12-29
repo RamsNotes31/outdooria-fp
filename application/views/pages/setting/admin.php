@@ -2,10 +2,17 @@
     <div class="d-flex flex-column align-items-center">
         <h1 class="fs-1 fw-bolder mb-5">Profile Admin</h1>
         <div class="d-flex align-items-center justify-content-center">
-            <img src="<?php echo base_url('public/img/admin/' . $admin['foto_admin']); ?>"
-                alt="<?= htmlspecialchars($admin['nama_admin'], ENT_QUOTES, 'UTF-8'); ?>"
-                class="img-fluid border border-dark border-3 card-neoraised rounded-pill"
-                style="width: 13rem; height: 13rem; object-fit: contain;">
+            <?php if (file_exists(FCPATH . 'public/img/admin/' . $admin['foto_admin'])) : ?>
+                <img src="<?php echo base_url('public/img/admin/' . $admin['foto_admin']); ?>"
+                    alt="<?= htmlspecialchars($admin['nama_admin'], ENT_QUOTES, 'UTF-8'); ?>"
+                    class="img-fluid border border-dark border-3 card-neoraised rounded-pill"
+                    style="width: 13rem; height: 13rem; object-fit: contain;">
+            <?php else : ?>
+                <img src="<?php echo base_url('public/img/admin/default.png'); ?>"
+                    alt="<?= htmlspecialchars($admin['nama_admin'], ENT_QUOTES, 'UTF-8'); ?>"
+                    class="img-fluid border border-dark border-3 card-neoraised rounded-pill"
+                    style="width: 13rem; height: 13rem; object-fit: contain;">
+            <?php endif; ?>
         </div>
         <h1 class="fs-1 fw-light mb-4 mt-5 text-center fw-bold">
             <?php if ($admin['jenis_kelamin'] === 'L') : ?>

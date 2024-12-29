@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 29, 2024 at 02:54 AM
+-- Generation Time: Dec 29, 2024 at 05:03 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -15,7 +15,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `outdooria_hikyu`
@@ -139,7 +139,7 @@ END$$
 --
 -- Functions
 --
-CREATE DEFINER=`root`@`localhost` FUNCTION `id_admin_baru` (`nama_admin` VARCHAR(100)) RETURNS VARCHAR(10) CHARSET utf8 DETERMINISTIC READS SQL DATA BEGIN
+CREATE DEFINER=`root`@`localhost` FUNCTION `id_admin_baru` (`nama_admin` VARCHAR(100)) RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
     DECLARE id_admin_baru VARCHAR(10);
     DECLARE huruf_depan VARCHAR(1);
     DECLARE urutan INT;
@@ -162,7 +162,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `id_admin_baru` (`nama_admin` VARCHAR
     RETURN id_admin_baru;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `id_alat_baru` (`p_nama_alat` VARCHAR(100), `p_kategori` ENUM('primary','secondary','accessory','others')) RETURNS VARCHAR(10) CHARSET utf8 DETERMINISTIC READS SQL DATA BEGIN
+CREATE DEFINER=`root`@`localhost` FUNCTION `id_alat_baru` (`p_nama_alat` VARCHAR(100), `p_kategori` ENUM('primary','secondary','accessory','others')) RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
     DECLARE huruf_kategori CHAR(1);
     DECLARE huruf_nama CHAR(1);
     DECLARE alat_baru INT;
@@ -187,7 +187,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `id_alat_baru` (`p_nama_alat` VARCHAR
     RETURN id_alat_baru;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `id_chat_baru` () RETURNS VARCHAR(10) CHARSET utf8 DETERMINISTIC READS SQL DATA BEGIN
+CREATE DEFINER=`root`@`localhost` FUNCTION `id_chat_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
     DECLARE id_chat_baru VARCHAR(10);
     DECLARE urutan INT;
     DECLARE urutan_str VARCHAR(5);
@@ -207,7 +207,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `id_chat_baru` () RETURNS VARCHAR(10)
     RETURN id_chat_baru;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `id_favorit_baru` () RETURNS VARCHAR(10) CHARSET utf8 DETERMINISTIC READS SQL DATA BEGIN
+CREATE DEFINER=`root`@`localhost` FUNCTION `id_favorit_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
     DECLARE id_favorit_baru VARCHAR(10);
     DECLARE urutan INT;
     DECLARE urutan_str VARCHAR(5);
@@ -227,7 +227,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `id_favorit_baru` () RETURNS VARCHAR(
     RETURN id_favorit_baru;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `id_feedback_baru` () RETURNS VARCHAR(10) CHARSET utf8 DETERMINISTIC READS SQL DATA BEGIN
+CREATE DEFINER=`root`@`localhost` FUNCTION `id_feedback_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
     DECLARE id_feedback_baru VARCHAR(10);
     DECLARE urutan INT;
     DECLARE urutan_str VARCHAR(5);
@@ -247,7 +247,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `id_feedback_baru` () RETURNS VARCHAR
     RETURN id_feedback_baru;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `id_informasi_baru` () RETURNS VARCHAR(10) CHARSET utf8 DETERMINISTIC READS SQL DATA BEGIN
+CREATE DEFINER=`root`@`localhost` FUNCTION `id_informasi_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
     DECLARE id_informasi_baru VARCHAR(10);
     DECLARE urutan INT;
     DECLARE urutan_str VARCHAR(5);
@@ -267,7 +267,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `id_informasi_baru` () RETURNS VARCHA
     RETURN id_informasi_baru;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `id_penyewaan_baru` () RETURNS VARCHAR(10) CHARSET utf8 DETERMINISTIC READS SQL DATA BEGIN
+CREATE DEFINER=`root`@`localhost` FUNCTION `id_penyewaan_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
     DECLARE id_penyewaan_baru VARCHAR(10);
     DECLARE urutan INT;
     DECLARE urutan_str VARCHAR(5);
@@ -287,7 +287,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `id_penyewaan_baru` () RETURNS VARCHA
     RETURN id_penyewaan_baru;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `id_user_baru` (`nama` VARCHAR(100)) RETURNS VARCHAR(10) CHARSET utf8 DETERMINISTIC READS SQL DATA BEGIN
+CREATE DEFINER=`root`@`localhost` FUNCTION `id_user_baru` (`nama` VARCHAR(100)) RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
     DECLARE id_user_baru VARCHAR(10);
     DECLARE huruf_depan VARCHAR(1);
     DECLARE urutan INT;
@@ -310,7 +310,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `id_user_baru` (`nama` VARCHAR(100)) 
     RETURN id_user_baru;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `seri_alat_baru` () RETURNS VARCHAR(10) CHARSET utf8 DETERMINISTIC BEGIN
+CREATE DEFINER=`root`@`localhost` FUNCTION `seri_alat_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC BEGIN
     DECLARE seri_alat_baru VARCHAR(10);
     DECLARE urutan INT;
     DECLARE urutan_str VARCHAR(5);
@@ -343,7 +343,7 @@ CREATE TABLE `admin` (
   `jenis_kelamin` enum('P','L','O') DEFAULT 'O',
   `tanggal_ditambahkan` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `foto_admin` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `admin`
@@ -352,7 +352,6 @@ CREATE TABLE `admin` (
 INSERT INTO `admin` (`id_admin`, `nama_admin`, `email_admin`, `no_telp_admin`, `password_admin`, `jenis_kelamin`, `tanggal_ditambahkan`, `foto_admin`) VALUES
 ('1', 'Rama Danadipa', 'rama@gmail.com', '089697100997', 'ramadanadipa', 'O', '2024-11-27 12:13:25', 'default.png'),
 ('1165', 'Bot', 'bot@bot', '0812345679', 'botbot123', 'O', '2024-12-29 02:02:54', 'default.png'),
-('2', 'Panji Ihsanudin Fajri', 'panji@gmail.com', '085777419874', 'pnj1165', 'L', '2024-11-27 12:13:25', 'default.png'),
 ('A00005', 'adada', 'admdain@example.com', '083334567890', 'pasdasword123', 'O', '2024-12-07 08:08:53', 'default.png'),
 ('N00003', 'Nama Admin', 'admin@example.com', '081234567890', 'password123', 'O', '2024-12-07 03:39:29', 'default.png');
 
@@ -370,17 +369,17 @@ CREATE TABLE `alat_pendakian` (
   `harga_sewa` decimal(10,0) NOT NULL,
   `foto_produk` varchar(255) NOT NULL,
   `deskripsi` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `alat_pendakian`
 --
 
 INSERT INTO `alat_pendakian` (`id_alat`, `nama_alat`, `kategori`, `stok`, `harga_sewa`, `foto_produk`, `deskripsi`) VALUES
-('1', 'Tenda 4P', 'primary', 91, '55000', 'default.jpg', 'Tenda Untuk 4 Orang'),
+('1', 'Tenda 4P', 'primary', 92, '55000', 'default.jpg', 'Tenda Untuk 4 Orang'),
 ('2', 'Tracking Pole', 'secondary', 66, '15000', 'default.jpg', 'Alat Bantuan'),
 ('A-J-00001', 'jam', 'accessory', 4, '21000', 'default.jpg', 'jam'),
-('O-K-00001', 'kompor', 'others', 3, '50000', 'default.jpg', 'untuk memasak'),
+('O-K-00001', 'kompor', 'others', 6, '50000', 'default.jpg', 'untuk memasak'),
 ('S-L-00002', 'lampu', 'secondary', 12, '50000', 'default.jpg', 'untuk penerangan');
 
 --
@@ -412,12 +411,12 @@ DELIMITER ;
 CREATE TABLE `chat` (
   `id_chat` varchar(11) NOT NULL,
   `id_user` varchar(11) NOT NULL,
-  `id_admin` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `id_admin` varchar(11) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `role` enum('user','admin') NOT NULL,
   `pesan` text NOT NULL,
   `tanggal_kirim` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `foto_chat` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `chat`
@@ -443,7 +442,7 @@ CREATE TABLE `favorit` (
   `id_user` varchar(11) NOT NULL,
   `id_alat` varchar(11) NOT NULL,
   `tanggal_ditambahkan` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `favorit`
@@ -470,7 +469,7 @@ CREATE TABLE `feedback` (
   `rating` decimal(2,1) DEFAULT NULL,
   `foto` varchar(255) DEFAULT NULL,
   `tanggal_feedback` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `feedback`
@@ -498,7 +497,7 @@ CREATE TABLE `informasi_pendakian` (
   `deskripsi` text NOT NULL,
   `tanggal_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `foto_gunung` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `informasi_pendakian`
@@ -526,7 +525,7 @@ CREATE TABLE `penyewaan` (
   `total_harga` decimal(10,0) NOT NULL,
   `status_sewa` enum('menunggu','disewa','selesai','batal') NOT NULL DEFAULT 'menunggu',
   `bukti_pembayaran` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `penyewaan`
@@ -535,7 +534,7 @@ CREATE TABLE `penyewaan` (
 INSERT INTO `penyewaan` (`id_penyewaan`, `id_user`, `seri_alat`, `tanggal_penyewaan`, `tanggal_pengembalian`, `total_harga`, `status_sewa`, `bukti_pembayaran`) VALUES
 ('1', '2', '1', '2024-11-27', '2024-11-28', '110000', 'batal', NULL),
 ('11', '2', '1', '2024-11-27', '2024-11-28', '110000', 'selesai', NULL),
-('1165', 'T00008', '2', '2024-12-29', '2024-12-31', '110000', 'menunggu', '1165_tang_keke.jpg'),
+('1165', 'T00008', '2', '2024-12-29', '2024-12-31', '110000', 'batal', '1165_tang_keke.jpg'),
 ('2', '1', '2', '2024-11-27', '2024-11-28', '30000', 'batal', NULL),
 ('20', '1', '2', '2024-11-27', '2024-11-28', '30000', 'selesai', NULL),
 ('26', '1', '2', '2024-11-27', '2024-11-28', '30000', 'batal', NULL),
@@ -562,9 +561,9 @@ INSERT INTO `penyewaan` (`id_penyewaan`, `id_user`, `seri_alat`, `tanggal_penyew
 ('P-00026', 'C00005', 'S-00022', '2024-12-27', '2024-12-30', '50000', 'batal', NULL),
 ('P-00027', 'C00005', 'S-00014', '2024-12-27', '2024-12-30', '50000', 'batal', NULL),
 ('P-00029', 'T00008', 'S-00014', '2024-12-29', '2025-01-01', '50000', 'batal', NULL),
-('P-00030', 'T00008', 'S-00022', '2024-12-29', '2025-01-01', '50000', 'menunggu', NULL),
-('P-00031', 'T00008', 'S-00019', '2024-12-29', '2025-01-01', '50000', 'menunggu', NULL),
-('P-00032', 'C00007', 'S-00014', '2024-12-29', '2025-01-01', '50000', 'menunggu', 'P-00032_cobain.png');
+('P-00030', 'T00008', 'S-00022', '2024-12-29', '2025-01-01', '50000', 'batal', NULL),
+('P-00031', 'T00008', 'S-00019', '2024-12-29', '2025-01-01', '50000', 'batal', NULL),
+('P-00032', 'C00007', 'S-00014', '2024-12-29', '2025-01-01', '50000', 'selesai', 'P-00032_cobain.png');
 
 --
 -- Triggers `penyewaan`
@@ -630,9 +629,9 @@ CREATE TABLE `seri` (
   `seri_alat` varchar(11) NOT NULL,
   `id_alat` varchar(11) NOT NULL,
   `kondisi` enum('baru','baik','minus') NOT NULL DEFAULT 'baik',
-  `status_produk` enum('tersedia','disewa','dalam perawatan','rusak','menunggu') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'tersedia',
+  `status_produk` enum('tersedia','disewa','dalam perawatan','rusak','menunggu') CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL DEFAULT 'tersedia',
   `tanggal_ditambahkan` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `seri`
@@ -651,14 +650,14 @@ INSERT INTO `seri` (`seri_alat`, `id_alat`, `kondisi`, `status_produk`, `tanggal
 ('S-00010', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
 ('S-00011', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
 ('S-00012', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
-('S-00014', 'O-K-00001', 'baru', 'menunggu', '2024-12-07 06:10:42'),
+('S-00014', 'O-K-00001', 'baru', 'tersedia', '2024-12-07 06:10:42'),
 ('S-00015', 'O-K-00001', 'baru', 'tersedia', '2024-12-07 06:10:44'),
 ('S-00017', 'O-K-00001', 'baru', 'tersedia', '2024-12-07 06:10:46'),
 ('S-00018', 'O-K-00001', 'baru', 'tersedia', '2024-12-07 06:10:48'),
-('S-00019', 'O-K-00001', 'baru', 'menunggu', '2024-12-07 08:17:57'),
+('S-00019', 'O-K-00001', 'baru', 'tersedia', '2024-12-07 08:17:57'),
 ('S-00020', 'S-L-00002', 'baru', 'tersedia', '2024-12-07 08:18:09'),
 ('S-00021', 'S-L-00002', 'baru', 'tersedia', '2024-12-07 08:19:33'),
-('S-00022', 'O-K-00001', 'baru', 'menunggu', '2024-12-07 08:19:59'),
+('S-00022', 'O-K-00001', 'baru', 'tersedia', '2024-12-07 08:19:59'),
 ('S-00023', 'A-J-00001', 'baik', 'tersedia', '2024-12-07 08:33:56'),
 ('S-00024', 'A-J-00001', 'baik', 'tersedia', '2024-12-07 08:33:56'),
 ('S-00025', 'A-J-00001', 'baik', 'tersedia', '2024-12-07 08:33:56'),
@@ -712,7 +711,7 @@ CREATE TABLE `users` (
   `alamat` text,
   `tanggal_daftar` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `foto_profil` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `users`
@@ -724,6 +723,7 @@ INSERT INTO `users` (`id_user`, `nama`, `email`, `password`, `jenis_kelamin`, `n
 ('C00006', 'cobaadad', 'dadatry@gmail.com', 'trytryadadad', 'O', '081217419874', 'daddad', '2024-12-27 20:05:22', 'cobaadad.png'),
 ('C00007', 'cobain', 'coba@gmail.com', 'pnj1165', 'O', '085280664986', 'adwadada', '2024-12-28 11:49:26', 'cobain.png'),
 ('N00003', 'Nama User', 'user@example.com', 'password123', 'O', '081234567891', 'Alamat User', '2024-12-07 03:39:43', 'default.png'),
+('N00009', 'nyoba', 'nyoba@gmail.com', 'nyobanyoba', 'L', '085280664981', 'dada', '2024-12-29 16:28:32', 'default.png'),
 ('T00006', 'try', 'try@gmail.com', 'trytry', 'O', '081318897775', 'try', '2024-12-27 18:15:51', 'try.jpg'),
 ('T00008', 'tang keke', 'tang@keke.com', 'tangkeke', 'P', '081318897774', 'Yuikogawa', '2024-12-28 15:31:05', 'tang keke.jpg'),
 ('W00004', 'wfawf', 'ufwawfafer@example.com', 'pfwafassword123', 'O', '081224567891', 'Alamat User', '2024-12-07 08:09:12', 'default.png');

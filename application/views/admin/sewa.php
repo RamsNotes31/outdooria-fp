@@ -1,12 +1,7 @@
-<?php
-
-$title = " | Sewa";
-include '../../templates/header4.php'; ?>
-
 <div class="container-fluid py-5 px-3">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 fw-bolder">Data Penyewaan</h1>
-        <a href="dashboard.php" class="btn btn-success btn-neoraised btn-md fw-bold mt-3">Back To Dasboard</a>
+        <h1 class="h3 mb-0 fw-bolder text-black">Data Penyewaan</h1>
+        <a href="<?= base_url('dashboard') ?>" class="btn btn-success btn-neoraised btn-md fw-bold mt-3 border border-dark border-3">Back To Dashboard</a>
     </div>
     <div class="table-responsive">
         <table id="example" class="table table-borderless card-neoraised border border-dark border-3" style="width:100%">
@@ -24,17 +19,37 @@ include '../../templates/header4.php'; ?>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="text-center">1</td>
-                    <td class="text-center">John Doe</td>
-                    <td class="text-center">Hammer</td>
-                    <td class="text-center">SA001</td>
-                    <td class="text-center">2022-11-01</td>
-                    <td class="text-center">2022-11-05</td>
-                    <td class="text-center">Rp 100,000</td>
-                    <td class="text-center">Pending</td>
-                    <td class="text-center"><img src="https://fotomhs.amikom.ac.id/2023/23_12_2925.jpg" alt="Profile 3" width="50" height="50" class="rounded-3 border border-dark card-neoraised"></td>
-                </tr>
+                <?php foreach ($penyewaans as $item): ?>
+                    <tr>
+                        <td class="text-center"><?= htmlspecialchars($item->id_penyewaan, ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td class="text-center"><?= htmlspecialchars($item->nama_user, ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td class="text-center"><?= htmlspecialchars($item->nama_alat, ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td class="text-center"><?= htmlspecialchars($item->seri_alat, ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td class="text-center"><?= htmlspecialchars($item->tanggal_penyewaan, ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td class="text-center"><?= htmlspecialchars($item->tanggal_pengembalian, ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td class="text-center">Rp <?= number_format($item->total_harga, 0, ',', '.'); ?></td>
+                        <td class="text-center"><?= htmlspecialchars($item->status_sewa, ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td class="text-center">
+                            <?php if (!empty($item->bukti_pembayaran) && $item->status_sewa !== 'batal'): ?>
+                                <?php if (file_exists(FCPATH . 'public/img/bukti/' . $item->bukti_pembayaran)): ?>
+                                    <img src="<?= base_url('public/img/bukti/' . $item->bukti_pembayaran); ?>" width="100" height="100" class="img-thumbnail card-neoraised border border-dark border-2" alt="Bukti Bayar">
+                                <?php else: ?>
+                                    <p class="card-text text-muted card card-neoraised p-1">Foto Telah dihapus.</p>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <span class="text-muted">
+                                    <?php if ($item->status_sewa === 'menunggu'): ?>
+                                        Tidak ada
+                                    <?php elseif ($item->status_sewa === 'batal'): ?>
+                                        Tidak ada
+                                    <?php elseif (in_array($item->status_sewa, ['disewa', 'selesai'])): ?>
+                                        Bayar ditempat
+                                    <?php endif; ?>
+                                </span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
             <tfoot>
                 <tr>
@@ -52,6 +67,3 @@ include '../../templates/header4.php'; ?>
         </table>
     </div>
 </div>
-</div>
-
-<?php include '../../templates/footer.php'; ?>

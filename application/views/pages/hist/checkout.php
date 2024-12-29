@@ -319,7 +319,8 @@
             <div class="col-lg-6 order-lg-1">
                 <h2 class="text-center mt-md-5 py-5 fw-bolder">Rating & Review</h2>
                 <div class="rating-review-form">
-                    <form method="post" action="<?= base_url('invoice/bukti') ?>" class="mb-4" enctype="multipart/form-data">
+                    <?php ini_set('memory_limit', '-1'); ?>
+                    <form method="post" action="<?= base_url('invoice/riview') ?>" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="nama_alat" class="visually-hidden">Nama Alat</label>
                             <input type="hidden" id="nama_alat" name="nama_alat" value="<?= htmlspecialchars($invoice['nama_alat'], ENT_QUOTES, 'UTF-8') ?>">
@@ -359,43 +360,58 @@
                                 <input type="file" id="userPhoto" name="photo" class="form-control card-neoraised" accept=".jpeg, .jpg, .png, .heic" onchange="previewFile()">
                             </div>
                             <img src="" class="img-fluid border border-dark border-3 card-neoraised d-none" id="preview-image" style="width: 15rem; height: 10rem; object-fit: contain;">
+                            <p id="fileError" class="text-danger d-none">*Ukuran file terlalu besar. Maksimal 2 MB.</p>
                             <p id="fileError" class="text-danger d-none">*Hanya support image (.jpeg, .jpg, .png, .heic)</p>
                         </div>
-                        <script>
-                            function previewFile() {
-                                const preview = document.getElementById('preview-image');
-                                const file = document.getElementById('userPhoto').files[0];
-                                const fileError = document.getElementById('fileError');
-                                const submitButton = document.querySelector('button[type="submit"]');
-                                if (file) {
-                                    const fileType = file.type;
-                                    if (fileType.startsWith('image/')) {
-                                        const reader = new FileReader();
-                                        reader.onloadend = function() {
-                                            preview.src = reader.result;
-                                            preview.alt = file.name;
-                                            preview.classList.remove('d-none');
-                                            fileError.classList.add('d-none');
-                                            submitButton.disabled = false;
-                                        };
-                                        reader.readAsDataURL(file);
-                                    } else {
-                                        preview.src = "";
-                                        preview.alt = "";
-                                        preview.classList.add('d-none');
-                                        fileError.classList.remove('d-none');
-                                        submitButton.disabled = true;
-                                    }
-                                }
-                            }
-                        </script>
+
 
                         <button type="submit" class="btn btn-neoraised btn-success mt-3 fw-bold">Submit Review</button>
                     </form>
                 </div>
             </div>
         </div>
+        <script>
+            function previewFile() {
+                const preview = document.getElementById('preview-image');
+                const file = document.getElementById('userPhoto').files[0];
+                const fileError = document.getElementById('fileError');
+                const submitButton = document.querySelector('button[type="submit"]');
+                if (file) {
+                    const fileType = file.type;
+                    if (fileType.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onloadend = function() {
+                            preview.src = reader.result;
+                            preview.alt = file.name;
+                            preview.classList.remove('d-none');
+                            fileError.classList.add('d-none');
+                            submitButton.disabled = false;
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        preview.src = "";
+                        preview.alt = "";
+                        preview.classList.add('d-none');
+                        fileError.classList.remove('d-none');
+                        submitButton.disabled = true;
+                    }
+                }
 
+                const userPhoto = document.getElementById('userPhoto');
+                userPhoto.addEventListener('change', function() {
+                    const file = this.files[0];
+                    const fileError = document.getElementById('fileError');
+                    if (file && file.size > 2 * 1024 * 1024) { // Maksimal 2 MB
+                        fileError.textContent = '*Ukuran file terlalu besar. Maksimal 2 MB.';
+                        fileError.classList.remove('d-none');
+                        this.value = ''; // Reset input file
+                    } else {
+                        fileError.classList.add('d-none');
+                    }
+                });
+
+            }
+        </script>
 
         <div class="user-reviews mt-5 py-5">
             <h3 class="text-center mb-5 py-5 mt-5 fw-bolder">New Reviews</h3>

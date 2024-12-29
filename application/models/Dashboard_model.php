@@ -339,6 +339,22 @@ class Dashboard_model extends CI_Model
         return $query->row_array(); // Kembalikan data sebagai array
     }
 
+    public function get_admin_statistics()
+    {
+        $query = $this->db->query("
+            SELECT 
+                COUNT(*) AS total_admins,
+                SUM(jenis_kelamin = 'L') AS total_male,
+                SUM(jenis_kelamin = 'P') AS total_female,
+                SUM(jenis_kelamin = 'O') AS total_other,
+                ROUND((SUM(jenis_kelamin = 'L') / COUNT(*)) * 100, 2) AS male_percentage,
+                ROUND((SUM(jenis_kelamin = 'P') / COUNT(*)) * 100, 2) AS female_percentage,
+                ROUND((SUM(jenis_kelamin = 'O') / COUNT(*)) * 100, 2) AS other_percentage
+            FROM admin
+        ");
+        return $query->row_array(); // Kembalikan data sebagai array
+    }
+
     // Get top admin who has replied the most
     public function get_top_admin_chat()
     {

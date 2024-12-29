@@ -40,33 +40,33 @@ class Invoice_model extends CI_Model
 
     public function upload_bukti_pembayaran($id_penyewaan)
     {
-
         $this->load->library('session');
         $nama = $this->session->userdata('nama');
-        $config['upload_path']   = './public/img/bukti/'; // Lokasi folder upload
-        $config['allowed_types'] = 'jpg|jpeg|png|heic';  // Jenis file yang diperbolehkan
-        $config['file_name']     = $id_penyewaan . '_' . $nama;       // Nama file akan sesuai dengan id_penyewaan
+        $config['upload_path']   = './public/img/bukti/';
+        $config['allowed_types'] = 'jpg|jpeg|png|heic';
+        //$config['max_size']      = 2048; // Maksimal 2 MB
+        $config['file_name']     = $id_penyewaan . '_' . $nama;
 
-        $this->load->library('upload', $config);       // Load library upload dengan konfigurasi
+        $this->load->library('upload', $config);
 
         if ($this->upload->do_upload('image')) {
-            // Jika berhasil upload, ambil nama file dan simpan ke database
-            $data = $this->upload->data();             // Data file yang diupload
-            $file_name = $data['file_name'];           // Nama file hasil upload
+            $data = $this->upload->data();
+            $file_name = $data['file_name'];
 
             // Copy file ke folder chat
             copy('./public/img/bukti/' . $file_name, './public/img/chat/' . $file_name);
 
-            // Update nama file bukti pembayaran di database
             $this->db->set('bukti_pembayaran', $file_name);
             $this->db->where('id_penyewaan', $id_penyewaan);
             $this->db->update('penyewaan');
 
-            return true; // Upload berhasil
+            return true;
         } else {
-            return false; // Upload gagal
+            log_message('error', 'Upload gagal: ' . $this->upload->display_errors());
+            return $this->upload->display_errors();
         }
     }
+
 
     public function get_feedback_with_user($limit = 3)
     {
@@ -118,15 +118,13 @@ class Invoice_model extends CI_Model
 
     public function tambah_feedback($id_user, $product_id, $id_penyewaan, $comment, $rating, $foto)
     {
+        ini_set('memory_limit', '-1');
         // Panggil stored procedure menggunakan CALL
         $this->db->query("CALL tambah_feedback(?, ?, ?, ?, ?, ?)", array($id_user, $product_id, $id_penyewaan, $comment, $rating, $foto));
 
         // Periksa apakah query berhasil
-        if ($this->db->affected_rows() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        // Periksa apakah query berhasil
+        return $this->db->affected_rows() > 0;
     }
 
     public function insert_chat_auto($data)
