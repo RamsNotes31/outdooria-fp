@@ -120,20 +120,31 @@
             <?php if (isset($informasi) && count($informasi) > 0): ?>
                 <?php foreach ($informasi as $info): ?>
                     <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 mb-3 px-3 py-3">
-                        <div class="card card-neoraised mb-3 py-3 px-3  d-flex flex-column" style="height: 100%;">
+                        <div class="card card-neoraised mb-3 py-3 px-3 d-flex flex-column" style="height: 100%;">
                             <div class="row">
                                 <div class="col-12">
-                                    <img src="<?= base_url('public/img/gunung/' . $info['foto_gunung']); ?>" class="img-fluid border border-dark border-3 rounded-3 card-neoraised" alt="<?= htmlspecialchars($info['nama_gunung']); ?>">
+                                    <img src="<?= base_url('public/img/gunung/' . ($info['foto_gunung'] ?? 'default.jpg')); ?>"
+                                        class="img-fluid border border-dark border-3 rounded-3 card-neoraised"
+                                        alt="<?= htmlspecialchars($info['nama_gunung'] ?? 'Gunung Tidak Diketahui'); ?>">
                                     <p class="text-center mt-3 fw-bold">
-                                        Oleh Admin: <a href="<?= base_url('akun/admin/' . $info['nama_admin']); ?>" class="badge rounded-pill card-neoraised bg-primary text-white text-decoration-none"><?= htmlspecialchars($info['nama_admin']); ?></a>
+                                        Oleh Admin:
+                                        <a href="<?= base_url('akun/admin/' . ($info['nama_admin'] ?? '#')); ?>"
+                                            class="badge rounded-pill card-neoraised bg-primary text-white text-decoration-none">
+                                            <?= htmlspecialchars($info['nama_admin'] ?? 'Admin Tidak Diketahui'); ?>
+                                        </a>
                                     </p>
                                     <div class="row">
                                         <div class="col-12 col-md-9">
-                                            <h5 class="card-title mt-3 fw-bolder text-left fs-5"><?= htmlspecialchars($info['nama_gunung']); ?></h5>
-                                            <p class="card-text text-left fw-light">Lokasi: <?= htmlspecialchars($info['lokasi']); ?></p>
+                                            <h5 class="card-title mt-3 fw-bolder text-left fs-5">
+                                                <?= htmlspecialchars($info['nama_gunung'] ?? 'Gunung Tidak Diketahui'); ?>
+                                            </h5>
+                                            <p class="card-text text-left fw-light">
+                                                Lokasi: <?= htmlspecialchars($info['lokasi'] ?? 'Lokasi Tidak Diketahui'); ?>
+                                            </p>
                                         </div>
                                         <div class="col-12 col-lg-3 d-flex align-items-center justify-content-end ms-auto mt-3">
-                                            <a href="<?= base_url('gunung/info/' . $info['id_informasi']); ?>" class="btn btn-lg btn-neoraised btn-success text-white fw-bolder">
+                                            <a href="<?= base_url('gunung/info/' . ($info['id_informasi'] ?? '#')); ?>"
+                                                class="btn btn-lg btn-neoraised btn-success text-white fw-bolder">
                                                 Info
                                             </a>
                                         </div>
@@ -146,9 +157,9 @@
             <?php else: ?>
                 <p class="text-center">No results found.</p>
                 <div class="row justify-content-center mt-4">
-                    <button class="btn btn-outline-success btn-neoraised fw-bold" onclick="window.location.href='<?= base_url('gunung'); ?>'">Refresh</button>
+                    <button class="btn btn-outline-success btn-neoraised fw-bold"
+                        onclick="window.location.href='<?= base_url('gunung'); ?>'">Refresh</button>
                 </div>
-
             <?php endif; ?>
         </div>
     </div>

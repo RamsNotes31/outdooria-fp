@@ -4,6 +4,7 @@
         <table id="datatable1" class="table table-hover table-borderless card-neoraised border border-dark border-3 w-100">
             <thead>
                 <tr>
+                    <th class="text-center">Invoice</th>
                     <th class="text-center">Nama Alat</th>
                     <th class="text-center">Seri Alat</th>
                     <th class="text-center">Tanggal Sewa</th>
@@ -18,7 +19,8 @@
                 <?php if (!empty($riwayat)): ?>
                     <?php foreach ($riwayat as $item): ?>
                         <tr>
-                            <td class="text-center"><?= htmlspecialchars($item->nama_alat); ?></td>
+                            <td class="text-center">#<?= htmlspecialchars($item->id_penyewaan); ?></td>
+                            <td class="text-center"><?= $item->nama_alat ? htmlspecialchars($item->nama_alat) : 'Tidak ada'; ?></td>
                             <td class="text-center"><?= htmlspecialchars($item->seri_alat); ?></td>
                             <td class="text-center"><?= htmlspecialchars($item->tanggal_penyewaan); ?></td>
                             <td class="text-center"><?= htmlspecialchars($item->tanggal_pengembalian); ?></td>
@@ -56,6 +58,7 @@
             </tbody>
             <tfoot>
                 <tr>
+                    <th class="text-center">Invoice</th>
                     <th class="text-center">Nama Alat</th>
                     <th class="text-center">Seri Alat</th>
                     <th class="text-center">Tanggal Sewa</th>

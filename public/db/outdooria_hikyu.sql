@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 29, 2024 at 05:03 PM
+-- Generation Time: Dec 30, 2024 at 02:39 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -376,11 +376,11 @@ CREATE TABLE `alat_pendakian` (
 --
 
 INSERT INTO `alat_pendakian` (`id_alat`, `nama_alat`, `kategori`, `stok`, `harga_sewa`, `foto_produk`, `deskripsi`) VALUES
-('1', 'Tenda 4P', 'primary', 92, '55000', 'default.jpg', 'Tenda Untuk 4 Orang'),
-('2', 'Tracking Pole', 'secondary', 66, '15000', 'default.jpg', 'Alat Bantuan'),
-('A-J-00001', 'jam', 'accessory', 4, '21000', 'default.jpg', 'jam'),
-('O-K-00001', 'kompor', 'others', 6, '50000', 'default.jpg', 'untuk memasak'),
-('S-L-00002', 'lampu', 'secondary', 12, '50000', 'default.jpg', 'untuk penerangan');
+('1', 'Tenda 4P', 'primary', 94, '55000', 'default.jpg', 'Tenda Untuk 4 Orang'),
+('2', 'Tracking Pole', 'secondary', 65, '15000', 'default.jpg', 'Alat Bantuan'),
+('A-J-00001', 'jam', 'accessory', 9, '21000', 'default.jpg', 'jam'),
+('O-K-00001', 'kompor', 'others', 5, '50000', 'default.jpg', 'untuk memasak'),
+('S-L-00002', 'lampu', 'secondary', 11, '50000', 'default.jpg', 'untuk penerangan');
 
 --
 -- Triggers `alat_pendakian`
@@ -398,6 +398,27 @@ CREATE TRIGGER `stok_alat_seri` AFTER INSERT ON `alat_pendakian` FOR EACH ROW BE
 
         SET i = i + 1;
     END WHILE;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `stok_alat_seri_update` AFTER UPDATE ON `alat_pendakian` FOR EACH ROW BEGIN
+    DECLARE i INT DEFAULT 1;
+    DECLARE id_seri_baru VARCHAR(20);
+    DECLARE p INT;
+
+    SET p = NEW.stok - OLD.stok;
+
+    IF p > 0 THEN
+        WHILE i <= p DO
+            SET id_seri_baru = seri_alat_baru();
+
+            INSERT INTO seri (seri_alat, id_alat, kondisi, status_produk, tanggal_ditambahkan)
+            VALUES (id_seri_baru, NEW.id_alat, 'baik', 'tersedia', CURRENT_TIMESTAMP);
+
+            SET i = i + 1;
+        END WHILE;
+    END IF;
 END
 $$
 DELIMITER ;
@@ -429,7 +450,10 @@ INSERT INTO `chat` (`id_chat`, `id_user`, `id_admin`, `role`, `pesan`, `tanggal_
 ('C-00004', 'T00008', NULL, 'user', '', '2024-12-29 02:25:39', 'tang_keke_user_1735439139.png'),
 ('C-00005', 'C00007', '1165', 'user', '<strong>Detail Invoice</strong> <br><br>Invoice: #P-00032<br> Nama: cobain<br> Alat: kompor<br> Tanggal Sewa: 29 December 2024<br> Tanggal Balik: 01 January 2025<br> Harga: Rp. 50.000<br>', '2024-12-29 02:45:53', 'P-00032_cobain.png'),
 ('C-00006', 'C00007', '1165', 'admin', 'Baik, pesanan telah kami terima, silahkan datang untuk mengambil alat tersebut untuk kami proses lebih lanjut. Terima kasih.', '2024-12-29 02:45:53', NULL),
-('C-00007', 'C00007', '1', 'admin', 'Baik, pesanan telah kami terima, silahkan datang untuk mengambil alat tersebut untuk kami proses lebih lanjut. Terima kasih.', '2024-12-29 02:45:53', NULL);
+('C-00007', 'C00007', '1', 'admin', 'Baik, pesanan telah kami terima, silahkan datang untuk mengambil alat tersebut untuk kami proses lebih lanjut. Terima kasih.', '2024-12-29 02:45:53', NULL),
+('C-00008', '1', NULL, 'user', 'fajwbfaw\r\n', '2024-12-30 07:02:11', NULL),
+('C-00009', '1', '1165', 'user', '<strong>Detail Invoice</strong> <br><br>Invoice: #P-00033<br> Nama: Marcellinus Sorongan<br> Alat: lampu<br> Tanggal Sewa: 30 December 2024<br> Tanggal Balik: 02 January 2025<br> Harga: Rp. 50.000<br>', '2024-12-30 07:02:29', 'P-00033_Marcellinus_Sorongan.png'),
+('C-00010', '1', '1165', 'admin', 'Baik, pesanan telah kami terima, silahkan datang untuk mengambil alat tersebut untuk kami proses lebih lanjut. Terima kasih.', '2024-12-30 07:02:29', NULL);
 
 -- --------------------------------------------------------
 
@@ -480,7 +504,8 @@ INSERT INTO `feedback` (`id_feedback`, `id_user`, `id_alat`, `id_penyewaan`, `ko
 ('13', '2', '1', '1', 'asdadada', '6.0', NULL, '2024-12-28 12:56:58'),
 ('3', '2', '1', '1', 'dwad', '4.5', NULL, '2024-12-07 12:56:58'),
 ('4', '2', '1', '1', 'dwad', '0.0', 'icon.png', '2024-12-31 12:56:58'),
-('F-00005', 'T00008', '1', '1165', 'adawd', '5.0', NULL, '2024-12-28 23:43:22');
+('F-00005', 'T00008', '1', '1165', 'adawd', '5.0', NULL, '2024-12-28 23:43:22'),
+('F-00006', '1', '1', '3', 'dwakdnuawi', '5.0', 'Marcellinus_Sorongan_3.jpg', '2024-12-30 06:58:59');
 
 -- --------------------------------------------------------
 
@@ -563,7 +588,8 @@ INSERT INTO `penyewaan` (`id_penyewaan`, `id_user`, `seri_alat`, `tanggal_penyew
 ('P-00029', 'T00008', 'S-00014', '2024-12-29', '2025-01-01', '50000', 'batal', NULL),
 ('P-00030', 'T00008', 'S-00022', '2024-12-29', '2025-01-01', '50000', 'batal', NULL),
 ('P-00031', 'T00008', 'S-00019', '2024-12-29', '2025-01-01', '50000', 'batal', NULL),
-('P-00032', 'C00007', 'S-00014', '2024-12-29', '2025-01-01', '50000', 'selesai', 'P-00032_cobain.png');
+('P-00032', 'C00007', 'S-00014', '2024-12-29', '2025-01-01', '50000', 'selesai', 'P-00032_cobain.png'),
+('P-00033', '1', 'S-00021', '2024-12-30', '2025-01-02', '50000', 'batal', 'P-00033_Marcellinus_Sorongan.png');
 
 --
 -- Triggers `penyewaan`
@@ -638,20 +664,16 @@ CREATE TABLE `seri` (
 --
 
 INSERT INTO `seri` (`seri_alat`, `id_alat`, `kondisi`, `status_produk`, `tanggal_ditambahkan`) VALUES
-('1', '2', 'baru', 'tersedia', '2024-11-27 12:27:00'),
-('2', '1', 'minus', 'tersedia', '2024-11-27 12:27:00'),
-('S-00003', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
-('S-00004', 'S-L-00002', 'baru', 'tersedia', '2024-12-07 03:40:42'),
-('S-00005', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
-('S-00006', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
+('S-00004', 'S-L-00002', 'minus', 'disewa', '2024-12-07 03:40:42'),
+('S-00005', 'S-L-00002', 'baru', 'disewa', '2024-12-07 03:40:42'),
+('S-00006', 'S-L-00002', 'minus', 'rusak', '2024-12-07 03:40:42'),
 ('S-00007', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
 ('S-00008', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
 ('S-00009', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
 ('S-00010', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
 ('S-00011', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
 ('S-00012', 'S-L-00002', 'baik', 'tersedia', '2024-12-07 03:40:42'),
-('S-00014', 'O-K-00001', 'baru', 'tersedia', '2024-12-07 06:10:42'),
-('S-00015', 'O-K-00001', 'baru', 'tersedia', '2024-12-07 06:10:44'),
+('S-00015', 'O-K-00001', 'baru', 'disewa', '2024-12-07 06:10:44'),
 ('S-00017', 'O-K-00001', 'baru', 'tersedia', '2024-12-07 06:10:46'),
 ('S-00018', 'O-K-00001', 'baru', 'tersedia', '2024-12-07 06:10:48'),
 ('S-00019', 'O-K-00001', 'baru', 'tersedia', '2024-12-07 08:17:57'),
@@ -661,7 +683,17 @@ INSERT INTO `seri` (`seri_alat`, `id_alat`, `kondisi`, `status_produk`, `tanggal
 ('S-00023', 'A-J-00001', 'baik', 'tersedia', '2024-12-07 08:33:56'),
 ('S-00024', 'A-J-00001', 'baik', 'tersedia', '2024-12-07 08:33:56'),
 ('S-00025', 'A-J-00001', 'baik', 'tersedia', '2024-12-07 08:33:56'),
-('S-00026', 'A-J-00001', 'baru', 'tersedia', '2024-12-07 08:35:55');
+('S-00026', 'A-J-00001', 'baru', 'tersedia', '2024-12-07 08:35:55'),
+('S-00027', 'O-K-00001', 'baru', 'tersedia', '2024-12-30 14:10:43'),
+('S-00028', 'O-K-00001', 'baru', 'tersedia', '2024-12-30 14:14:11'),
+('S-00029', 'S-L-00002', 'baru', 'tersedia', '2024-12-30 14:14:56'),
+('S-00030', 'O-K-00001', 'baru', 'tersedia', '2024-12-30 14:17:16'),
+('S-00031', 'A-J-00001', 'baik', 'tersedia', '2024-12-30 14:18:43'),
+('S-00032', '1', 'baru', 'tersedia', '2024-12-30 14:19:31'),
+('S-00033', 'O-K-00001', 'baik', 'tersedia', '2024-12-30 14:28:45'),
+('S-00034', 'O-K-00001', 'baik', 'tersedia', '2024-12-30 14:28:45'),
+('S-00035', 'O-K-00001', 'baik', 'tersedia', '2024-12-30 14:28:45'),
+('S-00036', 'O-K-00001', 'baik', 'tersedia', '2024-12-30 14:28:45');
 
 --
 -- Triggers `seri`

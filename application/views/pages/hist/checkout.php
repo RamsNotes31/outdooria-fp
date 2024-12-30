@@ -320,7 +320,7 @@
                 <h2 class="text-center mt-md-5 py-5 fw-bolder">Rating & Review</h2>
                 <div class="rating-review-form">
                     <?php ini_set('memory_limit', '-1'); ?>
-                    <form method="post" action="<?= base_url('invoice/riview') ?>" enctype="multipart/form-data">
+                    <form method="post" action="<?= base_url('invoice/review') ?>" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="nama_alat" class="visually-hidden">Nama Alat</label>
                             <input type="hidden" id="nama_alat" name="nama_alat" value="<?= htmlspecialchars($invoice['nama_alat'], ENT_QUOTES, 'UTF-8') ?>">

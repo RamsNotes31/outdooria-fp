@@ -9,6 +9,7 @@ class Admin extends CI_Controller
         parent::__construct();
         $this->load->model('Admin_model');
         $this->load->library('session');
+        $this->load->library('form_validation');
     }
 
     public function index()
@@ -303,5 +304,119 @@ class Admin extends CI_Controller
 
         // Redirect ke halaman lain
         redirect($_SERVER['HTTP_REFERER']);
+    }
+
+
+    public function data_seri_alat()
+    {
+        $data['title'] = 'Hikyu | Seri Alat';
+        $this->load->view('templates/header4', $data);
+
+        $data['series'] = $this->Admin_model->get_all_seri();
+
+        $this->load->view('admin/seri', $data);
+
+        $this->load->view('templates/footer');
+    }
+
+    public function hapus_seri($seri_alat = null)
+    {
+        if (is_null($seri_alat)) {
+            redirect('admin/data_seri_alat');
+        }
+
+        $id_alat = $this->Admin_model->get_id_alat($seri_alat);
+
+        $this->Admin_model->seri_alat_hapus($seri_alat, $id_alat);
+
+        redirect('admin/data_seri_alat');
+    }
+
+    public function ubah_seri($seri_alat)
+    {
+        $data['title'] = 'Hikyu | Edit Seri';
+        $this->load->view('templates/header4', $data);
+
+        // Redirect jika $seri_alat kosong
+        if (!$seri_alat) {
+            redirect('admin/data_seri_alat');
+        }
+
+        // Ambil data produk berdasarkan seri alat
+        $data['product'] = $this->db->get_where('seri', ['seri_alat' => $seri_alat])->row_array();
+        if (!$data['product']) {
+            redirect('admin/data_seri_alat');
+        }
+
+        // Ambil data enum kondisi dan status dari model
+        $data['kondisi'] = $this->Admin_model->get_enum_kondisi();
+        $data['status'] = $this->Admin_model->get_status_excluding_waiting();
+
+        // Ambil nama alat berdasarkan ID alat yang diambil dari URI segment ke-4
+        $id_alat = $this->Admin_model->get_id_alat($seri_alat);
+        $data['produk'] = $this->Admin_model->get_nama_alat($id_alat);
+
+        // Load view
+        $this->load->view('admin/eseri', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function update_seri_alat($seri_alat)
+    {
+        // Validasi input form
+        if (!$seri_alat || !$this->input->post('kondisi') || !$this->input->post('status')) {
+            $this->session->set_flashdata('error', 'Data tidak valid. Pastikan semua field diisi.');
+            redirect($_SERVER['HTTP_REFERER']);
+        }
+
+        // Data yang akan diupdate berdasarkan input dari form
+        $data = [
+            'kondisi' => $this->input->post('kondisi'), // Ambil nilai kondisi dari form
+            'status_produk' => $this->input->post('status') // Ambil nilai status dari form
+        ];
+
+        // Proses update data ke database
+        $this->Admin_model->update_seri($seri_alat, $data);
+
+        // Redirect kembali ke halaman data seri alat
+        redirect('admin/data_seri_alat');
+    }
+
+    public function tambah_seri_alat()
+    {
+        $data['title'] = 'Hikyu | Tambah Seri';
+        $this->load->view('templates/header4', $data);
+
+        $data['nama_alat'] = $this->Admin_model->getNamaAlat(); // Get nama_alat from database
+        $data['kondisi'] = ['baru', 'baik', 'minus']; // Enum values for kondisi
+        $data['status'] = ['tersedia', 'disewa', 'dalam perawatan', 'rusak']; // Enum values for status
+
+        $this->load->view('admin/tseri', $data);
+
+        $this->load->view('templates/footer');
+    }
+
+    public function tambah_data_seri()
+    {
+        $this->form_validation->set_rules('nama_alat', 'Nama Alat', 'required');
+        // $this->form_validation->set_rules('kategori', 'Kondisi', 'required');
+        //$this->form_validation->set_rules('status', 'Status', 'required');
+        $this->form_validation->set_rules('jumlah', 'Jumlah', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            redirect($_SERVER['HTTP_REFERER']);
+        } else {
+
+            $p_id_alat = $this->input->post('nama_alat');
+            // $p_kondisi = $this->input->post('kategori');
+            // $p_status_produk = $this->input->post('status');
+            $p_jumlah = $this->input->post('jumlah');
+
+            $this->db->set('stok', 'stok + ' . (int)$p_jumlah, FALSE);
+            $this->db->where('id_alat', $p_id_alat);
+            $this->db->update('alat_pendakian');
+
+            redirect('admin/data_seri_alat');
+        }
     }
 }

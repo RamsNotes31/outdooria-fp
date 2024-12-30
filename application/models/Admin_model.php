@@ -174,4 +174,111 @@ class Admin_model extends CI_Model
 
         return $result; // Return deletion status
     }
+
+    public function get_all_seri()
+    {
+        $this->db->select('seri.*, alat_pendakian.nama_alat');
+        $this->db->from('seri');
+        $this->db->join('alat_pendakian', 'seri.id_alat = alat_pendakian.id_alat');
+        $this->db->order_by('seri.seri_alat', 'DESC');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+
+    public function seri_alat_hapus($seri_alat)
+    {
+        // Disable foreign key checks temporarily
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 0');
+
+        // Hapus data dari tabel seri
+        $this->db->where('seri_alat', $seri_alat);
+        $this->db->delete('seri');
+
+
+        // Re-enable foreign key checks
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
+
+        return true;
+    }
+
+    public function get_id_alat($seri_alat)
+    {
+        $this->db->select('id_alat');
+        $this->db->from('seri');
+        $this->db->where('seri_alat', $seri_alat);
+        $query = $this->db->get();
+        return $query->row()->id_alat ?? null;
+    }
+
+
+
+
+
+    // Method untuk mendapatkan enum kondisi
+    public function get_enum_kondisi()
+    {
+        return [
+            '2' => 'Baik',
+            '3' => 'Minus',
+            '1' => 'Baru'
+        ];
+    }
+
+    // Method untuk mendapatkan enum status
+    public function get_enum_status()
+    {
+        return [
+            '1' => 'tersedia',
+            '3' => 'dalam perawatan',
+            '4' => 'Rusak'
+        ];
+    }
+
+    // Method untuk mendapatkan enum status selain "Menunggu"
+    public function get_status_excluding_waiting()
+    {
+        $status = $this->get_enum_status();
+        unset($status['0']); // Asumsikan "Menunggu" memiliki key '0'
+        return $status;
+    }
+
+    // Update data produk berdasarkan seri alat
+    public function update_seri($id, $data)
+    {
+        $this->db->where('seri_alat', $id);
+        return $this->db->update('seri', $data);
+    }
+
+    // Ambil nama alat berdasarkan ID alat
+    public function get_nama_alat($id_alat)
+    {
+        $this->db->select('nama_alat');
+        $this->db->from('alat_pendakian');
+        $this->db->where('id_alat', $id_alat);
+        $query = $this->db->get();
+        return $query->row_array(); // Mengembalikan array nama_alat
+    }
+
+    public function getNamaAlat()
+    {
+        $this->db->select('id_alat, nama_alat');
+        $query = $this->db->get('alat_pendakian');
+        return $query->result();
+    }
+
+    public function callProcedureTambahSeri($p_id_alat, $p_kondisi, $p_status_produk)
+    {
+        $query = "CALL tambah_seri(?, ?, ?)";
+        return $this->db->query($query, [$p_id_alat, $p_kondisi, $p_status_produk]);
+    }
+
+    public function get_id_produk($nama)
+    {
+        $this->db->select('id_alat');
+        $this->db->from('alat_pendakian');
+        $this->db->where('nama_alat', $nama);
+        $query = $this->db->get();
+        return $query->row()->id_alat ?? null;
+    }
 }
