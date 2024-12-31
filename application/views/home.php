@@ -66,7 +66,7 @@ defined('BASEPATH') or
             <div class="d-flex justify-content-center flex-lg-row flex-column">
                 <div class="d-flex justify-content-center align-items-center mb-4 flex-lg-row flex-column">
                     <div class="d-flex flex-column align-items-center mx-4">
-                        <img src="https://fotomhs.amikom.ac.id/2023/23_12_2925.jpg" class="rounded-circle img-fluid img-thumbnail border border-dark border-3 card-neoraised" alt="Marcell" style="width: 10rem">
+                        <img src="https://fotomhs.amikom.ac.id/2023/23_12_2966.jpg" class="rounded-circle img-fluid img-thumbnail border border-dark border-3 card-neoraised" alt="Marcell" style="width: 10rem">
                         <p class="text-center fs-1 fw-bolder">Marcell</p>
                         <div class="alert alert-danger-neoraised alert-danger fw-bolder" role="alert">
                             23.12.2966
@@ -230,6 +230,46 @@ defined('BASEPATH') or
     <?php else: ?>
         <p class="text-center">No admin data available.</p>
     <?php endif; ?>
+        </div>
+    </div>
+
+
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h1 class="text-center fw-bolder mt-5">Our Achievements</h1>
+            <p class="text-center mt-4 fs-4 fw-light mb-5">We have a long history of success in mountain climbing. Here are some of our achievements</p>
+            <div class="d-flex justify-content-center flex-lg-row flex-column">
+                <div class="d-flex justify-content-center align-items-center mb-4 flex-lg-row flex-column gap-5">
+
+                    <div class="card card-body border border-dark border-2 rounded-3 card-neoraised shadow-md">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center">
+                                <p class="text-center fs-1 fw-bolder text-danger"><?= $total_alat; ?>+</p>
+                                <h1 class="text-center fs-3 fw-bolder text-success">Alat Tersedia</h1>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="card card-body border border-dark border-2 rounded-3 card-neoraised shadow-md">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center">
+                                <p class="text-center fs-1 fw-bolder text-danger"><?= $total_users; ?>+</p>
+                                <h1 class="text-center fs-3 fw-bolder text-success">User Mendaftar</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-body border border-dark border-2 rounded-3 card-neoraised shadow-md">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center">
+                                <p class="text-center fs-1 fw-bolder text-danger"><?= $total_penyewaan; ?>+</p>
+                                <h1 class="text-center fs-3 fw-bolder text-success">Total Penyewaan</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

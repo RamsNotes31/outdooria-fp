@@ -173,10 +173,19 @@ class Produk extends CI_Controller
             redirect('../login');
         }
 
+
         // Ambil data dari form
         $seri_alat = htmlspecialchars($this->input->post('itemSelect', true));
+
+        $id_alat = $this->input->post('id_alat', true);
         $bookingDate = $this->input->post('bookingDate', true);
         $returnDate = $this->input->post('returnDate', true);
+
+        if (!$this->Produk_model->checkbook($id_user, $id_alat)) {
+            $this->session->set_flashdata('error', 'Anda sudah memesan alat ini.');
+            redirect($_SERVER['HTTP_REFERER']);
+        }
+
 
         // Validasi format tanggal
         if (!$this->is_valid_date($bookingDate) || !$this->is_valid_date($returnDate)) {

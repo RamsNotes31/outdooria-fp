@@ -389,7 +389,7 @@ class Admin extends CI_Controller
 
         $data['nama_alat'] = $this->Admin_model->getNamaAlat(); // Get nama_alat from database
         $data['kondisi'] = ['baru', 'baik', 'minus']; // Enum values for kondisi
-        $data['status'] = ['tersedia', 'disewa', 'dalam perawatan', 'rusak']; // Enum values for status
+        $data['status'] = ['tersedia', 'dalam perawatan', 'rusak']; // Enum values for status
 
         $this->load->view('admin/tseri', $data);
 
@@ -408,15 +408,52 @@ class Admin extends CI_Controller
         } else {
 
             $p_id_alat = $this->input->post('nama_alat');
-            // $p_kondisi = $this->input->post('kategori');
-            // $p_status_produk = $this->input->post('status');
+            $p_kondisi = $this->input->post('kategori');
+            $p_status_produk = $this->input->post('status');
             $p_jumlah = $this->input->post('jumlah');
 
             $this->db->set('stok', 'stok + ' . (int)$p_jumlah, FALSE);
             $this->db->where('id_alat', $p_id_alat);
             $this->db->update('alat_pendakian');
 
+            for ($i = 0; $i < $p_jumlah; $i++) {
+                $this->Admin_model->callProcedureTambahSeri($p_id_alat, 'baru','tersedia');
+            }
+
             redirect('admin/data_seri_alat');
         }
+    }
+
+    public function data_chat()
+    {
+        $data['title'] = 'Hikyu | Data Chat';
+        $this->load->view('templates/header4', $data);
+
+        $data['users'] = $this->Admin_model->getDistinctUsers();
+
+        $this->load->view('admin/chat', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function chat_detail($id_user)
+    {
+        $data['title'] = 'Hikyu | Chat Detail';
+        $this->load->view('templates/header4', $data);
+
+        $this->load->model('Chatting_model');
+
+        // Ambil data chat
+        $data['chats'] = $this->Chatting_model->get_all_chats($id_user);
+
+        // Ambil nama user
+        $data['users'] = $this->Chatting_model->get_nama_user($id_user);
+
+        // Jika nama user tidak ditemukan, tampilkan pesan error
+        if (!$data['users']) {
+            $data['error_message'] = "User tidak ditemukan!";
+        }
+
+        $this->load->view('admin/detail', $data);
+        $this->load->view('templates/footer');
     }
 }

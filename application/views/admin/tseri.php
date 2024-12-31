@@ -19,6 +19,27 @@
                                 <?php endforeach; ?>
                             </select>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="kategori" class="form-label text-black">Kondisi</label>
+                            <select class="form-select card-neoraised" id="kategori" name="kategori" required>
+                                <option value="" selected disabled>Pilih Kondisi</option>
+                                <?php foreach ($kondisi as $k): ?>
+                                    <option value="<?= $k ?>"><?= $k ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="status" class="form-label text-black">Status</label>
+                            <select class="form-select card-neoraised" id="status" name="status" required>
+                                <option value="" selected disabled>Pilih Status</option>
+                                <?php foreach ($status as $s): ?>
+                                    <option value="<?= $s ?>"><?= $s ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
                         <div class="mb-3">
                             <label for="jumlah" class="form-label text-black">Jumlah</label>
                             <input type="number" class="form-control card-neoraised " id="jumlah" name="jumlah" min="1" value="1" required>

@@ -26,7 +26,7 @@
                                                 <?php if (strlen($nama) > 50) { ?>
                                                     <?php $nama = wordwrap($nama, 50, "<br>\n"); ?>
                                                 <?php } ?>
-                                                <span class="badge rounded-pill bg-warning card-neoraised border border-1 border-dark mb-3"> <a href="<?= base_url('akun/profil/' . $chat['nama_user']) ?>" class="text-decoration-none"><?= $nama ?></a></span>
+                                                <span class="badge rounded-pill bg-warning card-neoraised border border-1 border-dark mb-3"> <a href="<?= base_url('akun/profil/' . $chat['nama_user']) ?>" class="text-decoration-none text-white"><?= $nama ?></a></span>
                                             </div>
 
                                             <!-- Display chat message or media -->
@@ -217,8 +217,8 @@
                                                     <?php $nama = wordwrap($nama, 50, "<br>\n"); ?>
                                                 <?php } ?>
                                                 <span class="badge rounded-pill bg-danger card-neoraised border border-1 border-dark"> <?php if ($chat['id_admin'] == 1165): ?>
-                                                        <a href="<?= base_url('akun/admin/bot') ?>" class="text-decoration-none"><?= $nama ?></a>
-                                                    <?php else: ?><a href="<?= base_url('akun/admin/' . $chat['nama_admin']) ?>" class="text-decoration-none"><?= $nama ?></a><?php endif; ?></span>
+                                                        <a href="<?= base_url('akun/admin/bot') ?>" class="text-decoration-none text-white"><?= $nama ?></a>
+                                                    <?php else: ?><a href="<?= base_url('akun/admin/' . $chat['nama_admin']) ?>" class="text-decoration-none text-white"><?= $nama ?></a><?php endif; ?></span>
                                             </div>
                                             <?php if (empty($chat['foto_chat'])): ?>
                                             <?php else: ?>

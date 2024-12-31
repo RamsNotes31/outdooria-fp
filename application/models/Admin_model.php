@@ -281,4 +281,13 @@ class Admin_model extends CI_Model
         $query = $this->db->get();
         return $query->row()->id_alat ?? null;
     }
+
+    public function getDistinctUsers()
+    {
+        $this->db->select('chat.id_user, users.nama');
+        $this->db->from('chat');
+        $this->db->join('users', 'chat.id_user = users.id_user');
+        $this->db->distinct(); // Menghindari data duplikat
+        return $this->db->get()->result_array(); // Mengembalikan hasil sebagai array
+    }
 }

@@ -67,6 +67,18 @@
                 <h4 class="card-title mt-md-3 mb-4 text-left mt-3 fw-bold">
                     Stok <span class="badge rounded-pill text-bg-success card-neoraised"><?= $product['stok']; ?></span>
                 </h4>
+                <?php if ($this->session->flashdata('success')): ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <?= $this->session->flashdata('success'); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php elseif ($this->session->flashdata('error')): ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <?= $this->session->flashdata('error'); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php endif; ?>
+
 
                 <form method="POST" action="<?= site_url('produk/submit'); ?>" enctype="multipart/form-data">
                     <input type="hidden" name="id_alat" value="<?= $product['id_alat']; ?>">
@@ -104,7 +116,7 @@
                 <div class="row">
                     <?php if (!empty($products)): ?>
                         <?php foreach ($products as $produc): ?>
-                            <div class="col-6 col-sm-4 col-lg-6 mt-5">
+                            <div class="col-6 col-sm-4 col-lg-6 mt-5  mx-auto">
                                 <div class="card card-neoraised py-2 px-2 mb-4 d-flex flex-column" style="height: 100%;">
                                     <h3 class="card-title text-center mt-2 mb-3 fw-bold"><?= $produc['nama_alat']; ?></h3>
                                     <img src="<?= base_url('public/img/produk/' . $produc['foto_produk']); ?>"
@@ -227,20 +239,20 @@
                                 <?php endif; ?>
                                 <div class="d-flex justify-content-between">
                                     <p class="card-text"><small class="text-muted fw-bold"><?= number_format(htmlspecialchars($review['rating'], ENT_QUOTES, 'UTF-8'), 1); ?>/5.0</small>
-                                            <?php
-                                            $rating = floor($review['rating']);
-                                            $hasHalfStar = ($review['rating'] - $rating) >= 0.5;
-                                            for ($i = 1; $i <= 5; $i++) {
-                                                if ($i <= $rating) {
-                                                    echo '<i class="bi bi-star-fill text-warning"></i>';
-                                                } elseif ($hasHalfStar && $i == $rating + 1) {
-                                                    echo '<i class="bi bi-star-half text-warning"></i>';
-                                                    $hasHalfStar = false;
-                                                } else {
-                                                    echo '<i class="bi bi-star text-muted"></i>';
-                                                }
+                                        <?php
+                                        $rating = floor($review['rating']);
+                                        $hasHalfStar = ($review['rating'] - $rating) >= 0.5;
+                                        for ($i = 1; $i <= 5; $i++) {
+                                            if ($i <= $rating) {
+                                                echo '<i class="bi bi-star-fill text-warning"></i>';
+                                            } elseif ($hasHalfStar && $i == $rating + 1) {
+                                                echo '<i class="bi bi-star-half text-warning"></i>';
+                                                $hasHalfStar = false;
+                                            } else {
+                                                echo '<i class="bi bi-star text-muted"></i>';
                                             }
-                                            ?>
+                                        }
+                                        ?>
                                         </small></p>
                                     <p class="card-text"><small class="text-muted fw-light"><?= date('F d, Y H:i:s', strtotime($review['tanggal_feedback'])); ?></small></p>
                                 </div>

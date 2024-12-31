@@ -119,7 +119,7 @@
         <div class="row px-lg-0 px-3">
             <?php if (isset($informasi) && count($informasi) > 0): ?>
                 <?php foreach ($informasi as $info): ?>
-                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 mb-3 px-3 py-3">
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 mb-3 px-3 py-3 mx-auto">
                         <div class="card card-neoraised mb-3 py-3 px-3 d-flex flex-column" style="height: 100%;">
                             <div class="row">
                                 <div class="col-12">

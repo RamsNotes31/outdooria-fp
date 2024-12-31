@@ -7,11 +7,27 @@ class Chatting_model extends CI_Model
         $this->load->database();
     }
 
+
     public function get_id_by_name($nama)
     {
         $this->db->where('nama', $nama);
         $result = $this->db->get('users')->row();
         return $result ? $result->id_user : null; // Return user ID if exists
+    }
+
+    public function get_nama_user($id_user)
+    {
+        $this->db->where('id_user', $id_user);
+        $result = $this->db->get('users')->row();  // Ambil 1 baris hasil
+        return $result ? $result->nama : null;  // Kembalikan nama jika ada, atau null jika tidak ditemukan
+    }
+
+
+    public function get_id_by_name_admin($nama)
+    {
+        $this->db->where('nama_admin', $nama);
+        $result = $this->db->get('admin')->row();
+        return $result ? $result->id_admin : null; // Return user ID if exists
     }
 
     // Memasukkan pesan menggunakan stored procedure

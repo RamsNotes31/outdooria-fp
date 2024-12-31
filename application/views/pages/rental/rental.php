@@ -93,7 +93,7 @@ defined('BASEPATH') or
     <div class="row">
         <?php if (!empty($produks) && is_array($produks)): ?>
             <?php foreach ($produks as $produk): ?>
-                <div class="col-xl-4 col-sm-6 col-lg-4 mb-3 col-md-6 col-6">
+                <div class="col-xl-4 col-sm-6 col-lg-4 mb-3 col-md-6 col-6 mx-auto">
                     <div class="card card-neoraised mb-3 py-3 px-3 d-flex flex-column" style="height: 100%;">
                         <div class="row">
                             <div class="col-md-6">

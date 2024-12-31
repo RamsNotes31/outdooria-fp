@@ -32,9 +32,9 @@
         </div>
         <p class="text-center mt-3 mb-5 fw-bolder justify-content-center">
             Oleh Admin: <br>
-            <img src="<?= base_url('public/img/admin/' . $detail['foto_admin']); ?>" alt="<?= htmlspecialchars($detail['nama_admin']); ?>" class="rounded-circle me-2 border border-2 border-dark card-neoraised p-1" width="40" height="40">
+            <img src="<?= base_url('public/img/admin/' . ($detail['foto_admin'] ?? 'default.png')); ?>" alt="<?= htmlspecialchars($detail['nama_admin'] ?? 'Admin', ENT_QUOTES, 'UTF-8'); ?>" class="rounded-circle me-2 border border-2 border-dark card-neoraised p-1" width="40" height="40">
             <span class="text-center mt-3 fw-bold">
-                <a href="<?= base_url('akun/admin/' . $detail['nama_admin']); ?>" class="badge rounded-pill card-neoraised bg-primary text-white text-decoration-none"><?= htmlspecialchars($detail['nama_admin']); ?></a>
+                <a href="<?= base_url('akun/admin/' . ($detail['nama_admin'] ?? '')); ?>" class="badge rounded-pill card-neoraised bg-primary text-white text-decoration-none"><?= htmlspecialchars($detail['nama_admin'] ?? 'Admin', ENT_QUOTES, 'UTF-8'); ?></a>
             </span>
         </p>
 
@@ -73,7 +73,7 @@
         <h3 class="text-center mt-5 fw-bold">Other Mountain</h3>
         <div class="row">
             <?php foreach ($gunungs as $info): ?>
-                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 mb-3 px-3 py-3">
+                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 mb-3 px-3 py-3 mx-auto">
                     <div class="card card-neoraised mb-3 py-3 px-3 d-flex flex-column" style="height: 100%;">
                         <div class="row">
                             <div class="col-12">

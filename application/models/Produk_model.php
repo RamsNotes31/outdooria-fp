@@ -378,4 +378,18 @@ class Produk_model extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    public function checkbook($id_user, $id_alat) {
+        $this->db->select('penyewaan.id_penyewaan');
+        $this->db->from('penyewaan');
+        $this->db->join('seri', 'penyewaan.seri_alat = seri.seri_alat');
+        $this->db->where('id_user', $id_user);
+        $this->db->where('seri.id_alat', $id_alat);
+        $this->db->where_in('status_sewa', ['disewa', 'menunggu']);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return false;
+        }
+        return true;
+    }
 }
