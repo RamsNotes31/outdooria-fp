@@ -417,7 +417,7 @@ class Admin extends CI_Controller
             $this->db->update('alat_pendakian');
 
             for ($i = 0; $i < $p_jumlah; $i++) {
-                $this->Admin_model->callProcedureTambahSeri($p_id_alat, 'baru','tersedia');
+                $this->Admin_model->callProcedureTambahSeri($p_id_alat, 'baru', 'tersedia');
             }
 
             redirect('admin/data_seri_alat');
@@ -455,5 +455,236 @@ class Admin extends CI_Controller
 
         $this->load->view('admin/detail', $data);
         $this->load->view('templates/footer');
+    }
+
+    public function data_informasi()
+    {
+        $data['title'] = 'Hikyu | Data Informasi';
+        $this->load->view('templates/header4', $data);
+        $data['info'] = $this->Admin_model->getallinformasi();
+        $this->load->view('admin/informasi', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function tinformasi()
+    {
+        $data['title'] = 'Hikyu | Tambah Informasi';
+        $this->load->view('templates/header4', $data);
+        $this->load->view('admin/tinformasi', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function data_alat()
+    {
+        $data['title'] = 'Hikyu | Data Alat';
+        $this->load->view('templates/header4', $data);
+        $data['alat'] = $this->Admin_model->getallalat();
+        $this->load->view('admin/alat', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function dinformasi($id_informasi)
+    {
+        // Ambil informasi detail berdasarkan ID
+        $this->load->model('Admin_model');
+        $informasi = $this->Admin_model->get_informasi_by_id($id_informasi);
+
+        if ($informasi) {
+            // Hapus gambar terkait jika ada
+            $path = './public/img/gunung/' . $informasi['foto_gunung'];
+            if (file_exists($path) && $informasi['foto_gunung'] !== 'default.jpg') {
+                unlink($path); // Hapus file gambar
+            }
+
+            // Hapus data dari database
+            if ($this->Admin_model->hapus_informasi($id_informasi)) {
+                $this->session->set_flashdata('success', 'Data informasi berhasil dihapus.');
+            } else {
+                $this->session->set_flashdata('error', 'Gagal menghapus data informasi.');
+            }
+        } else {
+            $this->session->set_flashdata('error', 'Data informasi tidak ditemukan.');
+        }
+
+        redirect('admin/data_informasi');
+    }
+
+
+    public function dalat($id_alat)
+    {
+        if ($this->Admin_model->hapus_alat($id_alat)) {
+            $this->session->set_flashdata('success', 'Data informasi berhasil dihapus.');
+            redirect('admin/data_alat');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus data informasi.');
+            redirect($_SERVER['HTTP_REFERER']);
+        }
+    }
+
+    public function tambah_informasi()
+    {
+        $this->load->library('upload');
+        $this->load->model('Admin_model'); // Pastikan model dimuat
+        $nama_admin = $this->session->userdata('nama_admin');
+        $id_admin = $this->Admin_model->get_id_admin($nama_admin);
+        $gunung = $this->input->post('admin', TRUE);
+
+        // Validasi input
+        $this->form_validation->set_rules('admin', 'Nama Gunung', 'required|alpha_numeric_spaces');
+        $this->form_validation->set_rules('lokasi', 'Lokasi', 'required');
+        $this->form_validation->set_rules('harga_biaya', 'Harga Biaya', 'required|numeric');
+        $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            // Jika validasi gagal
+            $this->session->set_flashdata('error', validation_errors());
+            redirect($_SERVER['HTTP_REFERER']);
+        }
+
+        // Konfigurasi upload file
+        $config['upload_path']   = './public/img/gunung/';
+        $config['allowed_types'] = 'jpg|jpeg|png|gif';
+        $config['file_name']     = strtolower(str_replace(' ', '_', $gunung));
+
+        $this->upload->initialize($config);
+
+        if (!$this->upload->do_upload('foto')) {
+            // Gagal upload, gunakan foto default
+            $foto = 'default.jpg';
+        } else {
+            // Berhasil upload
+            $upload_data = $this->upload->data();
+            $foto = $upload_data['file_name'];
+        }
+
+        // Persiapkan data untuk disimpan
+        $data = [
+            'id_admin'     => $id_admin,
+            'nama_gunung'  => $gunung,
+            'lokasi'       => $this->input->post('lokasi', TRUE),
+            'harga_biaya'  => $this->input->post('harga_biaya', TRUE),
+            'deskripsi'    => $this->input->post('deskripsi', TRUE),
+            'foto_gunung'  => $foto,
+        ];
+
+        // Panggil model untuk simpan data
+        if ($this->Admin_model->tambah_informasi($data)) {
+            $this->session->set_flashdata('success', 'Informasi pendakian berhasil ditambahkan.');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menambahkan informasi pendakian.');
+        }
+
+        redirect('admin/data_informasi');
+    }
+
+    public function einformasi($id_informasi)
+    {
+        $data['title'] = 'Hikyu | Edit Alat';
+        $this->load->view('templates/header4', $data);
+        $data['alat'] = $this->Admin_model->get_informasi_by_id($id_informasi);
+        $this->load->view('admin/einformasi', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function deleteInfo($id_informasi)
+    {
+        $nama = $this->session->userdata('nama_admin');
+
+        if (empty($nama)) {
+            return false; // No session 'nama', cannot proceed
+        }
+
+        // Fetch the user's profile photo filename from the database
+        $this->db->select('foto_gunung');
+        $this->db->where('id_informasi', $id_informasi);
+        $query = $this->db->get('informasi_pendakian');
+        $foto_gunung = $query->row()->foto_gunung ?? null;
+
+        if ($foto_gunung) {
+            // Construct the file path
+            $file_path = './public/img/gunung/' . $foto_gunung;
+            $informasi = $this->Admin_model->get_informasi_by_id($id_informasi);
+            // Attempt to delete the file if it exists
+            if (file_exists($file_path) && $informasi['foto_gunung'] !== 'default.jpg') {
+                unlink($file_path);
+            }
+        }
+
+        // Update the foto_gunung to default.png
+        $this->db->set('foto_gunung', 'default.jpg');
+        $this->db->where('id_informasi', $id_informasi);
+        $result = $this->db->update('informasi_pendakian');
+        $result = $this->Admin_model->delete_foto_info($id_informasi);
+
+
+        if ($result) {
+            $this->session->set_flashdata('success', 'Foto berhasil dihapus dan diubah menjadi default.');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus foto.');
+        }
+
+        // Redirect ke halaman lain
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    public function edit_informasi()
+    {
+        $this->load->library('upload');
+        $this->load->model('Admin_model'); // Pastikan model sudah dimuat
+
+        $id_info = $this->input->post('id_informasi');
+        $nama_admin = $this->session->userdata('nama_admin');
+        $nama_gunung = $this->input->post('admin');
+        $harga_biaya = $this->input->post('harga_biaya');
+        $lokasi = $this->input->post('lokasi');
+        $deskripsi = $this->input->post('deskripsi');
+
+        // Fetch existing information from the database
+       // $id_admin = $this->Admin_model->get_id_admin($nama_admin);
+        $id_admin =  $this->input->post('nama');
+        $informasi = $this->Admin_model->get_informasi_by_id($id_info);
+
+        // Initialize variables
+        $foto_gunung = $informasi['foto_gunung'];
+
+        // Handle file upload
+        $config['upload_path'] = './public/img/gunung/';
+        $config['allowed_types'] = 'jpeg|jpg|png|heic';
+        $config['file_name'] = $nama_gunung; // Unique file name to avoid overwrites
+
+        $this->upload->initialize($config);
+
+        if (!empty($_FILES['foto']['name']) && $this->upload->do_upload('foto')) {
+            // Remove old file if it exists and is not the default image
+            $file_path = './public/img/gunung/' . $informasi['foto_gunung'];
+            if (file_exists($file_path) && $informasi['foto_gunung'] !== 'default.jpg') {
+                unlink($file_path);
+            }
+
+            // Assign new file name to `foto_gunung`
+            $file_data = $this->upload->data();
+            $foto_gunung = $file_data['file_name'];
+        }
+
+        // Prepare data for update
+        $data = [
+            'id_admin' => $id_admin,
+            'nama_gunung' => $nama_gunung,
+            'harga_biaya' => $harga_biaya,
+            'lokasi' => $lokasi,
+            'deskripsi' => $deskripsi,
+            'foto_gunung' => $foto_gunung,
+        ];
+
+        // Update database
+        $result = $this->Admin_model->update_informasi($id_info, $data);
+
+        if ($result) {
+            $this->session->set_flashdata('success', 'Data berhasil diperbarui.');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal memperbarui data.');
+        }
+
+        redirect('admin/data_informasi');
     }
 }

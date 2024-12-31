@@ -2,7 +2,7 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
+-- Host: sql311.byethost7.com:3306
 -- Generation Time: Dec 31, 2024 at 08:38 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
@@ -18,14 +18,14 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `outdooria_hikyu`
+-- Database: `b7_38015628_outdooria_hikyu`
 --
 
 DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_admin` (IN `p_nama_admin` VARCHAR(100), IN `p_email_admin` VARCHAR(100), IN `p_no_telp_admin` VARCHAR(15), IN `p_password_admin` VARCHAR(255), IN `p_jenis_kelamin_admin` ENUM('L','P',' O'), IN `p_foto_admin` VARCHAR(255))   BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` PROCEDURE `tambah_admin` (IN `p_nama_admin` VARCHAR(100), IN `p_email_admin` VARCHAR(100), IN `p_no_telp_admin` VARCHAR(15), IN `p_password_admin` VARCHAR(255), IN `p_jenis_kelamin_admin` ENUM('L','P',' O'), IN `p_foto_admin` VARCHAR(255))   BEGIN
     DECLARE id_admin_baru VARCHAR(10);
     SET id_admin_baru = id_admin_baru(p_nama_admin);
     
@@ -51,7 +51,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_admin` (IN `p_nama_admin` VA
     );
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_alat_pendakian` (IN `p_nama_alat` VARCHAR(100), IN `p_kategori` ENUM('primary','secondary','accessory','others'), IN `p_stok` INT, IN `p_harga_sewa` DECIMAL(10,0), IN `p_foto_produk` VARCHAR(255), IN `p_deskripsi` TEXT)   BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` PROCEDURE `tambah_alat_pendakian` (IN `p_nama_alat` VARCHAR(100), IN `p_kategori` ENUM('primary','secondary','accessory','others'), IN `p_stok` INT, IN `p_harga_sewa` DECIMAL(10,0), IN `p_foto_produk` VARCHAR(255), IN `p_deskripsi` TEXT)   BEGIN
     DECLARE id_alat_baru VARCHAR(10);
     SET id_alat_baru = id_alat_baru(p_nama_alat, p_kategori);
     
@@ -59,7 +59,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_alat_pendakian` (IN `p_nama_
     VALUES (id_alat_baru, p_nama_alat, p_kategori, p_stok, p_harga_sewa, p_foto_produk, p_deskripsi);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_chat` (IN `p_id_user` VARCHAR(10), IN `p_id_admin` VARCHAR(10), IN `p_role` ENUM('user','admin'), IN `p_pesan` TEXT, IN `p_foto_chat` VARCHAR(255))   BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` PROCEDURE `tambah_chat` (IN `p_id_user` VARCHAR(10), IN `p_id_admin` VARCHAR(10), IN `p_role` ENUM('user','admin'), IN `p_pesan` TEXT, IN `p_foto_chat` VARCHAR(255))   BEGIN
     DECLARE id_chat_baru VARCHAR(10);
     SET id_chat_baru = id_chat_baru();
     
@@ -67,7 +67,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_chat` (IN `p_id_user` VARCHA
     VALUES (id_chat_baru, p_id_user, p_id_admin, p_role, p_pesan, CURRENT_TIMESTAMP, p_foto_chat);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_favorit` (IN `p_id_user` VARCHAR(10), IN `p_id_alat` VARCHAR(10))   BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` PROCEDURE `tambah_favorit` (IN `p_id_user` VARCHAR(10), IN `p_id_alat` VARCHAR(10))   BEGIN
     DECLARE id_favorit_baru VARCHAR(10);
     SET id_favorit_baru = id_favorit_baru();
     
@@ -75,7 +75,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_favorit` (IN `p_id_user` VAR
     VALUES (id_favorit_baru, p_id_user, p_id_alat, CURRENT_TIMESTAMP);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_feedback` (IN `p_id_user` VARCHAR(10), IN `p_id_alat` VARCHAR(10), IN `p_id_penyewaan` VARCHAR(10), IN `p_komentar` TEXT, IN `p_rating` DECIMAL(2,1), IN `p_foto` VARCHAR(255))   BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` PROCEDURE `tambah_feedback` (IN `p_id_user` VARCHAR(10), IN `p_id_alat` VARCHAR(10), IN `p_id_penyewaan` VARCHAR(10), IN `p_komentar` TEXT, IN `p_rating` DECIMAL(2,1), IN `p_foto` VARCHAR(255))   BEGIN
     DECLARE id_feedback_baru VARCHAR(10);
    
     SET id_feedback_baru = id_feedback_baru(); 
@@ -84,7 +84,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_feedback` (IN `p_id_user` VA
     VALUES (id_feedback_baru, p_id_user, p_id_alat, p_id_penyewaan, p_komentar, p_rating, p_foto, CURRENT_TIMESTAMP);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_informasi_pendakian` (IN `p_id_admin` VARCHAR(10), IN `p_nama_gunung` VARCHAR(100), IN `p_lokasi` VARCHAR(255), IN `p_harga_biaya` DECIMAL(10,0), IN `p_deskripsi` TEXT, IN `p_foto_gunung` VARCHAR(255))   BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` PROCEDURE `tambah_informasi_pendakian` (IN `p_id_admin` VARCHAR(10), IN `p_nama_gunung` VARCHAR(100), IN `p_lokasi` VARCHAR(255), IN `p_harga_biaya` DECIMAL(10,0), IN `p_deskripsi` TEXT, IN `p_foto_gunung` VARCHAR(255))   BEGIN
     DECLARE id_informasi_baru VARCHAR(10);
     SET id_informasi_baru = id_informasi_baru();
     
@@ -92,7 +92,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_informasi_pendakian` (IN `p_
     VALUES (id_informasi_baru, p_id_admin, p_nama_gunung, p_lokasi, p_harga_biaya, p_deskripsi, CURRENT_TIMESTAMP, p_foto_gunung);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_penyewaan` (IN `p_id_user` VARCHAR(10), IN `p_seri_alat` VARCHAR(10), IN `p_tanggal_penyewaan` DATETIME, IN `p_tanggal_pengembalian` DATETIME, IN `p_total_harga` DECIMAL(10,0))   BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` PROCEDURE `tambah_penyewaan` (IN `p_id_user` VARCHAR(10), IN `p_seri_alat` VARCHAR(10), IN `p_tanggal_penyewaan` DATETIME, IN `p_tanggal_pengembalian` DATETIME, IN `p_total_harga` DECIMAL(10,0))   BEGIN
     DECLARE id_penyewaan_baru VARCHAR(10);
     SET id_penyewaan_baru = id_penyewaan_baru();
     
@@ -100,7 +100,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_penyewaan` (IN `p_id_user` V
     VALUES (id_penyewaan_baru, p_id_user, p_seri_alat, p_tanggal_penyewaan, p_tanggal_pengembalian, p_total_harga);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_seri` (IN `p_id_alat` VARCHAR(10), IN `p_kondisi` ENUM('baru','baik','minus'), IN `p_status_produk` ENUM('tersedia','disewa','dalam perawatan','rusak'))   BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` PROCEDURE `tambah_seri` (IN `p_id_alat` VARCHAR(10), IN `p_kondisi` ENUM('baru','baik','minus'), IN `p_status_produk` ENUM('tersedia','disewa','dalam perawatan','rusak'))   BEGIN
     DECLARE id_seri_baru VARCHAR(10);
     SET id_seri_baru = seri_alat_baru();
     
@@ -108,7 +108,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_seri` (IN `p_id_alat` VARCHA
     VALUES (id_seri_baru, p_id_alat, p_kondisi, p_status_produk, CURRENT_TIMESTAMP);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_user` (IN `p_nama` VARCHAR(100), IN `p_email` VARCHAR(100), IN `p_password` VARCHAR(255), IN `p_jenis_kelamin` ENUM('L','P','O'), IN `p_no_telepon` VARCHAR(15), IN `p_alamat` TEXT, IN `p_foto_profil` VARCHAR(255))   BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` PROCEDURE `tambah_user` (IN `p_nama` VARCHAR(100), IN `p_email` VARCHAR(100), IN `p_password` VARCHAR(255), IN `p_jenis_kelamin` ENUM('L','P','O'), IN `p_no_telepon` VARCHAR(15), IN `p_alamat` TEXT, IN `p_foto_profil` VARCHAR(255))   BEGIN
     DECLARE id_user_baru VARCHAR(10);
     SET id_user_baru = id_user_baru(p_nama);
     
@@ -139,7 +139,7 @@ END$$
 --
 -- Functions
 --
-CREATE DEFINER=`root`@`localhost` FUNCTION `id_admin_baru` (`nama_admin` VARCHAR(100)) RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` FUNCTION `id_admin_baru` (`nama_admin` VARCHAR(100)) RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
     DECLARE id_admin_baru VARCHAR(10);
     DECLARE huruf_depan VARCHAR(1);
     DECLARE urutan INT;
@@ -162,7 +162,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `id_admin_baru` (`nama_admin` VARCHAR
     RETURN id_admin_baru;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `id_alat_baru` (`p_nama_alat` VARCHAR(100), `p_kategori` ENUM('primary','secondary','accessory','others')) RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` FUNCTION `id_alat_baru` (`p_nama_alat` VARCHAR(100), `p_kategori` ENUM('primary','secondary','accessory','others')) RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
     DECLARE huruf_kategori CHAR(1);
     DECLARE huruf_nama CHAR(1);
     DECLARE alat_baru INT;
@@ -187,7 +187,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `id_alat_baru` (`p_nama_alat` VARCHAR
     RETURN id_alat_baru;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `id_chat_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` FUNCTION `id_chat_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
     DECLARE id_chat_baru VARCHAR(10);
     DECLARE urutan INT;
     DECLARE urutan_str VARCHAR(5);
@@ -207,7 +207,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `id_chat_baru` () RETURNS VARCHAR(10)
     RETURN id_chat_baru;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `id_favorit_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` FUNCTION `id_favorit_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
     DECLARE id_favorit_baru VARCHAR(10);
     DECLARE urutan INT;
     DECLARE urutan_str VARCHAR(5);
@@ -227,7 +227,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `id_favorit_baru` () RETURNS VARCHAR(
     RETURN id_favorit_baru;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `id_feedback_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` FUNCTION `id_feedback_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
     DECLARE id_feedback_baru VARCHAR(10);
     DECLARE urutan INT;
     DECLARE urutan_str VARCHAR(5);
@@ -247,7 +247,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `id_feedback_baru` () RETURNS VARCHAR
     RETURN id_feedback_baru;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `id_informasi_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` FUNCTION `id_informasi_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
     DECLARE id_informasi_baru VARCHAR(10);
     DECLARE urutan INT;
     DECLARE urutan_str VARCHAR(5);
@@ -267,7 +267,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `id_informasi_baru` () RETURNS VARCHA
     RETURN id_informasi_baru;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `id_penyewaan_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` FUNCTION `id_penyewaan_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
     DECLARE id_penyewaan_baru VARCHAR(10);
     DECLARE urutan INT;
     DECLARE urutan_str VARCHAR(5);
@@ -287,7 +287,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `id_penyewaan_baru` () RETURNS VARCHA
     RETURN id_penyewaan_baru;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `id_user_baru` (`nama` VARCHAR(100)) RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` FUNCTION `id_user_baru` (`nama` VARCHAR(100)) RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC READS SQL DATA BEGIN
     DECLARE id_user_baru VARCHAR(10);
     DECLARE huruf_depan VARCHAR(1);
     DECLARE urutan INT;
@@ -310,7 +310,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `id_user_baru` (`nama` VARCHAR(100)) 
     RETURN id_user_baru;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `seri_alat_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` FUNCTION `seri_alat_baru` () RETURNS VARCHAR(10) CHARSET utf8mb3 DETERMINISTIC BEGIN
     DECLARE seri_alat_baru VARCHAR(10);
     DECLARE urutan INT;
     DECLARE urutan_str VARCHAR(5);
@@ -827,7 +827,7 @@ CREATE TABLE `view_foto_gunung` (
 --
 DROP TABLE IF EXISTS `view_bukti_pembayaran`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_bukti_pembayaran`  AS SELECT `penyewaan`.`bukti_pembayaran` AS `bukti_pembayaran` FROM `penyewaan` WHERE (`penyewaan`.`bukti_pembayaran` is not null)  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`b7_38015628`@`sql311.byethost7.com` SQL SECURITY DEFINER VIEW `view_bukti_pembayaran`  AS SELECT `penyewaan`.`bukti_pembayaran` AS `bukti_pembayaran` FROM `penyewaan` WHERE (`penyewaan`.`bukti_pembayaran` is not null)  ;
 
 -- --------------------------------------------------------
 
@@ -836,7 +836,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `view_foto_alat`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_foto_alat`  AS SELECT `alat_pendakian`.`foto_produk` AS `foto_produk` FROM `alat_pendakian` WHERE (`alat_pendakian`.`foto_produk` is not null)  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`b7_38015628`@`sql311.byethost7.com` SQL SECURITY DEFINER VIEW `view_foto_alat`  AS SELECT `alat_pendakian`.`foto_produk` AS `foto_produk` FROM `alat_pendakian` WHERE (`alat_pendakian`.`foto_produk` is not null)  ;
 
 -- --------------------------------------------------------
 
@@ -845,7 +845,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `view_foto_chat`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_foto_chat`  AS SELECT `chat`.`foto_chat` AS `foto_chat` FROM `chat` WHERE (`chat`.`foto_chat` is not null)  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`b7_38015628`@`sql311.byethost7.com` SQL SECURITY DEFINER VIEW `view_foto_chat`  AS SELECT `chat`.`foto_chat` AS `foto_chat` FROM `chat` WHERE (`chat`.`foto_chat` is not null)  ;
 
 -- --------------------------------------------------------
 
@@ -854,7 +854,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `view_foto_gunung`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_foto_gunung`  AS SELECT `informasi_pendakian`.`foto_gunung` AS `foto_gunung` FROM `informasi_pendakian` WHERE (`informasi_pendakian`.`foto_gunung` is not null)  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`b7_38015628`@`sql311.byethost7.com` SQL SECURITY DEFINER VIEW `view_foto_gunung`  AS SELECT `informasi_pendakian`.`foto_gunung` AS `foto_gunung` FROM `informasi_pendakian` WHERE (`informasi_pendakian`.`foto_gunung` is not null)  ;
 
 --
 -- Indexes for dumped tables
@@ -984,14 +984,14 @@ DELIMITER $$
 --
 -- Events
 --
-CREATE DEFINER=`root`@`localhost` EVENT `auto_cancel_penyewaan` ON SCHEDULE EVERY 1 HOUR STARTS '2024-12-27 13:10:34' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` EVENT `auto_cancel_penyewaan` ON SCHEDULE EVERY 1 HOUR STARTS '2024-12-27 13:10:34' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
     UPDATE `penyewaan`
     SET `status_sewa` = 'batal'
     WHERE `status_sewa` = 'menunggu' 
       AND TIMESTAMPDIFF(HOUR, `tanggal_penyewaan`, NOW()) >= 12;
 END$$
 
-CREATE DEFINER=`root`@`localhost` EVENT `auto_complete_penyewaan` ON SCHEDULE EVERY 1 HOUR STARTS '2024-12-27 14:03:15' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
+CREATE DEFINER=`b7_38015628`@`sql311.byethost7.com` EVENT `auto_complete_penyewaan` ON SCHEDULE EVERY 1 HOUR STARTS '2024-12-27 14:03:15' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
     UPDATE `penyewaan`
     SET `status_sewa` = 'selesai'
     WHERE `status_sewa` = 'disewa'

@@ -290,4 +290,101 @@ class Admin_model extends CI_Model
         $this->db->distinct(); // Menghindari data duplikat
         return $this->db->get()->result_array(); // Mengembalikan hasil sebagai array
     }
+
+    public function getallinformasi()
+    {
+        $this->db->select('*');
+        $this->db->from('informasi_pendakian');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function getallalat()
+    {
+        $this->db->select('*');
+        $this->db->from('alat_pendakian');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function hapus_alat($id)
+    {
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 0');
+        $this->db->where('id_alat', $id);
+        $this->db->delete('alat_pendakian');
+
+        $this->db->where('id_alat', $id);
+        $this->db->delete('seri');
+
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
+
+        return true;
+    }
+
+    public function hapus_informasi($id_informasi)
+    {
+        $this->db->where('id_informasi', $id_informasi);
+        return $this->db->delete('informasi_pendakian');
+    }
+
+
+    public function tambah_informasi($data)
+    {
+        $result = $this->db->query("CALL tambah_informasi_pendakian(?, ?, ?, ?, ?, ?)", [
+            $data['id_admin'],
+            $data['nama_gunung'],
+            $data['lokasi'],
+            $data['harga_biaya'],
+            $data['deskripsi'],
+            $data['foto_gunung']
+        ]);
+
+        return $result;
+    }
+
+    public function delete_foto_info($id_informasi)
+    {
+        $nama = $this->session->userdata('nama_admin');
+
+        if (empty($nama)) {
+            return false; // No session 'nama', cannot proceed
+        }
+
+        // Fetch the user's profile photo filename from the database
+        $this->db->select('foto_gunung');
+        $this->db->where('id_informasi', $id_informasi);
+        $query = $this->db->get('informasi_pendakian');
+        $foto_gunung = $query->row()->foto_gunung ?? null;
+
+
+
+        // Update the foto_gunung to default.png
+        $this->db->set('foto_gunung', 'default.jpg');
+        $this->db->where('id_informasi', $id_informasi);
+        $result = $this->db->update('informasi_pendakian');
+
+        return $result; // Return deletion status
+    }
+
+    // Fungsi untuk mendapatkan informasi berdasarkan ID
+
+    // Fungsi untuk memperbarui informasi
+    public function update_informasi($id, $data)
+    {
+        $this->db->where('id_informasi', $id);
+        return $this->db->update('informasi_pendakian', $data);
+    }
+
+    public function get_informasi_by_id($id_informasi)
+    {
+        $query = $this->db->get_where('informasi_pendakian', ['id_informasi' => $id_informasi]);
+        return $query->row_array();
+    }
+
+    public function get_id_admin($nama_admin)
+    {
+        $query = $this->db->get_where('admin', ['nama_admin' => $nama_admin]);
+        $row = $query->row_array();
+        return $row ? $row['id_admin'] : null;
+    }
 }
