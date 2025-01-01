@@ -24,10 +24,6 @@ class Produk_model extends CI_Model
         $this->db->order_by('RAND()'); 
         $query = $this->db->get();
 
-        // Debugging
-        if (!$query->num_rows()) {
-            log_message('error', 'No data retrieved from alat_pendakian.');
-        }
 
         return $query->result();
     }
