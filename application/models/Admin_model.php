@@ -387,4 +387,79 @@ class Admin_model extends CI_Model
         $row = $query->row_array();
         return $row ? $row['id_admin'] : null;
     }
+
+    // Fetch ENUM values from the database for the 'kategori' column
+    public function getKategoriOptions()
+    {
+        $query = $this->db->query("SHOW COLUMNS FROM alat_pendakian LIKE 'kategori'");
+        $row = $query->row_array();
+        preg_match("/^enum\((.*)\)$/", $row['Type'], $matches);
+        $enum = str_getcsv($matches[1], ',', "'");
+        return $enum;
+    }
+
+    // Insert new alat data into the database
+    public function insertAlatWithProcedure($data)
+    {
+        $query = "CALL tambah_alat_pendakian(?, ?, ?, ?, ?, ?)";
+        $this->db->query($query, [
+            $data['nama'],         // p_nama_alat
+            $data['kategori'],     // p_kategori
+            $data['stok'],         // p_stok
+            $data['harga_sewa'],   // p_harga_sewa
+            $data['foto'],         // p_foto_produk
+            $data['deskripsi']     // p_deskripsi
+        ]);
+    }
+
+    public function get_alats_by_id($id)
+    {
+        $query = $this->db->get_where('alat_pendakian', ['id_alat' => $id]);
+        return $query->row_array();
+    }
+
+    public function delete_foto_produk($id)
+    {
+        $nama = $this->session->userdata('nama_admin');
+
+        if (empty($nama)) {
+            return false; // No session 'nama', cannot proceed
+        }
+
+        // Fetch the user's profile photo filename from the database
+        $this->db->select('foto_produk');
+        $this->db->where('id_alat', $id);
+        $query = $this->db->get('alat_pendakian');
+        $foto_produk = $query->row()->foto_produk ?? null;
+
+
+        // Update the foto_produk to default.png
+        $this->db->set('foto_produk', 'default.jpg');
+        $this->db->where('id_alat', $id);
+        $result = $this->db->update('alat_pendakian');
+
+        return $result; // Return deletion status
+    }
+
+    // Get alat data by ID
+    public function getAlatById($id)
+    {
+        return $this->db->get_where('alat_pendakian', ['id_alat' => $id])->row_array();
+    }
+
+    // Update alat data
+    public function updateAlat($id, $data)
+    {
+        $this->db->where('id_alat', $id);
+        return $this->db->update('alat_pendakian', $data);
+    }
+
+    // Delete old photo if not default.jpg
+    public function deleteOldPhoto($filename)
+    {
+        $file_path = './public/img/produk/' . $filename;
+        if ($filename !== 'default.jpg' && file_exists($file_path)) {
+            unlink($file_path); // Delete the file
+        }
+    }
 }

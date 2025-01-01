@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 01, 2025 at 01:57 AM
+-- Generation Time: Jan 01, 2025 at 05:18 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -351,7 +351,7 @@ CREATE TABLE `admin` (
 
 INSERT INTO `admin` (`id_admin`, `nama_admin`, `email_admin`, `no_telp_admin`, `password_admin`, `jenis_kelamin`, `tanggal_ditambahkan`, `foto_admin`) VALUES
 ('1165', 'bot', 'bot@bot', '0123456789', 'botbot123', 'O', '2025-01-01 01:30:52', 'default.png'),
-('S00002', 'super admin', 'admin@admin', '0897654321', 'admin123', '', '2025-01-01 01:55:18', 'default.png');
+('S00002', 'super admin', 'admin@admin', '0897654321', 'admin123', 'O', '2025-01-01 01:55:18', 'default.png');
 
 -- --------------------------------------------------------
 

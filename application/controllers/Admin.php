@@ -474,6 +474,7 @@ class Admin extends CI_Controller
         $this->load->view('templates/footer');
     }
 
+
     public function data_alat()
     {
         $data['title'] = 'Hikyu | Data Alat';
@@ -640,7 +641,7 @@ class Admin extends CI_Controller
         $deskripsi = $this->input->post('deskripsi');
 
         // Fetch existing information from the database
-       // $id_admin = $this->Admin_model->get_id_admin($nama_admin);
+        // $id_admin = $this->Admin_model->get_id_admin($nama_admin);
         $id_admin =  $this->input->post('nama');
         $informasi = $this->Admin_model->get_informasi_by_id($id_info);
 
@@ -686,5 +687,184 @@ class Admin extends CI_Controller
         }
 
         redirect('admin/data_informasi');
+    }
+
+    // Load form view
+    public function talat()
+    {
+        $data['title'] = 'Hikyu | Tambah Alat';
+        $this->load->view('templates/header4', $data);
+        $data['kategori_options'] = $this->Admin_model->getKategoriOptions();
+        $this->load->view('admin/talat', $data);
+        $this->load->view('templates/footer');
+    }
+
+    // Process form submission
+    public function tambahData()
+    {
+        $this->form_validation->set_rules('nama', 'Nama Alat', 'required');
+        $this->form_validation->set_rules('kategori', 'Kategori', 'required');
+        $this->form_validation->set_rules('stok', 'Stok', 'required|numeric');
+        $this->form_validation->set_rules('harga_sewa', 'Harga Sewa', 'required|numeric');
+        $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->talat();
+        } else {
+            $foto = $this->uploadFoto(); // Handle file upload
+            $data = [
+                'nama' => $this->input->post('nama'),
+                'kategori' => $this->input->post('kategori'),
+                'stok' => $this->input->post('stok'),
+                'harga_sewa' => $this->input->post('harga_sewa'),
+                'foto' => $foto,
+                'deskripsi' => $this->input->post('deskripsi'),
+            ];
+
+            try {
+                $this->Admin_model->insertAlatWithProcedure($data);
+                $this->session->set_flashdata('success', 'Data alat berhasil ditambahkan.');
+                redirect('admin/data_alat');
+            } catch (Exception $e) {
+                $this->session->set_flashdata('error', 'Terjadi kesalahan: ' . $e->getMessage());
+                $this->talat();
+            }
+        }
+    }
+
+    // Handle file upload
+    private function uploadFoto()
+    {
+        // Handle file upload
+        $config['upload_path'] = './public/img/produk/';
+        $config['allowed_types'] = 'jpeg|jpg|png|heic';
+        $config['file_name'] = $this->input->post('nama');
+
+        $this->load->library('upload', $config);
+
+        if ($this->upload->do_upload('foto')) {
+            return $this->upload->data('file_name');
+        } else {
+            return 'default.jpg'; // Default image if upload fails
+        }
+    }
+
+    public function ealat($id)
+    {
+        $data['title'] = 'Hikyu | Edit Alat';
+        $this->load->view('templates/header4', $data);
+        $data['kategori_options'] = $this->Admin_model->getKategoriOptions();
+
+        $data['data'] = $this->Admin_model->getAlatById($id);
+
+        // If alat not found
+        if (!$data['data']) {
+            $this->session->set_flashdata('error', 'Data alat tidak ditemukan.');
+            redirect('admin/data_alat');
+        }
+
+        $this->load->view('admin/ealat', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function deleteAlat($id)
+    {
+        $nama = $this->session->userdata('nama_admin');
+
+        if (empty($nama)) {
+            return false; // No session 'nama', cannot proceed
+        }
+
+        // Fetch the user's profile photo filename from the database
+        $this->db->select('foto_produk');
+        $this->db->where('id_alat', $id);
+        $query = $this->db->get('alat_pendakian');
+        $foto_produk = $query->row()->foto_produk ?? null;
+
+        if ($foto_produk) {
+            // Construct the file path
+            $file_path = './public/img/produk/' . $foto_produk;
+            $informasi = $this->Admin_model->get_alats_by_id($id);
+            // Attempt to delete the file if it exists
+            if (file_exists($file_path) && $informasi['foto_produk'] !== 'default.jpg') {
+                unlink($file_path);
+            }
+        }
+
+        // Update the foto_produk to default.png
+        $this->db->set('foto_produk', 'default.jpg');
+        $this->db->where('id_alat', $id);
+        $result = $this->db->update('alat_pendakian');
+        $result = $this->Admin_model->delete_foto_produk($id);
+
+
+        if ($result) {
+            $this->session->set_flashdata('success', 'Foto berhasil dihapus dan diubah menjadi default.');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus foto.');
+        }
+
+        // Redirect ke halaman lain
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    // Process edit form submission
+    public function updateAlat()
+    {
+        $id = $this->input->post('id_alat');
+
+        $this->form_validation->set_rules('nama', 'Nama Alat', 'required');
+        $this->form_validation->set_rules('kategori', 'Kategori', 'required');
+        $this->form_validation->set_rules('stok', 'Stok', 'required|numeric');
+        $this->form_validation->set_rules('harga_sewa', 'Harga Sewa', 'required|numeric');
+        $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->ealat($id);
+        } else {
+            $alat = $this->Admin_model->getAlatById($id); // Get current alat data
+
+            // Handle file upload
+            $foto = $this->uploadFotos();
+            if ($foto && $foto !== 'default.jpg') {
+                // Delete old photo if not default.jpg
+                $this->Admin_model->deleteOldPhoto($alat['foto_produk']);
+            } else {
+                $foto = $alat['foto_produk']; // Keep old photo
+            }
+
+            $data = [
+                'nama_alat' => $this->input->post('nama'),
+                'kategori' => $this->input->post('kategori'),
+                'stok' => $this->input->post('stok'),
+                'harga_sewa' => $this->input->post('harga_sewa'),
+                'deskripsi' => $this->input->post('deskripsi'),
+                'foto_produk' => $foto
+            ];
+
+            if ($this->Admin_model->updateAlat($id, $data)) {
+                $this->session->set_flashdata('success', 'Data alat berhasil diperbarui.');
+                redirect('admin/data_alat');
+            } else {
+                $this->session->set_flashdata('error', 'Terjadi kesalahan saat memperbarui data.');
+                $this->ealat($id);
+            }
+        }
+    }
+
+    // Handle file upload
+    private function uploadFotos()
+    {
+        $config['upload_path'] = './public/img/produk/';
+        $config['allowed_types'] = 'jpeg|jpg|png|heic';
+        $config['file_name'] = $this->input->post('nama');
+
+        $this->load->library('upload', $config);
+
+        if ($this->upload->do_upload('foto')) {
+            return $this->upload->data('file_name');
+        } else {
+            return null; // No new file uploaded
+        }
     }
 }
