@@ -9,7 +9,6 @@ class Dashboard extends CI_Controller
         parent::__construct();
         $this->load->model('Dashboard_model');
         $this->load->library('session');
-
     }
     public function index()
     {
@@ -62,10 +61,10 @@ class Dashboard extends CI_Controller
 
         // Hitung persentase
         $data['percentages'] = [
-            'batal' => ($data['batal'] / $data['total_penyewaan']) * 100,
-            'menunggu' => ($data['menunggu'] / $data['total_penyewaan']) * 100,
-            'disewa' => ($data['disewa'] / $data['total_penyewaan']) * 100,
-            'selesai' => ($data['selesai'] / $data['total_penyewaan']) * 100,
+            'batal' => $data['total_penyewaan'] > 0 ? ($data['batal'] / $data['total_penyewaan']) * 100 : 0,
+            'menunggu' => $data['total_penyewaan'] > 0 ? ($data['menunggu'] / $data['total_penyewaan']) * 100 : 0,
+            'disewa' => $data['total_penyewaan'] > 0 ? ($data['disewa'] / $data['total_penyewaan']) * 100 : 0,
+            'selesai' => $data['total_penyewaan'] > 0 ? ($data['selesai'] / $data['total_penyewaan']) * 100 : 0,
         ];
 
         // Mengambil data dari model
@@ -77,12 +76,11 @@ class Dashboard extends CI_Controller
 
         // Menghitung persentase
         $data['percentagess'] = [
-            'rusak' => ($data['rusak'] / $data['total_stok']) * 100,
-            'dalam_perawatan' => ($data['dalam_perawatan'] / $data['total_stok']) * 100,
-            'disewa' => ($data['disewa'] / $data['total_stok']) * 100,
-            'tersedia' => ($data['tersedia'] / $data['total_stok']) * 100,
+            'rusak' => $data['total_stok'] > 0 ? ($data['rusak'] / $data['total_stok']) * 100 : 0,
+            'dalam_perawatan' => $data['total_stok'] > 0 ? ($data['dalam_perawatan'] / $data['total_stok']) * 100 : 0,
+            'disewa' => $data['total_stok'] > 0 ? ($data['disewa'] / $data['total_stok']) * 100 : 0,
+            'tersedia' => $data['total_stok'] > 0 ? ($data['tersedia'] / $data['total_stok']) * 100 : 0,
         ];
-
         // Mengambil data dari model
         $data['total_stok'] = $this->Dashboard_model->get_total_stoks();
         $data['baru'] = $this->Dashboard_model->get_status_counts('baru');
@@ -91,9 +89,9 @@ class Dashboard extends CI_Controller
 
         // Menghitung persentase
         $data['percentagesss'] = [
-            'baru' => ($data['baru'] / $data['total_stok']) * 100,
-            'baik' => ($data['baik'] / $data['total_stok']) * 100,
-            'minus' => ($data['minus'] / $data['total_stok']) * 100,
+            'baru' => $data['total_stok'] > 0 ? ($data['baru'] / $data['total_stok']) * 100 : 0,
+            'baik' => $data['total_stok'] > 0 ? ($data['baik'] / $data['total_stok']) * 100 : 0,
+            'minus' => $data['total_stok'] > 0 ? ($data['minus'] / $data['total_stok']) * 100 : 0,
         ];
 
         // Mengambil jumlah alat berdasarkan kategori dari model

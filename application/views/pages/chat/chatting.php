@@ -209,7 +209,7 @@
                                     <div class="col-10 col-lg-6 mt-4">
                                         <div class="card-body card-neoraised border border-2 border-dark rounded-3">
                                             <div class="mb-3">
-                                                <img src="<?= base_url('public/img/admin/' . $chat['foto_admin']) ?>" class="rounded-circle border border-2 border-dark card-neoraised me-2 mb-2" width="40" alt="<?= $chat['nama_admin'] ?>">
+                                                <img src="<?= empty($chat['foto_admin']) ? base_url('public/img/admin/deleted.jpg') : base_url('public/img/admin/' . $chat['foto_admin']) ?>" class="rounded-circle border border-2 border-dark card-neoraised me-2 mb-2" width="40" alt="<?= $chat['nama_admin'] ?>">
 
 
                                                 <?php $nama = $chat['nama_admin'] ?? ''; ?>

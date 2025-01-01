@@ -55,10 +55,7 @@
                             <td class="text-center"><?= htmlspecialchars($feed->tanggal_feedback, ENT_QUOTES, 'UTF-8') ?></td>
                         </tr>
                     <?php endforeach; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="4" class="text-center">Tidak ada data feedback tersedia.</td>
-                    </tr>
+
                 <?php endif; ?>
             </tbody>
             <tfoot>

@@ -11,16 +11,15 @@
     <div class="row">
         <?php
         $cards = [
-            ['title' => 'Total Pendapatan | Bulanan', 'subtitle' => ' | IDR ' . number_format($pendapatan_bulanan, 0, ',', '.'), 'value' => 'IDR ' . number_format($total_pendapatan, 0, ',', '.'), 'bg' => 'primary', 'icon' => 'bi bi-currency-dollar'],
-            ['title' => 'Total Admin', 'subtitle' => '', 'value' => $total_admin, 'bg' => 'warning', 'icon' => 'bi bi-person'],
-            ['title' => 'Total Penyewaan', 'subtitle' => '', 'value' => $total_penyewaan, 'bg' => 'danger', 'icon' => 'bi bi-cart'],
-            ['title' => 'Total Users', 'subtitle' => '', 'value' => $total_users, 'bg' => 'info', 'icon' => 'bi bi-people'],
-            ['title' => 'Total Alat | Stok', 'subtitle' => '', 'value' => $total_alat . ' | ' . $total_stok, 'bg' => 'primary', 'icon' => 'bi bi-box'],
-            ['title' => 'Total Informasi', 'subtitle' => '', 'value' => $total_informasi, 'bg' => 'warning', 'icon' => 'bi bi-info-circle'],
-            ['title' => 'Total Favorit', 'subtitle' => '', 'value' => $total_favorit, 'bg' => 'danger', 'icon' => 'bi bi-heart'],
-            ['title' => 'Total Feedback', 'subtitle' => '', 'value' => $total_feedback, 'bg' => 'info', 'icon' => 'bi bi-chat'],
+            ['title' => 'Total Pendapatan | Bulanan', 'subtitle' => ' | IDR ' . number_format($pendapatan_bulanan ?? 0, 0, ',', '.'), 'value' => 'IDR ' . number_format($total_pendapatan ?? 0, 0, ',', '.'), 'bg' => 'primary', 'icon' => 'bi bi-currency-dollar'],
+            ['title' => 'Total Admin', 'subtitle' => '', 'value' => $total_admin ?? 0, 'bg' => 'warning', 'icon' => 'bi bi-person'],
+            ['title' => 'Total Penyewaan', 'subtitle' => '', 'value' => $total_penyewaan ?? 0, 'bg' => 'danger', 'icon' => 'bi bi-cart'],
+            ['title' => 'Total Users', 'subtitle' => '', 'value' => $total_users ?? 0, 'bg' => 'info', 'icon' => 'bi bi-people'],
+            ['title' => 'Total Alat | Stok', 'subtitle' => '', 'value' => ($total_alat ?? 0) . ' | ' . ($total_stok ?? 0), 'bg' => 'primary', 'icon' => 'bi bi-box'],
+            ['title' => 'Total Informasi', 'subtitle' => '', 'value' => $total_informasi ?? 0, 'bg' => 'warning', 'icon' => 'bi bi-info-circle'],
+            ['title' => 'Total Favorit', 'subtitle' => '', 'value' => $total_favorit ?? 0, 'bg' => 'danger', 'icon' => 'bi bi-heart'],
+            ['title' => 'Total Feedback', 'subtitle' => '', 'value' => $total_feedback ?? 0, 'bg' => 'info', 'icon' => 'bi bi-chat'],
         ];
-
         foreach ($cards as $card): ?>
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card card-neoraised border border-dark border-3">
@@ -422,11 +421,9 @@
                                     Alat Terlaris
                                 </div>
                                 <div class="h5 mb-0 fw-bolder text-black fw-bold">
-                                    <?php
-                                    if (isset($alat_terlaris[0]->nama_alat)) {
-                                        echo $alat_terlaris[0]->nama_alat;
-                                    }
-                                    ?><br><br>(<?= $alat_terlaris[0]->total_rented ?>x) Disewa
+                                    <?php if (isset($alat_terlaris[0]['nama_alat'])) {
+                                        echo $alat_terlaris[0]['nama_alat'];
+                                    } ?><br><br>(<?= $alat_terlaris[0]['total_rented'] ?? 0 ?>x) Disewa
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -467,7 +464,7 @@
                                             }
                                         }
                                     }
-                                    ?> (<?= number_format((float)$rating, 1, '.', '') ?>)
+                                    ?> (<?php if (isset($rating)) echo number_format((float)$rating, 1, '.', ''); ?>)
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -490,10 +487,10 @@
                                 </div>
                                 <div class="h5 mb-0 fw-bolder text-black fw-bold">
                                     <?php
-                                    if (isset($top_favorit[0]->nama_alat)) {
+                                    if (isset($top_favorit) && isset($top_favorit[0]->nama_alat)) {
                                         echo $top_favorit[0]->nama_alat;
                                     }
-                                    ?><br><br> (<?= $top_favorit[0]->total_favorites; ?>x) Favorit
+                                    ?><br><br> (<?php if (isset($top_favorit) && isset($top_favorit[0]->total_favorites)) echo $top_favorit[0]->total_favorites ?? 0; ?>x) Favorit
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -515,7 +512,7 @@
                                     Top Admin Post
                                 </div>
                                 <div class="h5 mb-0 fw-bolder text-black fw-bold">
-                                    <?= $top_admin_posting['nama_admin']; ?> <br><br> (<?= $top_admin_posting['total_posting']; ?>x) Posting
+                                    <?php if (isset($top_admin_posting['nama_admin'])) echo $top_admin_posting['nama_admin']; ?> <br><br> (<?php if (isset($top_admin_posting['total_posting'])) echo $top_admin_posting['total_posting']; ?>x) Posting
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -567,7 +564,13 @@
                                     Top User Sewa
                                 </div>
                                 <div class="h5 mb-0 fw-bolder text-black fw-bold">
-                                    <?= $top_user_rented_item['nama_user']; ?> <br><br> <?= $top_user_rented_item['nama_alat']; ?> (<?= $top_user_rented_item['jumlah_disewa']; ?>x)
+                                    <?php if (isset($top_user_rented_item['nama_user'])) {
+                                        echo $top_user_rented_item['nama_user'];
+                                    } ?> <br><br> <?php if (isset($top_user_rented_item['nama_alat'])) {
+                                                        echo $top_user_rented_item['nama_alat'];
+                                                    } ?> (<?php if (isset($top_user_rented_item['jumlah_disewa'])) {
+                                                                echo $top_user_rented_item['jumlah_disewa'];
+                                                            } ?>x)
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -591,10 +594,10 @@
                                         Top User Feedback
                                     </div>
                                     <div class="h5 mb-0 fw-bolder text-black fw-bold">
-                                        <?= $top_user_feedback['user_name']; ?> <br><br>(<?= $top_user_feedback['total_feedback']; ?>) Riviews |
+                                        <?= isset($top_user_feedback['user_name']) ? $top_user_feedback['user_name'] : 'N/A'; ?> <br><br>(<?= isset($top_user_feedback['total_feedback']) ? $top_user_feedback['total_feedback'] : '0'; ?>) Reviews |
                                         <?php
-                                        $fullStars = floor($top_user_feedback['average_rating']);
-                                        $halfStar = $top_user_feedback['average_rating'] - $fullStars >= 0.5;
+                                        $fullStars = isset($top_user_feedback['average_rating']) ? floor((float)$top_user_feedback['average_rating']) : 0;
+                                        $halfStar = isset($top_user_feedback['average_rating']) && $top_user_feedback['average_rating'] - $fullStars >= 0.5;
                                         for ($i = 0; $i < 5; $i++) {
                                             if ($i < $fullStars) {
                                                 echo '<i class="bi bi-star-fill text-warning"></i>';
@@ -604,7 +607,7 @@
                                                 echo '<i class="bi bi-star text-warning"></i>';
                                             }
                                         }
-                                        ?> (<?= number_format($top_user_feedback['average_rating'], 1); ?>)
+                                        ?> (<?= isset($top_user_feedback['average_rating']) ? number_format((float)$top_user_feedback['average_rating'], 1) : 'N/A'; ?>)
                                     </div>
                                 </div>
                                 <div class="col-auto">
@@ -626,7 +629,7 @@
                                         Top Admin Chat
                                     </div>
                                     <div class="h5 mb-0 fw-bolder text-black fw-bold">
-                                        <?= $top_admin_chat['nama_admin']; ?> <br><br> (<?= $top_admin_chat['total_replies']; ?>) Pesan Chat Dibalas
+                                        <?= isset($top_admin_chat['nama_admin']) ? $top_admin_chat['nama_admin'] : 'N/A'; ?> <br><br> (<?= isset($top_admin_chat['total_replies']) ? $top_admin_chat['total_replies'] : '0'; ?>) Pesan Chat Dibalas
                                     </div>
                                 </div>
                                 <div class="col-auto">
@@ -692,13 +695,21 @@
                                 'bg-warning',
                             ];
                             ?>
-                            <?php foreach ($kategori_counts as $i => $kategori): ?>
+
+                            <?php
+                            $kategori_counts = $kategori ?? [
+                                (object)['kategori' => 'primary', 'total' => 0],
+                                (object)['kategori' => 'secondary', 'total' => 0],
+                                (object)['kategori' => 'accessory', 'total' => 0],
+                                (object)['kategori' => 'others', 'total' => 0],
+                            ];
+                            foreach ($kategori_counts as $i => $kategori): ?>
                                 <h4 class="small fw-bolder"><?= ucfirst($kategori->kategori) ?> (<?= $kategori->total ?>)
-                                    <span class="float-right"><?= round(($kategori->total / $total_alat) * 100, 2); ?>%</span>
+                                    <span class="float-right"><?= $total_alat > 0 ? round(($kategori->total / $total_alat) * 100, 2) : 0; ?>%</span>
                                 </h4>
                                 <div class="progress mb-4 card-neoraised">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated border border-dark border-3 <?= $colors[$i % count($colors)]; ?>" role="progressbar"
-                                        style="width: <?= ($kategori->total / $total_alat) * 100; ?>%" aria-valuenow="<?= ($kategori->total / $total_alat) * 100; ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                        style="width: <?= $total_alat > 0 ? ($kategori->total / $total_alat) * 100 : 0; ?>%" aria-valuenow="<?= $total_alat > 0 ? ($kategori->total / $total_alat) * 100 : 0; ?>" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -722,6 +733,9 @@
                                         <ul class="splide__list">
                                             <?php foreach ($bukti_pembayaranya as $bukti) : ?>
                                                 <li class="splide__slide d-flex align-items-center justify-content-center">
+                                                <?php if (empty($bukti['bukti_pembayaran'])): ?>
+                                                    <p class="text-center">Tidak ada bukti pembayaran.</p>
+                                                <?php endif; ?>
                                                     <?php if (!empty($bukti['bukti_pembayaran'])): ?>
                                                         <?php if (file_exists(FCPATH . 'public/img/bukti/' . $bukti['bukti_pembayaran'])): ?>
                                                             <img src="<?= base_url('public/img/bukti/' . $bukti['bukti_pembayaran']); ?>" alt="Slide" class="img-fluid mb-5 card-neoraised border border-dark border-3" style="max-width: 100%;">
@@ -729,7 +743,7 @@
                                                             <p>Gambar tidak tersedia.</p>
                                                         <?php endif; ?>
                                                     <?php else: ?>
-                                                        <p>Gambar tidak tersedia.</p>
+                                                        <p class="text-center">Tidak ada bukti pembayaran.</p>
                                                     <?php endif; ?>
                                                 </li>
                                             <?php endforeach; ?>
