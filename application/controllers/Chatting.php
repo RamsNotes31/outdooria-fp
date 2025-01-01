@@ -22,14 +22,11 @@ class Chatting extends CI_Controller
         $id_user = $this->Chatting_model->get_id_by_name($nama);
 
         if (!$nama) {
-            // Jika user tidak login, arahkan ke halaman login
             redirect('../login');
         }
 
-        // Ambil data chat dari model
         $data['chats'] = $this->Chatting_model->get_all_chats($id_user);
 
-        // Load view
         $this->load->view('templates/header', $data);
         $this->load->view('pages/chat/chatting', $data);
         $this->load->view('templates/footer');
@@ -37,19 +34,17 @@ class Chatting extends CI_Controller
 
     public function send_message()
     {
-        // Validasi input
         $message = $this->input->post('message');
         $nama = $this->session->userdata('nama');
         $role = $this->session->userdata('role');
         $id_user = $this->Chatting_model->get_id_by_name($nama);
-        $id_admin = null; // Default admin ID
+        $id_admin = null;
         $foto_chat = null;
 
-        // Upload gambar jika ada
         if (!empty($_FILES['image']['name'])) {
             $config['upload_path'] = './public/img/chat/';
             $config['allowed_types'] = '*';
-            $config['file_name'] = $nama . '_' . $role . '_' . time(); // Nama file berdasarkan nama user, role, dan timestamp
+            $config['file_name'] = $nama . '_' . $role . '_' . time();
 
             $this->load->library('upload', $config);
 
@@ -60,7 +55,6 @@ class Chatting extends CI_Controller
                 redirect('../chatting');
             }
         } else {
-            // Validasi form jika tidak ada file yang diupload
             $this->form_validation->set_rules('message', 'Pesan', 'required|min_length[5]|max_length[255]');
 
             if ($this->form_validation->run() === FALSE) {
@@ -69,7 +63,6 @@ class Chatting extends CI_Controller
             }
         }
 
-        // Siapkan data untuk disimpan
         $data = [
             'id_user' => $id_user,
             'id_admin' => $id_admin,
@@ -78,7 +71,6 @@ class Chatting extends CI_Controller
             'foto_chat' => $foto_chat,
         ];
 
-        // Simpan data ke database menggunakan stored procedure
         if ($this->Chatting_model->insert_chat($data)) {
             $this->session->set_flashdata('success', 'Pesan berhasil dikirim.');
         } else {
@@ -117,13 +109,11 @@ class Chatting extends CI_Controller
         $foto_chat = null;
         $role = $this->session->userdata('role');
 
-        // Jika file sudah dipilih maka tidak menjalankan form validation
         if (!empty($_FILES['image']['name'])) {
 
-            // Upload gambar jika ada
             $config['upload_path'] = './public/img/chat/';
             $config['allowed_types'] = '*';
-            $config['file_name'] = $nama . '_' . $role . '_' . time(); // Nama file berdasarkan nama user, role, dan timestamp
+            $config['file_name'] = $nama . '_' . $role . '_' . time();
 
             $this->load->library('upload', $config);
 
@@ -135,7 +125,6 @@ class Chatting extends CI_Controller
             }
         } else {
 
-            // Validasi form jika tidak ada file yang diupload
             $this->form_validation->set_rules('message', 'Pesan', 'required|min_length[5]|max_length[255]');
 
             if ($this->form_validation->run() === FALSE) {
@@ -144,13 +133,11 @@ class Chatting extends CI_Controller
             }
         }
 
-        // Siapkan data untuk diupdate
         if (!empty($_FILES['image']['name'])) {
             $this->db->where('id_chat', $id_chat);
             $query = $this->db->get('chat');
             $chat = $query->row();
 
-            // Hapus file gambar jika ada
             if ($chat && $chat->foto_chat) {
                 $file_path = './public/img/chat/' . $chat->foto_chat;
                 if (file_exists($file_path)) {
@@ -168,7 +155,6 @@ class Chatting extends CI_Controller
             ];
         }
 
-        // Update data di database
         if ($this->Chatting_model->update_chat($id_chat, $data)) {
             $this->session->set_flashdata('success', 'Pesan berhasil diperbarui.');
         } else {
@@ -185,13 +171,11 @@ class Chatting extends CI_Controller
         $foto_chat = null;
         $role = $this->session->userdata('role');
 
-        // Jika file sudah dipilih maka tidak menjalankan form validation
         if (!empty($_FILES['image']['name'])) {
 
-            // Upload gambar jika ada
             $config['upload_path'] = './public/img/chat/';
             $config['allowed_types'] = '*';
-            $config['file_name'] = $nama . '_' . $role . '_' . time(); // Nama file berdasarkan nama user, role, dan timestamp
+            $config['file_name'] = $nama . '_' . $role . '_' . time();
 
             $this->load->library('upload', $config);
 
@@ -203,7 +187,6 @@ class Chatting extends CI_Controller
             }
         } else {
 
-            // Validasi form jika tidak ada file yang diupload
             $this->form_validation->set_rules('message', 'Pesan', 'required|min_length[5]|max_length[255]');
 
             if ($this->form_validation->run() === FALSE) {
@@ -212,13 +195,11 @@ class Chatting extends CI_Controller
             }
         }
 
-        // Siapkan data untuk diupdate
         if (!empty($_FILES['image']['name'])) {
             $this->db->where('id_chat', $id_chat);
             $query = $this->db->get('chat');
             $chat = $query->row();
 
-            // Hapus file gambar jika ada
             if ($chat && $chat->foto_chat) {
                 $file_path = './public/img/chat/' . $chat->foto_chat;
                 if (file_exists($file_path)) {
@@ -236,7 +217,6 @@ class Chatting extends CI_Controller
             ];
         }
 
-        // Update data di database
         if ($this->Chatting_model->update_chat($id_chat, $data)) {
             $this->session->set_flashdata('success', 'Pesan berhasil diperbarui.');
         } else {
@@ -270,19 +250,17 @@ class Chatting extends CI_Controller
 
     public function send_message_admin($id_users)
     {
-        // Validasi input
         $message = $this->input->post('message');
         $nama = $this->session->userdata('nama_admin');
         $role = $this->session->userdata('role');
         $id_user = $id_users;
-        $id_admin = $this->Chatting_model->get_id_by_name_admin($nama); // Default admin ID
+        $id_admin = $this->Chatting_model->get_id_by_name_admin($nama);
         $foto_chat = null;
 
-        // Upload gambar jika ada
         if (!empty($_FILES['image']['name'])) {
             $config['upload_path'] = './public/img/chat/';
             $config['allowed_types'] = '*';
-            $config['file_name'] = $nama . '_' . $role . '_' . time(); // Nama file berdasarkan nama user, role, dan timestamp
+            $config['file_name'] = $nama . '_' . $role . '_' . time();
 
             $this->load->library('upload', $config);
 
@@ -293,7 +271,6 @@ class Chatting extends CI_Controller
                 redirect($_SERVER['HTTP_REFERER']);
             }
         } else {
-            // Validasi form jika tidak ada file yang diupload
             $this->form_validation->set_rules('message', 'Pesan', 'required|min_length[5]|max_length[255]');
 
             if ($this->form_validation->run() === FALSE) {
@@ -302,7 +279,6 @@ class Chatting extends CI_Controller
             }
         }
 
-        // Siapkan data untuk disimpan
         $data = [
             'id_user' => $id_user,
             'id_admin' => $id_admin,
@@ -311,7 +287,6 @@ class Chatting extends CI_Controller
             'foto_chat' => $foto_chat,
         ];
 
-        // Simpan data ke database menggunakan stored procedure
         if ($this->Chatting_model->insert_chat($data)) {
             $this->session->set_flashdata('success', 'Pesan berhasil dikirim.');
         } else {

@@ -3,6 +3,18 @@ defined('BASEPATH') or
     header("Location: error");
 ?>
 
+<script>
+    <?php if (!$this->session->userdata('cek')): ?>
+        Swal.fire({
+            title: 'Selamat Datang!',
+            text: 'Selamat datang kembali, <?php echo $this->session->userdata('nama'); ?>',
+            icon: 'success',
+            confirmButtonText: 'Oke'
+        })
+        <?php $this->session->set_userdata('cek', true); ?>
+    <?php endif; ?>
+</script>
+
 <div class="container mt-4">
     <?php if ($this->session->userdata('nama')): ?>
         <h1 class="text-center fw-bolder mt-5 mb-5">Welcome back <span class="text-danger"><?php echo $this->session->userdata('nama'); ?>!</span></h1>
@@ -38,16 +50,15 @@ defined('BASEPATH') or
                 <div class="d-flex justify-content-center align-items-center flex-column">
                     <div class="d-flex">
                         <?php
-                        // Menampilkan bintang berdasarkan rata-rata rating
-                        $fullStars = $average_rating !== null ? floor($average_rating) : 0; // Pastikan rating tidak null sebelum floor
-                        $halfStar = ($average_rating - $fullStars) >= 0.5; // Cek jika ada bintang setengah
+                        $fullStars = $average_rating !== null ? floor($average_rating) : 0;
+                        $halfStar = ($average_rating - $fullStars) >= 0.5;
                         for ($i = 1; $i <= 5; $i++) {
                             if ($i <= $fullStars) {
-                                echo '<i class="bi bi-star-fill text-warning fs-1"></i>'; // Bintang penuh
+                                echo '<i class="bi bi-star-fill text-warning fs-1"></i>';
                             } elseif ($halfStar && $i == $fullStars + 1) {
-                                echo '<i class="bi bi-star-half text-warning fs-1"></i>'; // Bintang setengah
+                                echo '<i class="bi bi-star-half text-warning fs-1"></i>';
                             } else {
-                                echo '<i class="bi bi-star text-muted fs-1"></i>'; // Bintang kosong
+                                echo '<i class="bi bi-star text-muted fs-1"></i>';
                             }
                         }
                         ?>
@@ -111,19 +122,19 @@ defined('BASEPATH') or
                                 <div class="card card-neoraised mb-3">
                                     <div class="mx-3 my-3">
                                         <div class="d-flex justify-space-between">
-                                            <!-- Gambar Profil Placeholder -->
+
                                             <img src="<?= empty($feedback->foto_profil) ? base_url('public/img/user/deleted.jpg') : base_url('public/img/user/' . $feedback->foto_profil); ?>" \
                                                 alt="<?= $feedback->nama_user; ?>" \
                                                 class="rounded-circle me-2 mb-3 border border-2 border-dark card-neoraised"
                                                 width="40" height="40">
-                                            <!-- Nama User -->
+
                                             <a href="<?= base_url('akun/profil/' . ($feedback->nama_user)); ?>" class="d-flex align-items-center text-decoration-none">
                                                 <h5 class="card-title fw-bold align-self-center"><?= htmlspecialchars($feedback->nama_user, ENT_QUOTES, 'UTF-8'); ?></h5>
                                             </a>
 
 
                                         </div>
-                                        <!-- Komentar -->
+
                                         <p class="card-text fw-light mt-3">"<?= $feedback->komentar; ?>"</p>
                                         <?php if (!empty($feedback->foto)): ?>
                                             <?php if (file_exists(FCPATH . 'public/img/feedback/' . $feedback->foto)): ?>
@@ -134,25 +145,25 @@ defined('BASEPATH') or
                                         <?php endif; ?>
 
                                         <div class="d-block">
-                                            <!-- Tanggal Feedback -->
+
                                             <p class="card-text fw-light"><small
                                                     class="text-muted">
                                                     <?= date('F d, Y H:i:s', strtotime($feedback->tanggal_feedback)); ?>
                                                 </small></p>
-                                            <!-- Nama Alat dan Rating -->
+
                                             <p class="card-text me-5"><small class="text-muted fw-bold"><?= $feedback->nama_alat; ?></small>
                                                 <?php
-                                                $rating = floor($feedback->rating); // Ambil nilai bulat bawah dari rating
-                                                $hasHalfStar = ($feedback->rating - $rating) >= 0.5; // Cek apakah ada setengah bintang
+                                                $rating = floor($feedback->rating);
+                                                $hasHalfStar = ($feedback->rating - $rating) >= 0.5;
 
                                                 for ($i = 1; $i <= 5; $i++) {
                                                     if ($i <= $rating) {
-                                                        echo '<i class="bi bi-star-fill text-warning"></i>'; // Bintang penuh
+                                                        echo '<i class="bi bi-star-fill text-warning"></i>';
                                                     } elseif ($hasHalfStar && $i == $rating + 1) {
-                                                        echo '<i class="bi bi-star-half text-warning"></i>'; // Bintang setengah
-                                                        $hasHalfStar = false; // Set sudah digunakan
+                                                        echo '<i class="bi bi-star-half text-warning"></i>';
+                                                        $hasHalfStar = false;
                                                     } else {
-                                                        echo '<i class="bi bi-star text-muted"></i>'; // Bintang kosong
+                                                        echo '<i class="bi bi-star text-muted"></i>';
                                                     }
                                                 }
                                                 ?><small class="text-muted fw-bold"> <?= number_format(htmlspecialchars($rating, ENT_QUOTES, 'UTF-8'), 1); ?>/5.0</small></p>
@@ -201,27 +212,27 @@ defined('BASEPATH') or
                     <?php foreach ($admins as $admin): ?>
                         <hr>
             <div class="d-flex align-items-center justify-content-center mb-3">
-                <!-- Display Admin Photo -->
+           
                 <img src="<?= base_url('public/img/admin/' . $admin->foto_admin); ?>"
                     alt="Admin Photo" class="rounded-circle img-fluid me-3 card-neoraised border border-dark border-1" width="30" height="30">
-                <!-- Display Admin Name -->
+            
                 <a href="<?= base_url('akun/admin/' . ($admin->nama_admin)); ?>" class="text-decoration-none">
                     <p class="fw-bold mb-0"><?php echo $admin->nama_admin; ?></p>
                 </a>
             </div>
 
-            <!-- Display Admin Email -->
+
             <div class="text-center">
                 <a href="mailto:<?php echo $admin->email_admin; ?>" class="text-decoration-none">
                     <i class="bi bi-envelope me-2 text-danger"></i><?php echo $admin->email_admin; ?>
                 </a><br>
 
-                <!-- Display Admin Phone Number -->
+
                 <a href="tel:<?php echo $admin->no_telp_admin; ?>" class="text-decoration-none">
                     <i class="bi bi-telephone me-2 text-primary"></i><?php echo $admin->no_telp_admin; ?>
                 </a><br>
 
-                <!-- Display Admin WhatsApp Link -->
+
                 <a href="https://wa.me/+62<?php echo preg_replace('/^0/', '', $admin->no_telp_admin); ?>" class="text-decoration-none" target="_blank">
                     <i class="bi bi-whatsapp me-2 text-success"></i>+62<?php echo preg_replace('/^0/', '', $admin->no_telp_admin); ?>
                 </a><br>

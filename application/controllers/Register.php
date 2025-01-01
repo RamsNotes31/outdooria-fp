@@ -2,10 +2,6 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-$ci = new CI_Controller();
-$ci = &get_instance();
-$ci->load->helper('url');
-
 
 class Register extends CI_Controller
 {
@@ -41,12 +37,12 @@ class Register extends CI_Controller
         $result = $this->Register_model->register($data);
 
         if ($result) {
+            $this->session->set_flashdata('success', 'Akun berhasil dibuat!');
             $this->load->library('upload');
 
-            // Konfigurasi upload file
             $config['upload_path'] = './public/img/user/';
             $config['allowed_types'] = 'heic|jpg|jpeg|png';
-            $config['file_name'] = $this->input->post('nama'); // Set default file name
+            $config['file_name'] = $this->input->post('nama'); 
 
             $this->upload->initialize($config);
 
@@ -54,10 +50,10 @@ class Register extends CI_Controller
                 if (!$this->upload->do_upload('foto')) {
                     $error = $this->upload->display_errors();
 
-                    // Hapus user jika file yang diupload bukan gambar yang diizinkan
                     $this->db->where('email', $this->input->post('username'));
                     $this->db->delete('users');
 
+                    $this->session->set_flashdata('error', 'Maaf, file yang diupload tidak sesuai! ' . $error);
                     redirect('../register');
                 } else {
                     $upload_data = $this->upload->data();
@@ -68,13 +64,13 @@ class Register extends CI_Controller
                     $this->db->update('users', array('foto_profil' => $new_file_name));
                 }
             } else {
-                // Set default image if no file is selected
                 $this->db->where('email', $this->input->post('username'));
                 $this->db->update('users', array('foto_profil' => 'default.png'));
             }
 
             redirect('../login');
         } else {
+            $this->session->set_flashdata('error', 'Akun gagal dibuat!');
             redirect('../register');
         }
     }

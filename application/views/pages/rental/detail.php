@@ -1,12 +1,12 @@
 <?php if (!empty($product) && isset($product['id_alat'])): ?>
     <div class="container mt-5 py-5">
         <div class="row">
-            <!-- Gambar dan Rating -->
+
             <div class="col-md-6 d-flex justify-content-center mb-5 align-items-center">
                 <div class="row">
                     <div class="col-md-12 px-5 text-center">
                         <img src="<?= base_url('public/img/produk/' . $product['foto_produk']); ?>" class="img-fluid border border-dark border-3 rounded-5 card-neoraised" alt="<?= $product['nama_alat']; ?>">
-                        <!-- Wishlist Button -->
+
                         <div class="d-flex justify-content-center">
                             <?php if (isset($favorit) && in_array($product['id_alat'], $favorit)): ?>
                                 <a href="<?= base_url('produk/wishlist/' . $product['id_alat']); ?>"
@@ -52,7 +52,7 @@
                 </div>
             </div>
 
-            <!-- Detail dan Form -->
+
             <div class="col-md-6 align-items-center">
                 <h2 class="text-center mb-5 fw-bolder">Booking Form</h2>
                 <?php $nama_alats = $product['nama_alat']; ?>
@@ -147,7 +147,7 @@
                         <span class="text-center text-danger">*Silahkan melakukan penyewaan terlebih dahulu untuk membuat ulasan</span><br>
                         <span class="text-center text-danger mb-5">*Untuk memberikan ulasan, silahkan ke menu profile bagian riwayat tekan lihat detail</span>
                     </div>
-                    <!-- Sorting Options -->
+
                     <div class="d-flex justify-content-center align-items-center mb-5">
                         <form id="sortForm" action="" method="get" class="d-flex flex-wrap gap-3 justify-content-center">
                             <div class="form-check d-flex align-items-center">
@@ -205,7 +205,6 @@
                         </form>
                     </div>
                     <script>
-                        // Handle sorting radio button change without page refresh
                         const form = document.getElementById('sortForm');
                         const radios = document.querySelectorAll('input[name="order_by"]');
                         radios.forEach(radio => {
@@ -213,7 +212,7 @@
                                 const formData = new FormData(form);
                                 const queryString = new URLSearchParams(formData).toString();
                                 history.pushState(null, '', `${window.location.pathname}?${queryString}`);
-                                window.location.reload(); // Reload the page without changing the scroll position
+                                window.location.reload();
                             });
                         });
                     </script>

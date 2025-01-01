@@ -719,7 +719,6 @@
             </div>
             <div class="container mt-5">
                 <div class="row">
-                    <!-- Bukti Pembayaran -->
                     <div class="col-12 col-md-12">
                         <div class="card card-neoraised mb-3 border border-dark border-3">
                             <div class="card-header py-3 border border-dark border-3">

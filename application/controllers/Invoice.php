@@ -22,14 +22,13 @@ class Invoice extends CI_Controller
             redirect('../produk');
         }
 
-        $this->load->model('Invoice_model'); // Load model invoice
+        $this->load->model('Invoice_model');
 
 
 
-        // Ambil data penyewaan berdasarkan ID
         $data['invoice'] = $this->Invoice_model->get_invoice_by_id($id_penyewaan);
 
-        $nama = $this->session->userdata('nama'); // Ambil nama dari session
+        $nama = $this->session->userdata('nama');
 
         if ($nama !== $data['invoice']['nama']) {
             redirect('../produk');
@@ -43,7 +42,6 @@ class Invoice extends CI_Controller
 
         $data['feedbacks'] = $this->Invoice_model->get_feedback_with_user(3);
 
-        // Load tampilan invoice
         $this->load->view('templates/header', $data);
         $this->load->view('pages/hist/checkout', $data);
         $this->load->view('templates/footer', $data);
@@ -59,23 +57,19 @@ class Invoice extends CI_Controller
     }
     public function bukti()
     {
-        $this->load->model('Invoice_model');  // Load model penyewaan
-        // Ambil data form
+        $this->load->model('Invoice_model');
         $nama_alat = $this->input->post('nama_alat');
         $id_penyewaan = $this->input->post('id_penyewaan');
         $nama_alat = $this->input->post('nama_alat');
 
-        // Ambil nama user dari session
         $nama_user = $this->session->userdata('nama');
         $role = $this->session->userdata('role');
 
-        // Validasi apakah user sudah login
         if (empty($nama_user)) {
             $this->session->set_flashdata('error', 'Anda harus login untuk memberikan review.');
             redirect('../login');
         }
 
-        // Validasi role admin
         if ($role === 'admin') {
             redirect('../home');
         }
@@ -86,21 +80,17 @@ class Invoice extends CI_Controller
             redirect($_SERVER['HTTP_REFERER']);
         }
 
-        // Ambil ID user berdasarkan nama
         $id_user = $this->Invoice_model->get_id_by_name($nama_user);
 
-        // Validasi jika user tidak ditemukan
         if (!$id_user) {
             $this->session->set_flashdata('error', 'Gagal menemukan ID pengguna.');
             redirect('../login');
         }
 
-        // Proses upload bukti pembayaran
         $upload_status = $this->Invoice_model->upload_bukti_pembayaran($id_penyewaan);
 
 
         if ($upload_status === true) {
-            // Jika upload berhasil
             $this->session->set_flashdata('up', 'Bukti pembayaran berhasil diupload.');
 
             $message = "<strong>Detail Invoice</strong> <br><br>Invoice: #" . $id_penyewaan . "<br> Nama: " . $nama_user . "<br> Alat: " . $nama_alat . "<br> Tanggal Sewa: " . date('d F Y', strtotime($this->Invoice_model->get_invoice_by_id($id_penyewaan)['tanggal_penyewaan'])) . "<br> Tanggal Balik: " . date('d F Y', strtotime($this->Invoice_model->get_invoice_by_id($id_penyewaan)['tanggal_pengembalian'])) . "<br> Harga: Rp. " . number_format($this->Invoice_model->get_invoice_by_id($id_penyewaan)['total_harga'], 0, ',', '.') . "<br>";
@@ -113,10 +103,8 @@ class Invoice extends CI_Controller
                 'foto_chat' => null,
             ];
 
-            // Simpan data ke database menggunakan stored procedure
             if ($this->Invoice_model->insert_chat_auto($data)) {
                 $this->session->set_flashdata('success', 'Pesan berhasil dikirim.');
-                // Update foto_chat di tabel chat
                 $this->db->set('foto_chat', $this->Invoice_model->get_invoice_by_id($id_penyewaan)['bukti_pembayaran']);
                 $this->db->where('id_user', $id_user);
                 $this->db->where('pesan', $message);
@@ -138,7 +126,6 @@ class Invoice extends CI_Controller
                 $this->session->set_flashdata('error', 'Gagal mengirim pesan.');
             }
         } else {
-            // Jika upload gagal
             $this->session->set_flashdata('ga', 'Gagal mengupload bukti pembayaran: ' . $upload_status);
             redirect(base_url('invoice/bukti/' . $id_penyewaan));
         }
@@ -189,12 +176,10 @@ class Invoice extends CI_Controller
             redirect($_SERVER['HTTP_REFERER']);
         }
 
-        // Proses upload file
         $foto = null;
         if (!empty($_FILES['photo']['name'])) {
             $config['upload_path'] = './public/img/feedback/';
             $config['allowed_types'] = 'jpeg|jpg|png|heic';
-            $config['max_size'] = 2048; // Maksimal 2 MB
             $config['file_name'] = $nama_user . '_' . $id_penyewaan;
 
             $this->upload->initialize($config);

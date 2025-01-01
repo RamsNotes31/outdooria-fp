@@ -8,23 +8,23 @@ class Invoice_model extends CI_Model
     public function get_latest_penyewaan_by_user($id_invoice)
     {
         $this->db->select('penyewaan.*, users.nama AS nama_user, alat_pendakian.nama_alat');
-        $this->db->join('users', 'users.id_user = penyewaan.id_user', 'left'); // Join tabel users
-        $this->db->join('seri', 'seri.seri_alat = penyewaan.seri_alat', 'left'); // Join tabel seri
-        $this->db->join('alat_pendakian', 'alat_pendakian.id_alat = seri.id_alat', 'left'); // Join tabel alat_pendakian
-        $this->db->where('penyewaan.id_penyewaan', $id_invoice); // Filter berdasarkan id_penyewaan
+        $this->db->join('users', 'users.id_user = penyewaan.id_user', 'left');
+        $this->db->join('seri', 'seri.seri_alat = penyewaan.seri_alat', 'left');
+        $this->db->join('alat_pendakian', 'alat_pendakian.id_alat = seri.id_alat', 'left');
+        $this->db->where('penyewaan.id_penyewaan', $id_invoice);
         $query = $this->db->get('penyewaan');
-        return $query->row_array(); // Ambil data sebagai array
+        return $query->row_array();
     }
 
     public function get_latest_penyewaan_by_users($id_user, $seri_alat)
     {
         $this->db->select('id_penyewaan');
-        $this->db->where('id_user', $id_user); // Filter berdasarkan ID user
-        $this->db->where('seri_alat', $seri_alat); // Filter berdasarkan seri alat
-        $this->db->order_by('tanggal_penyewaan', 'DESC'); // Urutkan berdasarkan tanggal penyewaan terbaru
-        $this->db->limit(1); // Ambil hanya 1 data
+        $this->db->where('id_user', $id_user);
+        $this->db->where('seri_alat', $seri_alat);
+        $this->db->order_by('tanggal_penyewaan', 'DESC');
+        $this->db->limit(1);
         $query = $this->db->get('penyewaan');
-        return $query->row_array(); // Kembalikan hasil sebagai array
+        return $query->row_array();
     }
 
     public function get_invoice_by_id($id_penyewaan)
@@ -44,7 +44,7 @@ class Invoice_model extends CI_Model
         $nama = $this->session->userdata('nama');
         $config['upload_path']   = './public/img/bukti/';
         $config['allowed_types'] = 'jpg|jpeg|png|heic';
-        //$config['max_size']      = 2048; // Maksimal 2 MB
+
         $config['file_name']     = $id_penyewaan . '_' . $nama;
 
         $this->load->library('upload', $config);
@@ -53,7 +53,7 @@ class Invoice_model extends CI_Model
             $data = $this->upload->data();
             $file_name = $data['file_name'];
 
-            // Copy file ke folder chat
+
             copy('./public/img/bukti/' . $file_name, './public/img/chat/' . $file_name);
 
             $this->db->set('bukti_pembayaran', $file_name);
@@ -73,14 +73,13 @@ class Invoice_model extends CI_Model
         $this->db->select('IFNULL(users.nama, "Deleted User") AS nama_user, IFNULL(foto_profil, "deleted.jpg") AS foto_profil, alat_pendakian.nama_alat, feedback.komentar, feedback.rating, feedback.tanggal_feedback, feedback.foto');
         $this->db->from('feedback');
         $this->db->join('alat_pendakian', 'feedback.id_alat = alat_pendakian.id_alat');
-        $this->db->join('users', 'feedback.id_user = users.id_user', 'left'); // Join ke tabel users dengan left join
-        $this->db->where('feedback.rating <=', 5); // Filter rating > 4
-        $this->db->order_by('tanggal_feedback', 'DESC'); // Urutkan berdasarkan tanggal terbaru
-        $this->db->limit($limit); // Batasi jumlah data
+        $this->db->join('users', 'feedback.id_user = users.id_user', 'left');
+        $this->db->where('feedback.rating <=', 5);
+        $this->db->order_by('tanggal_feedback', 'DESC');
+        $this->db->limit($limit);
         $query = $this->db->get();
 
         return $query->num_rows() > 0 ? $query->result() : [];
-        // Pastikan selalu mengembalikan array
     }
 
     public function get_id_by_name($nama)
@@ -95,15 +94,15 @@ class Invoice_model extends CI_Model
 
     public function get_id_by_product($nama_alat)
     {
-        $this->db->select('id_alat'); // Pastikan kolom sesuai dengan database
-        $this->db->from('alat_pendakian'); // Nama tabel alat
+        $this->db->select('id_alat');
+        $this->db->from('alat_pendakian');
         $this->db->where('nama_alat', $nama_alat);
         $query = $this->db->get();
 
         if ($query->num_rows() > 0) {
-            return $query->row()->id_alat; // Kembalikan ID alat
+            return $query->row()->id_alat;
         } else {
-            return null; // Jika tidak ditemukan
+            return null;
         }
     }
 
@@ -113,17 +112,14 @@ class Invoice_model extends CI_Model
         $this->db->from('feedback');
         $this->db->where('id_penyewaan', $id_penyewaan);
         $query = $this->db->get();
-        return $query->row(); // Mengembalikan feedback jika ada
+        return $query->row();
     }
 
     public function tambah_feedback($id_user, $product_id, $id_penyewaan, $comment, $rating, $foto)
     {
         ini_set('memory_limit', '-1');
-        // Panggil stored procedure menggunakan CALL
         $this->db->query("CALL tambah_feedback(?, ?, ?, ?, ?, ?)", array($id_user, $product_id, $id_penyewaan, $comment, $rating, $foto));
 
-        // Periksa apakah query berhasil
-        // Periksa apakah query berhasil
         return $this->db->affected_rows() > 0;
     }
 
@@ -140,7 +136,6 @@ class Invoice_model extends CI_Model
             )
         );
 
-        // Periksa apakah query berhasil
         return $this->db->affected_rows() > 0;
     }
 }

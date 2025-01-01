@@ -12,7 +12,7 @@ class Gunung_model extends CI_Model
         $this->db->select('informasi_pendakian.id_informasi, informasi_pendakian.nama_gunung, informasi_pendakian.harga_biaya, informasi_pendakian.lokasi, informasi_pendakian.foto_gunung, admin.nama_admin, admin.foto_admin');
         $this->db->from('informasi_pendakian');
         $this->db->join('admin', 'admin.id_admin = informasi_pendakian.id_admin', 'left');
-        $this->db->order_by('RAND()'); // Buat random
+        $this->db->order_by('RAND()');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -44,7 +44,7 @@ class Gunung_model extends CI_Model
         $this->db->select('lokasi');
         $this->db->order_by('rand()');
         $query = $this->db->get('informasi_pendakian');
-        return $query->result_array(); // Pastikan hasilnya dalam bentuk array
+        return $query->result_array();
     }
 
     public function get_filtered_informasi($kategori, $search, $lokasi)
@@ -52,26 +52,25 @@ class Gunung_model extends CI_Model
         $this->db->select('informasi_pendakian.id_informasi, informasi_pendakian.nama_gunung, informasi_pendakian.harga_biaya, informasi_pendakian.lokasi, informasi_pendakian.foto_gunung, admin.nama_admin, admin.foto_admin');
         $this->db->join('admin', 'admin.id_admin = informasi_pendakian.id_admin', 'left');
         $this->db->from('informasi_pendakian');
-        $this->db->order_by('rand()'); // Acak
+        $this->db->order_by('rand()');
 
-        // Filter berdasarkan kategori
+
         if ($kategori == '1') {
-            $this->db->order_by('harga_biaya', 'ASC');  // Harga ascending
+            $this->db->order_by('harga_biaya', 'ASC');
         } elseif ($kategori == '2') {
-            $this->db->order_by('harga_biaya', 'DESC'); // Harga descending
+            $this->db->order_by('harga_biaya', 'DESC');
         } elseif ($kategori == '3') {
-            $this->db->order_by('tanggal_update', 'DESC'); // Terbaru
+            $this->db->order_by('tanggal_update', 'DESC');
         } elseif ($kategori == '0') {
-            $this->db->order_by('rand()'); // Acak
+            $this->db->order_by('rand()');
         }
 
-        // Filter berdasarkan pencarian
         if (!empty($search)) {
             $this->db->like('nama_gunung', $search);
         }
 
         if (!empty($lokasi)) {
-            $this->db->like('lokasi', $lokasi);  // Pencarian lokasi
+            $this->db->like('lokasi', $lokasi);
         }
 
         $query = $this->db->get();

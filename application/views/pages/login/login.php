@@ -26,3 +26,22 @@
         </form>
     </div>
 </div>
+<?php if ($this->session->flashdata('success')) { ?>
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: "<?= $this->session->flashdata('success') ?>",
+    });
+</script>
+<?php } ?>
+<?php if ($this->session->flashdata('error')) { ?>
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: "<?= $this->session->flashdata('error') ?>",
+    });
+</script>
+<?php } ?>
+

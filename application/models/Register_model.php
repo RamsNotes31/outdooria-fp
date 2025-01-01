@@ -6,7 +6,6 @@ class Register_model extends CI_Model
 {
     public function register($data)
     {
-        // Check if user data already exists
         $existingUserQuery = "SELECT * FROM users WHERE nama = ? OR email = ? OR no_telepon = ? OR password = ?";
         $existingUserBindings = [
             $data['nama'],
@@ -17,10 +16,10 @@ class Register_model extends CI_Model
         $existingUser = $this->db->query($existingUserQuery, $existingUserBindings)->row();
 
         if ($existingUser) {
+            $this->session->set_flashdata('error', 'Nama, email, no telepon, atau password sudah ada atau dipakai.');
             redirect('../register');
         }
 
-        // Proceed to register new user
         $query = "CALL tambah_user(?, ?, ?, ?, ?, ?, ?)";
         $bindings = [
             $data['nama'],

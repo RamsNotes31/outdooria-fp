@@ -6,9 +6,8 @@ class Login_model extends CI_Model
 {
     public function login($email, $password)
     {
-        // Cek di tabel users
         $this->db->where('email', $email);
-        $this->db->where('password', $password); // Cocokkan langsung password
+        $this->db->where('password', $password);
         $query = $this->db->get('users');
 
         if ($query->num_rows() == 1) {
@@ -17,9 +16,8 @@ class Login_model extends CI_Model
             return $user;
         }
 
-        // Cek di tabel admin
         $this->db->where('email_admin', $email);
-        $this->db->where('password_admin', $password); // Cocokkan langsung password
+        $this->db->where('password_admin', $password);
         $query = $this->db->get('admin');
 
         if ($query->num_rows() == 1) {
@@ -29,7 +27,7 @@ class Login_model extends CI_Model
             return $admin;
         }
 
-        // Jika tidak ditemukan di kedua tabel
+
         return false;
     }
 }

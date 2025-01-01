@@ -19,9 +19,9 @@ class Produk_model extends CI_Model
             COALESCE(AVG(feedback.rating), 0) AS rata_rata_rating
         ');
         $this->db->from('alat_pendakian');
-        $this->db->join('feedback', 'feedback.id_alat = alat_pendakian.id_alat', 'left'); // Left join untuk tetap menampilkan produk tanpa feedback
-        $this->db->group_by('alat_pendakian.id_alat'); // Kelompokkan berdasarkan ID alat
-        $this->db->order_by('RAND()'); // Acak produk
+        $this->db->join('feedback', 'feedback.id_alat = alat_pendakian.id_alat', 'left'); 
+        $this->db->group_by('alat_pendakian.id_alat'); 
+        $this->db->order_by('RAND()'); 
         $query = $this->db->get();
 
         // Debugging
@@ -29,14 +29,14 @@ class Produk_model extends CI_Model
             log_message('error', 'No data retrieved from alat_pendakian.');
         }
 
-        return $query->result(); // Pastikan selalu mengembalikan array
+        return $query->result();
     }
 
 
     public function get_produk_by_id($id_alat)
     {
         $this->db->where('id_alat', $id_alat);
-        $query = $this->db->get('produk');  // Gantilah 'produk' dengan nama tabel produk Anda
+        $query = $this->db->get('produk');  
         return $query->row_array();
     }
 
@@ -53,7 +53,7 @@ class Produk_model extends CI_Model
             COALESCE(AVG(feedback.rating), 0) AS rata_rata_rating
         ');
         $this->db->from('alat_pendakian');
-        $this->db->join('feedback', 'feedback.id_alat = alat_pendakian.id_alat', 'left'); // Left join untuk tetap menampilkan produk tanpa feedback
+        $this->db->join('feedback', 'feedback.id_alat = alat_pendakian.id_alat', 'left'); 
         $this->db->where('alat_pendakian.id_alat', $product_id);
         return $this->db->get()->row_array();
     }
@@ -81,10 +81,10 @@ class Produk_model extends CI_Model
     ');
         $this->db->from('alat_pendakian');
         $this->db->join('feedback', 'feedback.id_alat = alat_pendakian.id_alat', 'left');
-        $this->db->where_not_in('alat_pendakian.id_alat', $this->uri->segment(3)); // Filter tidak termasuk id alat yang sedang diakses
+        $this->db->where_not_in('alat_pendakian.id_alat', $this->uri->segment(3));
         $this->db->group_by('alat_pendakian.id_alat');
-        $this->db->order_by('RAND()'); // Urutan acak
-        $this->db->limit($limit); // Batasi jumlah produk
+        $this->db->order_by('RAND()'); 
+        $this->db->limit($limit); 
         return $this->db->get()->result_array();
     }
 
@@ -102,12 +102,12 @@ class Produk_model extends CI_Model
     public function get_all_kategori()
     {
         $this->db->distinct();
-        $this->db->select('kategori'); // Ambil hanya kolom alat_pendakian
-        $this->db->from('alat_pendakian'); // Nama tabel Anda
+        $this->db->select('kategori'); 
+        $this->db->from('alat_pendakian'); 
         return $this->db->get()->result();
     }
 
-    // Mendapatkan data produk dengan data tambahan untuk sorting
+    
     public function get_produk_with_criteria($kategori, $search, $sort)
     {
         $this->db->select('
@@ -124,7 +124,7 @@ class Produk_model extends CI_Model
         ');
         $this->db->from('alat_pendakian');
 
-        // Subquery untuk favorit
+       
         $this->db->join(
             '
             (SELECT id_alat, COUNT(*) AS favorit_count
@@ -135,7 +135,7 @@ class Produk_model extends CI_Model
             'left'
         );
 
-        // Subquery untuk popularitas (penyewaan)
+        
         $this->db->join(
             '
             (SELECT seri.id_alat, COUNT(*) AS popularity_count
@@ -148,7 +148,7 @@ class Produk_model extends CI_Model
         );
 
 
-        // Subquery untuk rating
+      
         $this->db->join(
             '
             (SELECT id_alat, AVG(rating) AS rata_rata_rating
@@ -159,7 +159,7 @@ class Produk_model extends CI_Model
             'left'
         );
 
-        // Subquery untuk total feedback
+      
         $this->db->join(
             '(SELECT id_alat, COUNT(*) AS total_feedback
           FROM feedback
@@ -169,29 +169,29 @@ class Produk_model extends CI_Model
             'left'
         );
 
-        // Filter berdasarkan kategori
+
         if (!empty($kategori) && $kategori !== '0') {
             $this->db->where('alat_pendakian.kategori', $kategori);
         }
 
-        // Filter berdasarkan pencarian
+
         if (!empty($search)) {
             $this->db->like('alat_pendakian.nama_alat', $search);
         }
 
-        // Sorting berdasarkan pilihan
+
         if ($sort) {
-            if ($sort == '1') { // Harga naik
+            if ($sort == '1') {
                 $this->db->order_by('alat_pendakian.harga_sewa', 'ASC');
-            } elseif ($sort == '2') { // Harga turun
+            } elseif ($sort == '2') {
                 $this->db->order_by('alat_pendakian.harga_sewa', 'DESC');
-            } elseif ($sort == '3') { // Popularitas
+            } elseif ($sort == '3') {
                 $this->db->order_by('popularity_count', 'DESC');
-            } elseif ($sort == '4') { // Rating
+            } elseif ($sort == '4') {
                 $this->db->order_by('rata_rata_rating', 'DESC');
-            } elseif ($sort == '5') { // Favorit
+            } elseif ($sort == '5') {
                 $this->db->order_by('favorit_count', 'DESC');
-            } else { // Acak
+            } else {
                 $this->db->order_by('rand()');
             }
         } else {
@@ -208,7 +208,7 @@ class Produk_model extends CI_Model
         $this->db->from('feedback');
         $this->db->where('id_alat', $id_alat);
         $query = $this->db->get();
-        return (int) ($query->row('total_feedback') ?? 0); // Kembalikan total_feedback sebagai integer
+        return (int) ($query->row('total_feedback') ?? 0);
     }
     public function get_average_rating_by_alat($id_alat)
     {
@@ -216,7 +216,7 @@ class Produk_model extends CI_Model
         $this->db->from('feedback');
         $this->db->where('id_alat', $id_alat);
         $query = $this->db->get();
-        return round($query->row('rata_rata_rating') ?? 0, 1); // Kembalikan rata-rata rating dibulatkan ke 1 desimal
+        return round($query->row('rata_rata_rating') ?? 0, 1);
     }
 
 
@@ -227,9 +227,9 @@ class Produk_model extends CI_Model
         $this->db->join('seri', 'penyewaan.seri_alat = seri.seri_alat');
         $this->db->join('alat_pendakian', 'seri.id_alat = alat_pendakian.id_alat', 'left');
         $this->db->where('alat_pendakian.id_alat', $id_alat);
-        $this->db->group_by('alat_pendakian.id_alat'); // Group by untuk menghitung dengan benar
+        $this->db->group_by('alat_pendakian.id_alat');
         $query = $this->db->get();
-        return $query->row_array(); // Kembalikan hasil sebagai array
+        return $query->row_array();
     }
 
 
@@ -238,9 +238,9 @@ class Produk_model extends CI_Model
         $this->db->select('id_alat, COUNT(*) AS favorit_count');
         $this->db->from('favorit');
         $this->db->where('id_alat', $id_alat);
-        $this->db->group_by('id_alat'); // Group by untuk menghitung dengan benar
+        $this->db->group_by('id_alat');
         $query = $this->db->get();
-        return $query->row_array(); // Kembalikan hasil sebagai array
+        return $query->row_array();
     }
 
 
@@ -256,44 +256,43 @@ class Produk_model extends CI_Model
 
     public function tambah_favorit($id_user, $id_alat)
     {
-        $this->db->select('id_user, id_alat'); // Pastikan kolom sesuai dengan database
-        $this->db->from('favorit'); // Ganti 'favorit' dengan nama tabel favorit Anda
+        $this->db->select('id_user, id_alat');
+        $this->db->from('favorit');
         $this->db->where('id_user', $id_user);
         $this->db->where('id_alat', $id_alat);
         $query = $this->db->get();
-        if ($query->num_rows() > 0) { // Jika data ada
+        if ($query->num_rows() > 0) {
             $this->db->where('id_user', $id_user);
             $this->db->where('id_alat', $id_alat);
             $this->db->delete('favorit');
-        } else { // Jika data tidak ada
+        } else {
             $this->db->query("CALL tambah_favorit(?, ?)", array($id_user, $id_alat));
         }
     }
 
     public function get_favorit_by_user($id_user)
     {
-        $this->db->select('id_alat'); // Pilih kolom id_alat
-        $this->db->from('favorit'); // Tabel favorit
-        $this->db->where('id_user', $id_user); // Kondisi berdasarkan id_user
+        $this->db->select('id_alat');
+        $this->db->from('favorit');
+        $this->db->where('id_user', $id_user);
         $query = $this->db->get();
 
-        return $query->result_array(); // Kembalikan daftar alat favorit
+        return $query->result_array();
     }
 
-    
 
-    // Metode untuk mendapatkan ID alat berdasarkan nama alat
+
     public function get_id_by_product($nama_alat)
     {
-        $this->db->select('id_alat'); // Pastikan kolom sesuai dengan database
-        $this->db->from('alat_pendakian'); // Nama tabel alat
+        $this->db->select('id_alat');
+        $this->db->from('alat_pendakian');
         $this->db->where('nama_alat', $nama_alat);
         $query = $this->db->get();
 
         if ($query->num_rows() > 0) {
-            return $query->row()->id_alat; // Kembalikan ID alat
+            return $query->row()->id_alat;
         } else {
-            return null; // Jika tidak ditemukan
+            return null;
         }
     }
 
@@ -333,10 +332,10 @@ class Produk_model extends CI_Model
         $this->db->select('id_penyewaan');
         $this->db->where('id_user', $id_user);
         $this->db->where('seri_alat', $seri_alat);
-        $this->db->order_by('id_penyewaan', 'DESC'); // Urutkan berdasarkan id_penyewaan terbaru
-        $this->db->limit(1); // Ambil hanya 1 data paling atas
+        $this->db->order_by('id_penyewaan', 'DESC');
+        $this->db->limit(1);
         $query = $this->db->get('penyewaan');
-        return $query->row()->id_penyewaan; // Kembalikan id_penyewaannya saja
+        return $query->row()->id_penyewaan;
     }
 
     public function get_feedback($product_id, $order_by = 'terbaru')
@@ -353,7 +352,6 @@ class Produk_model extends CI_Model
         $this->db->join('users', 'users.id_user = feedback.id_user', 'left');
         $this->db->where('feedback.id_alat', $product_id);
 
-        // Apply sorting based on the $order_by parameter
         switch ($order_by) {
             case 'rating_tertinggi':
                 $this->db->order_by('rating', 'DESC');
@@ -368,18 +366,18 @@ class Produk_model extends CI_Model
                 $this->db->order_by("CASE WHEN foto IS NOT NULL AND foto != '' THEN 1 ELSE 0 END", "DESC");
                 $this->db->order_by('tanggal_feedback', 'DESC');
                 break;
-            case 'terbaru': // Default case
+            case 'terbaru':
             default:
                 $this->db->order_by('tanggal_feedback', 'DESC');
                 break;
         }
 
-        // Execute query and return result
         $query = $this->db->get();
         return $query->result_array();
     }
 
-    public function checkbook($id_user, $id_alat) {
+    public function checkbook($id_user, $id_alat)
+    {
         $this->db->select('penyewaan.id_penyewaan');
         $this->db->from('penyewaan');
         $this->db->join('seri', 'penyewaan.seri_alat = seri.seri_alat');

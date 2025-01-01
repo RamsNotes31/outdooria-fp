@@ -15,8 +15,6 @@
                         <?php foreach ($chats as $chat): ?>
                             <?php if ($chat['role'] === 'user'): ?>
                                 <div class="row">
-                                    <!-- Tampilkan semua chat -->
-                                    <!-- Pesan User -->
                                     <div class="col-10 col-lg-6 mt-4 ms-auto">
                                         <div class="card-body card-neoraised border border-2 border-dark rounded-3 bg-light shadow-md">
                                             <div class="mb-3">
@@ -29,7 +27,6 @@
                                                 <span class="badge rounded-pill bg-warning card-neoraised border border-1 border-dark mb-3"> <a href="<?= base_url('akun/profil/' . $chat['nama_user']) ?>" class="text-decoration-none text-white"><?= $nama ?></a></span>
                                             </div>
 
-                                            <!-- Display chat message or media -->
                                             <?php if (empty($chat['foto_chat'])): ?>
                                             <?php else: ?>
 
@@ -83,7 +80,6 @@
 
                                             <p class="card-text mt-lg-3 mt-0"><?= nl2br($chat['pesan']) ?></p>
                                             <?php if ($chat['id_admin'] != 1165): ?>
-                                                <!-- Dropdown for actions -->
                                                 <div class="d-flex justify-content-start gap-3 mt-3">
                                                     <div class="dropdown">
                                                         <button class="btn btn-primary btn-sm border border-1 border-dark card-neoraised dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -119,7 +115,6 @@
                                                                     <input type="file" id="imageUpload<?= $chat['id_chat'] ?>" name="image" class="form-control card-neoraised" accept=".jpg,.jpeg,.png,.gif,.mp4,.webm,.ogg,.mp3,.wav,.txt,.pdf" onchange="previewFile(<?= $chat['id_chat'] ?>)">
                                                                 </div>
 
-                                                                <!-- Preview Section -->
                                                                 <div id="previewContainer<?= $chat['id_chat'] ?>" class="mt-3">
                                                                     <img id="imagePreview<?= $chat['id_chat'] ?>" class="d-none img-fluid rounded" alt="Image Preview">
                                                                     <video id="videoPreview<?= $chat['id_chat'] ?>" class="d-none w-100 rounded" controls>
@@ -149,7 +144,6 @@
                                                     const fileInput = document.getElementById(`imageUpload${chatId}`);
                                                     const file = fileInput.files[0];
 
-                                                    // Referensi elemen pratinjau berdasarkan ID modal
                                                     const imagePreview = document.getElementById(`imagePreview${chatId}`);
                                                     const videoPreview = document.getElementById(`videoPreview${chatId}`);
                                                     const videoSource = document.getElementById(`videoSource${chatId}`);
@@ -158,7 +152,6 @@
                                                     const fileInfoPreview = document.getElementById(`fileInfoPreview${chatId}`);
                                                     const fileNameElement = document.getElementById(`fileName${chatId}`);
 
-                                                    // Sembunyikan semua elemen pratinjau awalnya
                                                     imagePreview.classList.add('d-none');
                                                     videoPreview.classList.add('d-none');
                                                     audioPreview.classList.add('d-none');
@@ -168,7 +161,6 @@
                                                         const fileType = file.type;
 
                                                         if (fileType.startsWith('image/')) {
-                                                            // Pratinjau gambar
                                                             const reader = new FileReader();
                                                             reader.onload = function(e) {
                                                                 imagePreview.src = e.target.result;
@@ -176,19 +168,16 @@
                                                             };
                                                             reader.readAsDataURL(file);
                                                         } else if (fileType.startsWith('video/')) {
-                                                            // Pratinjau video
                                                             const fileURL = URL.createObjectURL(file);
                                                             videoSource.src = fileURL;
                                                             videoPreview.load();
                                                             videoPreview.classList.remove('d-none');
                                                         } else if (fileType.startsWith('audio/')) {
-                                                            // Pratinjau audio
                                                             const fileURL = URL.createObjectURL(file);
                                                             audioSource.src = fileURL;
                                                             audioPreview.load();
                                                             audioPreview.classList.remove('d-none');
                                                         } else {
-                                                            // Pratinjau file lainnya
                                                             fileNameElement.textContent = file.name;
                                                             fileInfoPreview.classList.remove('d-none');
                                                         }
@@ -204,7 +193,6 @@
                                 </div>
 
                             <?php else: ?>
-                                <!-- Pesan Admin -->
                                 <div class="row">
                                     <div class="col-10 col-lg-6 mt-4">
                                         <div class="card-body card-neoraised border border-2 border-dark rounded-3">
@@ -283,7 +271,6 @@
                         </li>
                         </li>
                         <li class="mt-3 mb-3">
-                            <!-- Preview Container -->
                             <div id="previewContainer" class="d-flex flex-column align-items-center">
                                 <img id="imagePreview" src="#" alt="Image Preview" class="img-fluid rounded d-none border border-2 border-dark card card-neoraised" width="250" height="250">
                                 <video id="videoPreview" controls class="img-fluid rounded d-none border border-2 border-dark card card-neoraised" width="250" height="250">
@@ -294,7 +281,6 @@
                                     <source id="audioSource" src="#" type="audio/mp3">
                                     Your browser does not support the audio element.
                                 </audio>
-                                <!-- Icon and File Name Preview -->
                                 <div id="fileInfoPreview" class="d-none text-center mt-3 card-neoraised border border-2 border-dark rounded py-4 px-4">
                                     <i class="bi bi-file-earmark fs-1 text-secondary"></i>
                                     <p id="fileName" class="fw-bold text-dark mt-2"></p>
@@ -310,7 +296,6 @@
                         const file = fileInput.files[0];
                         const previewContainer = document.getElementById('previewContainer');
 
-                        // Get all preview elements
                         const imagePreview = document.getElementById('imagePreview');
                         const videoPreview = document.getElementById('videoPreview');
                         const videoSource = document.getElementById('videoSource');
@@ -319,7 +304,6 @@
                         const fileInfoPreview = document.getElementById('fileInfoPreview');
                         const fileNameElement = document.getElementById('fileName');
 
-                        // Hide all preview elements initially
                         imagePreview.classList.add('d-none');
                         videoPreview.classList.add('d-none');
                         audioPreview.classList.add('d-none');
@@ -329,7 +313,6 @@
                             const fileType = file.type;
 
                             if (fileType.startsWith('image/')) {
-                                // If the file is an image
                                 const reader = new FileReader();
                                 reader.onload = function(e) {
                                     imagePreview.src = e.target.result;
@@ -337,20 +320,20 @@
                                 };
                                 reader.readAsDataURL(file);
                             } else if (fileType.startsWith('video/')) {
-                                // If the file is a video
+
                                 const fileURL = URL.createObjectURL(file);
                                 videoSource.src = fileURL;
-                                videoPreview.load(); // Reload video with new source
+                                videoPreview.load();
                                 videoPreview.classList.remove('d-none');
                             } else if (fileType.startsWith('audio/')) {
-                                // If the file is an audio
+
                                 const fileURL = URL.createObjectURL(file);
                                 audioSource.src = fileURL;
-                                audioPreview.load(); // Reload audio with new source
+                                audioPreview.load();
                                 audioPreview.classList.remove('d-none');
                             } else {
-                                // For other file types, show file info with icon
-                                fileNameElement.textContent = file.name; // Display the file name
+
+                                fileNameElement.textContent = file.name;
                                 fileInfoPreview.classList.remove('d-none');
                             }
                         }

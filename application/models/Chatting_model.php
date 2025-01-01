@@ -12,14 +12,14 @@ class Chatting_model extends CI_Model
     {
         $this->db->where('nama', $nama);
         $result = $this->db->get('users')->row();
-        return $result ? $result->id_user : null; // Return user ID if exists
+        return $result ? $result->id_user : null;
     }
 
     public function get_nama_user($id_user)
     {
         $this->db->where('id_user', $id_user);
-        $result = $this->db->get('users')->row();  // Ambil 1 baris hasil
-        return $result ? $result->nama : null;  // Kembalikan nama jika ada, atau null jika tidak ditemukan
+        $result = $this->db->get('users')->row(); 
+        return $result ? $result->nama : null;  
     }
 
 
@@ -27,10 +27,9 @@ class Chatting_model extends CI_Model
     {
         $this->db->where('nama_admin', $nama);
         $result = $this->db->get('admin')->row();
-        return $result ? $result->id_admin : null; // Return user ID if exists
+        return $result ? $result->id_admin : null; 
     }
 
-    // Memasukkan pesan menggunakan stored procedure
     public function insert_chat($data)
     {
         $this->db->query(
@@ -44,12 +43,10 @@ class Chatting_model extends CI_Model
             )
         );
 
-        // Periksa apakah query berhasil
         return $this->db->affected_rows() > 0;
     }
 
 
-    // Mengambil data chat dengan nama user dan admin
     public function get_all_chats($id_user)
     {
         $this->db->select('chat.*, users.foto_profil, users.nama as nama_user, admin.foto_admin, admin.nama_admin as nama_admin, id_chat');
@@ -68,7 +65,6 @@ class Chatting_model extends CI_Model
         $query = $this->db->get('chat');
         $chat = $query->row();
 
-        // Hapus file gambar jika ada
         if ($chat && $chat->foto_chat) {
             $file_path = './public/img/chat/' . $chat->foto_chat;
             if (file_exists($file_path)) {
@@ -76,7 +72,6 @@ class Chatting_model extends CI_Model
             }
         }
 
-        // Hapus pesan dari database
         $this->db->where('id_chat', $id_chat);
         return $this->db->delete('chat');
     }
@@ -87,7 +82,6 @@ class Chatting_model extends CI_Model
         $query = $this->db->get('chat');
         $chat = $query->row();
 
-        // Hapus file gambar jika ada
         if ($chat && $chat->foto_chat) {
             $file_path = './public/img/chat/' . $chat->foto_chat;
             if (file_exists($file_path)) {

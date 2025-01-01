@@ -71,7 +71,7 @@ class Admin_model extends CI_Model
         $this->db->join('alat_pendakian', 'seri.id_alat = alat_pendakian.id_alat');
         $this->db->order_by('penyewaan.id_penyewaan', 'DESC');
         $query = $this->db->get();
-        return $query->result(); // Mengembalikan sebagai objek
+        return $query->result();
     }
 
     public function tambah_admin($data)
@@ -88,7 +88,6 @@ class Admin_model extends CI_Model
             )
         );
 
-        // Periksa apakah query berhasil
         return $this->db->affected_rows() > 0;
     }
 
@@ -109,40 +108,33 @@ class Admin_model extends CI_Model
 
     public function delete_admin_by_session_name()
     {
-        // Get the session 'nama'
         $nama = $this->session->userdata('nama_admin');
 
         if (empty($nama)) {
-            return false; // No session 'nama', cannot proceed
+            return false;
         }
 
-        // Fetch the user's profile photo filename from the database
         $this->db->select('foto_admin');
         $this->db->where('nama_admin', $nama);
         $query = $this->db->get('admin');
         $foto_admin = $query->row()->foto_admin ?? null;
 
         if ($foto_admin && $foto_admin !== 'default.png') {
-            // Construct the file path
             $file_path = './public/img/admin/' . $foto_admin;
 
-            // Attempt to delete the file if it exists
             if (file_exists($file_path)) {
                 unlink($file_path);
             }
         }
 
-        // Disable foreign key checks temporarily
         $this->db->query('SET FOREIGN_KEY_CHECKS = 0');
 
-        // Perform the deletion
         $this->db->where('nama_admin', $nama);
         $result = $this->db->delete('admin');
 
-        // Re-enable foreign key checks
         $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
 
-        return $result; // Return deletion status
+        return $result;
     }
 
     public function update_user($id_admin, $data)
@@ -156,10 +148,9 @@ class Admin_model extends CI_Model
         $nama = $this->session->userdata('nama_admin');
 
         if (empty($nama)) {
-            return false; // No session 'nama', cannot proceed
+            return false;
         }
 
-        // Fetch the user's profile photo filename from the database
         $this->db->select('foto_admin');
         $this->db->where('nama_admin', $nama);
         $query = $this->db->get('admin');
@@ -167,12 +158,11 @@ class Admin_model extends CI_Model
 
 
 
-        // Update the foto_admin to default.png
         $this->db->set('foto_admin', 'default.png');
         $this->db->where('nama_admin', $nama);
         $result = $this->db->update('admin');
 
-        return $result; // Return deletion status
+        return $result;
     }
 
     public function get_all_seri()
@@ -188,15 +178,12 @@ class Admin_model extends CI_Model
 
     public function seri_alat_hapus($seri_alat)
     {
-        // Disable foreign key checks temporarily
         $this->db->query('SET FOREIGN_KEY_CHECKS = 0');
 
-        // Hapus data dari tabel seri
         $this->db->where('seri_alat', $seri_alat);
         $this->db->delete('seri');
 
 
-        // Re-enable foreign key checks
         $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
 
         return true;
@@ -215,7 +202,6 @@ class Admin_model extends CI_Model
 
 
 
-    // Method untuk mendapatkan enum kondisi
     public function get_enum_kondisi()
     {
         return [
@@ -225,7 +211,6 @@ class Admin_model extends CI_Model
         ];
     }
 
-    // Method untuk mendapatkan enum status
     public function get_enum_status()
     {
         return [
@@ -235,29 +220,26 @@ class Admin_model extends CI_Model
         ];
     }
 
-    // Method untuk mendapatkan enum status selain "Menunggu"
     public function get_status_excluding_waiting()
     {
         $status = $this->get_enum_status();
-        unset($status['0']); // Asumsikan "Menunggu" memiliki key '0'
+        unset($status['0']);
         return $status;
     }
 
-    // Update data produk berdasarkan seri alat
     public function update_seri($id, $data)
     {
         $this->db->where('seri_alat', $id);
         return $this->db->update('seri', $data);
     }
 
-    // Ambil nama alat berdasarkan ID alat
     public function get_nama_alat($id_alat)
     {
         $this->db->select('nama_alat');
         $this->db->from('alat_pendakian');
         $this->db->where('id_alat', $id_alat);
         $query = $this->db->get();
-        return $query->row_array(); // Mengembalikan array nama_alat
+        return $query->row_array();
     }
 
     public function getNamaAlat()
@@ -287,8 +269,8 @@ class Admin_model extends CI_Model
         $this->db->select('chat.id_user, users.nama');
         $this->db->from('chat');
         $this->db->join('users', 'chat.id_user = users.id_user');
-        $this->db->distinct(); // Menghindari data duplikat
-        return $this->db->get()->result_array(); // Mengembalikan hasil sebagai array
+        $this->db->distinct();
+        return $this->db->get()->result_array();
     }
 
     public function getallinformasi()
@@ -347,28 +329,26 @@ class Admin_model extends CI_Model
         $nama = $this->session->userdata('nama_admin');
 
         if (empty($nama)) {
-            return false; // No session 'nama', cannot proceed
+            return false;
         }
 
-        // Fetch the user's profile photo filename from the database
+
         $this->db->select('foto_gunung');
         $this->db->where('id_informasi', $id_informasi);
         $query = $this->db->get('informasi_pendakian');
         $foto_gunung = $query->row()->foto_gunung ?? null;
 
 
-
-        // Update the foto_gunung to default.png
         $this->db->set('foto_gunung', 'default.jpg');
         $this->db->where('id_informasi', $id_informasi);
         $result = $this->db->update('informasi_pendakian');
 
-        return $result; // Return deletion status
+        return $result;
     }
 
-    // Fungsi untuk mendapatkan informasi berdasarkan ID
 
-    // Fungsi untuk memperbarui informasi
+
+
     public function update_informasi($id, $data)
     {
         $this->db->where('id_informasi', $id);
@@ -388,7 +368,7 @@ class Admin_model extends CI_Model
         return $row ? $row['id_admin'] : null;
     }
 
-    // Fetch ENUM values from the database for the 'kategori' column
+
     public function getKategoriOptions()
     {
         $query = $this->db->query("SHOW COLUMNS FROM alat_pendakian LIKE 'kategori'");
@@ -398,17 +378,16 @@ class Admin_model extends CI_Model
         return $enum;
     }
 
-    // Insert new alat data into the database
     public function insertAlatWithProcedure($data)
     {
         $query = "CALL tambah_alat_pendakian(?, ?, ?, ?, ?, ?)";
         $this->db->query($query, [
-            $data['nama'],         // p_nama_alat
-            $data['kategori'],     // p_kategori
-            $data['stok'],         // p_stok
-            $data['harga_sewa'],   // p_harga_sewa
-            $data['foto'],         // p_foto_produk
-            $data['deskripsi']     // p_deskripsi
+            $data['nama'],
+            $data['kategori'],
+            $data['stok'],
+            $data['harga_sewa'],
+            $data['foto'],
+            $data['deskripsi']
         ]);
     }
 
@@ -423,43 +402,38 @@ class Admin_model extends CI_Model
         $nama = $this->session->userdata('nama_admin');
 
         if (empty($nama)) {
-            return false; // No session 'nama', cannot proceed
+            return false;
         }
 
-        // Fetch the user's profile photo filename from the database
         $this->db->select('foto_produk');
         $this->db->where('id_alat', $id);
         $query = $this->db->get('alat_pendakian');
         $foto_produk = $query->row()->foto_produk ?? null;
 
 
-        // Update the foto_produk to default.png
         $this->db->set('foto_produk', 'default.jpg');
         $this->db->where('id_alat', $id);
         $result = $this->db->update('alat_pendakian');
 
-        return $result; // Return deletion status
+        return $result;
     }
 
-    // Get alat data by ID
     public function getAlatById($id)
     {
         return $this->db->get_where('alat_pendakian', ['id_alat' => $id])->row_array();
     }
 
-    // Update alat data
     public function updateAlat($id, $data)
     {
         $this->db->where('id_alat', $id);
         return $this->db->update('alat_pendakian', $data);
     }
 
-    // Delete old photo if not default.jpg
     public function deleteOldPhoto($filename)
     {
         $file_path = './public/img/produk/' . $filename;
         if ($filename !== 'default.jpg' && file_exists($file_path)) {
-            unlink($file_path); // Delete the file
+            unlink($file_path);
         }
     }
 }

@@ -401,10 +401,10 @@
                 userPhoto.addEventListener('change', function() {
                     const file = this.files[0];
                     const fileError = document.getElementById('fileError');
-                    if (file && file.size > 2 * 1024 * 1024) { // Maksimal 2 MB
+                    if (file && file.size > 2 * 1024 * 1024) { 
                         fileError.textContent = '*Ukuran file terlalu besar. Maksimal 2 MB.';
                         fileError.classList.remove('d-none');
-                        this.value = ''; // Reset input file
+                        this.value = ''; 
                     } else {
                         fileError.classList.add('d-none');
                     }
@@ -421,19 +421,19 @@
                         <div class="card card-neoraised mb-3">
                             <div class="mx-3 my-3">
                                 <div class="d-flex justify-space-between">
-                                    <!-- Gambar Profil Placeholder -->
+
                                     <img src="<?= empty($feedback->foto_profil) ? base_url('public/img/user/deleted.jpg') : base_url('public/img/user/' . $feedback->foto_profil); ?>" \
                                         alt="<?= $feedback->nama_user; ?>" \
                                         class="rounded-circle me-2 mb-3 border border-2 border-dark card-neoraised"
                                         width="40" height="40">
-                                    <!-- Nama User -->
+
                                     <a href="<?= base_url('akun/profil/' . ($feedback->nama_user)); ?>" class="d-flex align-items-center text-decoration-none">
                                         <h5 class="card-title fw-bold align-self-center"><?= htmlspecialchars($feedback->nama_user, ENT_QUOTES, 'UTF-8'); ?></h5>
                                     </a>
 
 
                                 </div>
-                                <!-- Komentar -->
+
                                 <p class="card-text fw-light mt-3">"<?= $feedback->komentar; ?>"</p>
                                 <?php if (!empty($feedback->foto)): ?>
                                     <?php if (file_exists(FCPATH . 'public/img/feedback/' . $feedback->foto)): ?>
@@ -444,25 +444,25 @@
                                 <?php endif; ?>
 
                                 <div class="d-block">
-                                    <!-- Tanggal Feedback -->
+
                                     <p class="card-text fw-light"><small
                                             class="text-muted">
                                             <?= date('F d, Y H:i:s', strtotime($feedback->tanggal_feedback)); ?>
                                         </small></p>
-                                    <!-- Nama Alat dan Rating -->
+
                                     <p class="card-text me-5"><small class="text-muted fw-bold"><?= $feedback->nama_alat; ?></small>
                                         <?php
-                                        $rating = floor($feedback->rating); // Ambil nilai bulat bawah dari rating
-                                        $hasHalfStar = ($feedback->rating - $rating) >= 0.5; // Cek apakah ada setengah bintang
+                                        $rating = floor($feedback->rating);
+                                        $hasHalfStar = ($feedback->rating - $rating) >= 0.5;
 
                                         for ($i = 1; $i <= 5; $i++) {
                                             if ($i <= $rating) {
-                                                echo '<i class="bi bi-star-fill text-warning"></i>'; // Bintang penuh
+                                                echo '<i class="bi bi-star-fill text-warning"></i>';
                                             } elseif ($hasHalfStar && $i == $rating + 1) {
-                                                echo '<i class="bi bi-star-half text-warning"></i>'; // Bintang setengah
-                                                $hasHalfStar = false; // Set sudah digunakan
+                                                echo '<i class="bi bi-star-half text-warning"></i>';
+                                                $hasHalfStar = false;
                                             } else {
-                                                echo '<i class="bi bi-star text-muted"></i>'; // Bintang kosong
+                                                echo '<i class="bi bi-star text-muted"></i>';
                                             }
                                         }
                                         ?><small class="text-muted fw-bold"> <?= number_format(htmlspecialchars($rating, ENT_QUOTES, 'UTF-8'), 1); ?>/5.0</small></p>

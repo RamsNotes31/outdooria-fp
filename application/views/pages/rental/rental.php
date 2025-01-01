@@ -97,7 +97,7 @@ defined('BASEPATH') or
                     <div class="card card-neoraised mb-3 py-3 px-3 d-flex flex-column" style="height: 100%;">
                         <div class="row">
                             <div class="col-md-6">
-                                <!-- Menampilkan gambar produk -->
+
                                 <img src="<?= base_url("public/img/produk/" . $produk['foto_produk']); ?>"
                                     class="img-fluid border border-dark border-3 rounded-3 card-neoraised"
                                     alt="<?= $produk['nama_alat']; ?>">
@@ -116,7 +116,7 @@ defined('BASEPATH') or
                                         </a>
                                     <?php endif; ?>
 
-                                    <!-- Tombol Detail -->
+
                                     <a href="<?= base_url('produk/detail/' . $produk['id_alat']); ?>"
                                         class="btn btn-sm btn-neoraised btn-primary">
                                         <i class="bi bi-cart text-white fs-5"></i>
@@ -128,22 +128,22 @@ defined('BASEPATH') or
                                 </div>
                             </div>
                             <div class="col-md-6 d-flex flex-column justify-content-between">
-                                <!-- Nama Produk -->
+
                                 <h3 class="card-title mt-md-3 fw-bolder mt-4 mb-3 text-center" style="min-height: 60px;"><?= $produk['nama_alat']; ?></h3>
 
-                                <!-- Informasi Stok -->
+
                                 <h4 class="card-title mt-md-3 mb-3 text-center fw-bold">
                                     Stok
                                     <span class="badge rounded-pill text-bg-success card-neoraised fw-bold"><?= $produk['stok']; ?></span>
                                 </h4>
 
-                                <!-- Rating Produk -->
+
                                 <div class="d-flex justify-content-center flex-sm-row flex-column">
                                     <div class="d-flex justify-content-center align-items-center flex-column">
                                         <div class="d-flex">
                                             <?php
-                                            $rating = $produk['rata_rata_rating'] !== null ? floor($produk['rata_rata_rating']) : 0; // Pastikan rating tidak null sebelum floor
-                                            $hasHalfStar = ($produk['rata_rata_rating'] - $rating) >= 0.5; // Cek jika ada bintang setengah
+                                            $rating = $produk['rata_rata_rating'] !== null ? floor($produk['rata_rata_rating']) : 0;
+                                            $hasHalfStar = ($produk['rata_rata_rating'] - $rating) >= 0.5; 
                                             for ($i = 1; $i <= 5; $i++) {
                                                 if ($i <= $rating) {
                                                     echo '<i class="bi bi-star-fill text-warning fs-4"></i>';
@@ -160,7 +160,7 @@ defined('BASEPATH') or
                                     </div>
                                 </div>
 
-                                <!-- Informasi Favorit dan Popularitas -->
+
 
                             </div>
                         </div>

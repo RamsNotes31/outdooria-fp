@@ -15,7 +15,6 @@ class Welcome extends CI_Controller
 		$data['average_rating'] = $this->Home_model->get_average_rating();
 		$data['count_feedback'] = $this->Home_model->count_feedback();
 		$data['admins'] = $this->Home_model->get_admin_details();
-		// Debugging: pastikan data terisi
 		if (empty($data['feedbacks'])) {
 			log_message('error', 'No feedback data retrieved');
 		}

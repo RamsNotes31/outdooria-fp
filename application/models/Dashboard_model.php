@@ -9,45 +9,40 @@ class Dashboard_model extends CI_Model
 
     public function get_total_pendapatan()
     {
-        // Tabel `transactions` dengan kolom `amount`
+
         $this->db->select_sum('total_harga');
         $this->db->where_in('status_sewa', ['disewa', 'selesai']);
         $query = $this->db->get('penyewaan');
-        return $query->row()->total_harga ?? 0; // Pastikan ada nilai default jika tidak ada data
+        return $query->row()->total_harga ?? 0;
     }
 
 
     public function get_total_admin()
     {
-        // Tabel `users` dengan kolom `role` untuk menentukan admin
         $query = $this->db->get('admin');
         return $query->num_rows() ?? 0;
     }
 
     public function get_total_penyewaan()
     {
-        // Tabel `rentals` untuk data penyewaan
         $query = $this->db->get('penyewaan');
         return $query->num_rows() ?? 0;
     }
 
     public function get_total_users()
     {
-        // Tabel `users` untuk data pengguna
         $query = $this->db->get('users');
         return $query->num_rows() ?? 0;
     }
 
     public function get_total_alat()
     {
-        // Tabel `equipment` untuk data alat
         $query = $this->db->get('alat_pendakian');
         return $query->num_rows() ?? 0;
     }
 
     public function get_total_stok()
     {
-        // Tabel `equipment` untuk data alat
         $this->db->select_sum('stok');
         $query = $this->db->get('alat_pendakian');
         return $query->row()->stok ?? 0;
@@ -55,46 +50,37 @@ class Dashboard_model extends CI_Model
 
     public function get_total_informasi()
     {
-        // Tabel `information` untuk data informasi
         $query = $this->db->get('informasi_pendakian');
         return $query->num_rows() ?? 0;
     }
 
     public function get_total_favorit()
     {
-        // Tabel `favorites` untuk data favorit
         $query = $this->db->get('favorit');
         return $query->num_rows() ?? 0;
     }
 
     public function get_total_feedback()
     {
-        // Tabel `feedback` untuk data feedback
         $query = $this->db->get('feedback');
         return $query->num_rows() ?? 0;
     }
 
-    // Fungsi untuk menghitung pembelian online dan offline
     public function get_perbandingan_online_offline()
     {
-        // Hitung jumlah transaksi online (bukti_pembayaran tidak null)
         $this->db->where('bukti_pembayaran !=', NULL);
         $this->db->from('penyewaan');
         $online = $this->db->count_all_results();
 
-        // Hitung jumlah transaksi offline (bukti_pembayaran null)
         $this->db->where('bukti_pembayaran', NULL);
         $this->db->from('penyewaan');
         $offline = $this->db->count_all_results();
 
-        // Total transaksi
         $total = $online + $offline;
 
-        // Menghitung persentase online dan offline
         $online_percentage = ($total > 0) ? round(($online / $total) * 100, 2) : 0;
         $offline_percentage = ($total > 0) ? round(($offline / $total) * 100, 2) : 0;
 
-        // Mengembalikan hasil dalam array
         return [
             'online' => $online,
             'offline' => $offline,
@@ -104,7 +90,6 @@ class Dashboard_model extends CI_Model
         ];
     }
 
-    // Get the most popular tools based on rental frequency
     public function get_alat_terlaris()
     {
         $this->db->select('alat_pendakian.nama_alat, COUNT(penyewaan.seri_alat) as total_rented');
@@ -124,7 +109,6 @@ class Dashboard_model extends CI_Model
         return $result;
     }
 
-    // Get the highest-rated tools based on feedback
     public function get_rating_tertinggi()
     {
         $this->db->select('alat_pendakian.nama_alat, AVG(feedback.rating) as average_rating');
@@ -143,7 +127,6 @@ class Dashboard_model extends CI_Model
         return $result;
     }
 
-    // Get the top 5 favorite tools based on user preferences
     public function get_top_favorit()
     {
         $this->db->select('alat_pendakian.nama_alat, COUNT(favorit.id_favorit) as total_favorites');
@@ -162,7 +145,6 @@ class Dashboard_model extends CI_Model
         return $result;
     }
 
-    // Get the top 5 admins with the most recent interactions
     public function get_top_admin()
     {
         $this->db->select('admin.nama_admin, COUNT(informasi_pendakian.id_admin) as total_posts');
@@ -170,7 +152,7 @@ class Dashboard_model extends CI_Model
         $this->db->join('admin', 'informasi_pendakian.id_admin = admin.id_admin');
         $this->db->group_by('admin.id_admin');
         $this->db->order_by('total_posts', 'DESC');
-        $this->db->limit(1); // Limit to top admin
+        $this->db->limit(1);
         $result = $this->db->get()->result();
 
         if (empty($result)) {
@@ -184,7 +166,6 @@ class Dashboard_model extends CI_Model
 
 
 
-    // Get the top 5 users with the most rental transactions
     public function get_top_user()
     {
         $this->db->select('users.nama, COUNT(penyewaan.id_penyewaan) as total_rentals');
@@ -203,7 +184,6 @@ class Dashboard_model extends CI_Model
         return $result;
     }
 
-    // Get the items with the most stock
     public function get_stok_terbanyak()
     {
         $this->db->select('alat_pendakian.nama_alat, alat_pendakian.stok');
@@ -246,14 +226,11 @@ class Dashboard_model extends CI_Model
 
     public function update_status($rental_id, $status)
     {
-        // Validate inputs (optional but recommended)
 
 
-        // Update the rental status in the 'penyewaan' table
         $this->db->where('id_penyewaan', $rental_id);
         $this->db->update('penyewaan', ['status_sewa' => $status]);
 
-        // Return true if one row was affected (status updated)
         return $this->db->affected_rows() > 0;
     }
 
@@ -268,7 +245,6 @@ class Dashboard_model extends CI_Model
         return $this->db->count_all_results('penyewaan');
     }
 
-    // Mengambil total stok
     public function get_total_stoks()
     {
         $this->db->select('COUNT(*) as total');
@@ -277,7 +253,6 @@ class Dashboard_model extends CI_Model
         return $query->row()->total;
     }
 
-    // Mengambil jumlah stok berdasarkan status
     public function get_stok_by_status($status)
     {
         $this->db->select('COUNT(*) as total');
@@ -299,12 +274,11 @@ class Dashboard_model extends CI_Model
 
     public function get_kategori_counts()
     {
-        // Mengambil kategori alat dari tabel alat_pendakian
         $this->db->select('kategori, COUNT(*) as total');
-        $this->db->from('alat_pendakian'); // Mengambil data dari tabel seri
-        $this->db->group_by('kategori'); // Mengelompokkan berdasarkan kategori
+        $this->db->from('alat_pendakian');
+        $this->db->group_by('kategori');
         $query = $this->db->get();
-        return $query->result(); // Mengembalikan data hasil query
+        return $query->result();
     }
 
     public function get_all_bukti_pembayaran()
@@ -336,7 +310,7 @@ class Dashboard_model extends CI_Model
                 ROUND((SUM(jenis_kelamin = 'O') / COUNT(*)) * 100, 2) AS other_percentage
             FROM users
         ");
-        return $query->row_array(); // Kembalikan data sebagai array
+        return $query->row_array();
     }
 
     public function get_admin_statistics()
@@ -352,10 +326,9 @@ class Dashboard_model extends CI_Model
                 ROUND((SUM(jenis_kelamin = 'O') / COUNT(*)) * 100, 2) AS other_percentage
             FROM admin
         ");
-        return $query->row_array(); // Kembalikan data sebagai array
+        return $query->row_array();
     }
 
-    // Get top admin who has replied the most
     public function get_top_admin_chat()
     {
         $this->db->select('a.nama_admin, COUNT(p.id_chat) AS total_replies');
@@ -365,10 +338,9 @@ class Dashboard_model extends CI_Model
         $this->db->order_by('total_replies', 'DESC');
         $this->db->limit(1);
         $query = $this->db->get();
-        return $query->row_array();  // Return the first result (top admin)
+        return $query->row_array();
     }
 
-    // Get top user who has the most feedback and highest average rating
     public function get_top_user_feedback()
     {
         $this->db->select('u.nama AS user_name, COUNT(f.id_feedback) AS total_feedback, AVG(f.rating) AS average_rating');
@@ -379,10 +351,9 @@ class Dashboard_model extends CI_Model
         $this->db->order_by('average_rating', 'DESC');
         $this->db->limit(1);
         $query = $this->db->get();
-        return $query->row_array();  // Return the first result (top user)
+        return $query->row_array();
     }
 
-    // Get top admin who posted the most information
     public function get_top_admin_posting()
     {
         $this->db->select('a.nama_admin, COUNT(ip.id_informasi) AS total_posting');
@@ -392,10 +363,9 @@ class Dashboard_model extends CI_Model
         $this->db->order_by('total_posting', 'DESC');
         $this->db->limit(1);
         $query = $this->db->get();
-        return $query->row_array();  // Return the first result (top admin)
+        return $query->row_array();
     }
 
-    // Get top user who rented the most items and the most rented item
     public function get_top_user_rented_item()
     {
         $this->db->select('users.nama AS nama_user, alat_pendakian.nama_alat, COUNT(penyewaan.id_penyewaan) AS jumlah_disewa');
@@ -407,20 +377,17 @@ class Dashboard_model extends CI_Model
         $this->db->order_by('jumlah_disewa', 'DESC');
         $this->db->limit(1);
         $query = $this->db->get();
-        return $query->row_array();  // Return the first result (top user and rented item)
+        return $query->row_array();
     }
 
-    // Mendapatkan total pendapatan berdasarkan bulan dan tahun saat ini
     public function get_pendapatan_bulanan_bulan_ini()
     {
         $this->db->select_sum('total_harga');
         $this->db->from('penyewaan');
         $this->db->where_in('status_sewa', ['disewa', 'selesai']);
-        $this->db->where('YEAR(tanggal_penyewaan)', date('Y'));  // Filter berdasarkan tahun saat ini
-        $this->db->where('MONTH(tanggal_penyewaan)', date('m'));  // Filter berdasarkan bulan saat ini
+        $this->db->where('YEAR(tanggal_penyewaan)', date('Y'));
+        $this->db->where('MONTH(tanggal_penyewaan)', date('m'));
         $query = $this->db->get();
-        return $query->row()->total_harga;  // Mengambil hasil total pendapatan
+        return $query->row()->total_harga;
     }
-
-    // Mendapatkan pendapatan bulanan berdasarkan bulan dan tahun saat ini
 }

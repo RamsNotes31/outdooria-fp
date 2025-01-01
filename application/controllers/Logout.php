@@ -23,7 +23,7 @@ class Logout extends CI_Controller
     {
         delete_cookie('email');
         delete_cookie('password');
-        $this->session->sess_destroy(); // Hapus semua sesi
-        redirect('../login'); // Redirect ke halaman login
+        $this->session->sess_destroy();
+        redirect('../login');
     }
 }
