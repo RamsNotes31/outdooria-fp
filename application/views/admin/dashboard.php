@@ -421,9 +421,9 @@
                                     Alat Terlaris
                                 </div>
                                 <div class="h5 mb-0 fw-bolder text-black fw-bold">
-                                    <?php if (isset($alat_terlaris[0]['nama_alat'])) {
-                                        echo $alat_terlaris[0]['nama_alat'];
-                                    } ?><br><br>(<?= $alat_terlaris[0]['total_rented'] ?? 0 ?>x) Disewa
+                                    <?php if (isset($alat_terlaris[0]->nama_alat)) {
+                                        echo $alat_terlaris[0]->nama_alat;
+                                    } ?><br><br>(<?= $alat_terlaris[0]->total_rented ?? 0 ?>x) Disewa
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -732,14 +732,14 @@
                                         <ul class="splide__list">
                                             <?php foreach ($bukti_pembayaranya as $bukti) : ?>
                                                 <li class="splide__slide d-flex align-items-center justify-content-center">
-                                                <?php if (empty($bukti['bukti_pembayaran'])): ?>
-                                                    <p class="text-center">Tidak ada bukti pembayaran.</p>
-                                                <?php endif; ?>
+                                                    <?php if (empty($bukti['bukti_pembayaran'])): ?>
+                                                        <p class="text-center">Tidak ada bukti pembayaran.</p>
+                                                    <?php endif; ?>
                                                     <?php if (!empty($bukti['bukti_pembayaran'])): ?>
                                                         <?php if (file_exists(FCPATH . 'public/img/bukti/' . $bukti['bukti_pembayaran'])): ?>
                                                             <img src="<?= base_url('public/img/bukti/' . $bukti['bukti_pembayaran']); ?>" alt="Slide" class="img-fluid mb-5 card-neoraised border border-dark border-3" style="max-width: 100%;">
                                                         <?php else: ?>
-                                                            <p>Gambar tidak tersedia.</p>
+                                                            <p class="text-center mb-5">Gambar tidak tersedia.</p>
                                                         <?php endif; ?>
                                                     <?php else: ?>
                                                         <p class="text-center">Tidak ada bukti pembayaran.</p>

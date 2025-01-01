@@ -123,7 +123,7 @@ defined('BASEPATH') or
                                     <div class="mx-3 my-3">
                                         <div class="d-flex justify-space-between">
 
-                                            <img src="<?= empty($feedback->foto_profil) ? base_url('public/img/user/deleted.jpg') : base_url('public/img/user/' . $feedback->foto_profil); ?>" \
+                                            <img src="<?= (empty($feedback->foto_profil) || !file_exists(FCPATH . 'public/img/user/' . $feedback->foto_profil)) ? base_url('public/img/user/deleted.jpg') : base_url('public/img/user/' . $feedback->foto_profil); ?>" \
                                                 alt="<?= $feedback->nama_user; ?>" \
                                                 class="rounded-circle me-2 mb-3 border border-2 border-dark card-neoraised"
                                                 width="40" height="40">
@@ -212,10 +212,10 @@ defined('BASEPATH') or
                     <?php foreach ($admins as $admin): ?>
                         <hr>
             <div class="d-flex align-items-center justify-content-center mb-3">
-           
+
                 <img src="<?= base_url('public/img/admin/' . $admin->foto_admin); ?>"
                     alt="Admin Photo" class="rounded-circle img-fluid me-3 card-neoraised border border-dark border-1" width="30" height="30">
-            
+
                 <a href="<?= base_url('akun/admin/' . ($admin->nama_admin)); ?>" class="text-decoration-none">
                     <p class="fw-bold mb-0"><?php echo $admin->nama_admin; ?></p>
                 </a>
