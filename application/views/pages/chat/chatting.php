@@ -205,7 +205,7 @@
                                                     <?php $nama = wordwrap($nama, 50, "<br>\n"); ?>
                                                 <?php } ?>
                                                 <span class="badge rounded-pill bg-danger card-neoraised border border-1 border-dark"> <?php if ($chat['id_admin'] == 1165): ?>
-                                                        <a href="<?= base_url('akun/admin/bot') ?>" class="text-decoration-none text-white"><?= $nama ?></a>
+                                                        <a href="<?= base_url('akun/admin/Admin') ?>" class="text-decoration-none text-white"><?= $nama ?></a>
                                                     <?php else: ?><a href="<?= base_url('akun/admin/' . $chat['nama_admin']) ?>" class="text-decoration-none text-white"><?= $nama ?></a><?php endif; ?></span>
                                             </div>
                                             <?php if (empty($chat['foto_chat'])): ?>

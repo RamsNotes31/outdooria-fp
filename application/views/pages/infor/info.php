@@ -26,9 +26,10 @@
             </span>
         </p>
         <div class="col-lg-6 col-12 d-flex justify-content-center text-center offset-lg-3">
-            <img src="<?= base_url('public/img/gunung/' . $detail['foto_gunung']); ?>"
-                alt="<?= htmlspecialchars($detail['nama_gunung']); ?>"
-                class="img-fluid card-neoraised border border-dark border-3 rounded-5 text-center">
+            <img src="<?= base_url('public/img/gunung/' . ($detail['foto_gunung'] ?? 'default.jpg')); ?>"
+                class="img-fluid border border-dark border-3 rounded-3 card-neoraised"
+                alt="<?= htmlspecialchars($detail['nama_gunung'] ?? 'Gunung Tidak Diketahui'); ?>"
+                style=" width: 1000px; height: 350px;">
         </div>
         <p class="text-center mt-3 mb-5 fw-bolder justify-content-center">
             Oleh Admin: <br>
@@ -80,7 +81,8 @@
                                 <img
                                     src="<?= base_url('public/img/gunung/' . $info['foto_gunung']); ?>"
                                     class="img-fluid border border-dark border-3 rounded-3 card-neoraised"
-                                    alt="<?= htmlspecialchars($info['nama_gunung']); ?>">
+                                    alt="<?= htmlspecialchars($info['nama_gunung']); ?>"
+                                    style="object-fit: cover; width: 100%; height: 200px;">
                                 <p class="text-center mt-3 fw-bold">
                                     Harga Biaya:
 

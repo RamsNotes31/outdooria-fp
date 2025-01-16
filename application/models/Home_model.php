@@ -39,7 +39,7 @@ class Home_model extends CI_Model
     public function get_admin_details()
     {
 
-        $this->db->where('nama_admin !=', 'bot');
+        $this->db->where('nama_admin !=', 'admin');
         $this->db->select('nama_admin, foto_admin, email_admin, no_telp_admin');
         $query = $this->db->get('admin');
 

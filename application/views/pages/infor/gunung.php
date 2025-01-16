@@ -2,7 +2,7 @@
         <h1 class="text-center fw-bolder mb-5">Mountain</h1>
 
         <div class="row">
-            <div class="col-12">
+            <div class="col-12 col-md-5 mx-auto">
 
                 <div class="card-body">
                     <div class="splide" id="main-slider" role="group" aria-label="Main Slider">
@@ -11,7 +11,7 @@
                                 <?php foreach ($img_gunung as $mount) : ?>
                                     <li class="splide__slide d-flex align-items-center justify-content-center">
                                         <?php if (!empty($mount['foto_gunung'])): ?>
-                                            <img src="<?= base_url('public/img/gunung/' . $mount['foto_gunung']); ?>" alt="Slide" class="img-fluid mb-3 card-neoraised border border-dark border-3 rounded-3" style="max-width: 100%;">
+                                            <img src="<?= base_url('public/img/gunung/' . $mount['foto_gunung']); ?>" alt="Slide" class="card-neoraised border border-dark border-3 rounded-3 mb-3" style="object-fit: cover; width: 100%; max-height: 500px;">
                                         <?php else: ?>
                                             <p>Gambar tidak tersedia.</p>
                                         <?php endif; ?>
@@ -27,7 +27,7 @@
                                 <?php foreach ($img_gunung as $mount) : ?>
                                     <li class="splide__slide card-neoraised">
                                         <?php if (!empty($mount['foto_gunung'])): ?>
-                                            <img src="<?= base_url('public/img/gunung/' . $mount['foto_gunung']); ?>" alt="Thumbnail" class="img-thumbnail card-neoraised border border-dark border-3 rounded-3" style="width: 100px;">
+                                            <img src="<?= base_url('public/img/gunung/' . $mount['foto_gunung']); ?>" alt="Thumbnail" class="img-thumbnail card-neoraised border border-dark border-3 rounded-3" style="object-fit: cover; width: 100%; height: 200px;">
                                         <?php else: ?>
                                             <p>Gambar tidak tersedia.</p>
                                         <?php endif; ?>
@@ -125,7 +125,8 @@
                                 <div class="col-12">
                                     <img src="<?= base_url('public/img/gunung/' . ($info['foto_gunung'] ?? 'default.jpg')); ?>"
                                         class="img-fluid border border-dark border-3 rounded-3 card-neoraised"
-                                        alt="<?= htmlspecialchars($info['nama_gunung'] ?? 'Gunung Tidak Diketahui'); ?>">
+                                        alt="<?= htmlspecialchars($info['nama_gunung'] ?? 'Gunung Tidak Diketahui'); ?>"
+                                        style="object-fit: cover; width: 100%; height: 200px;">
                                     <p class="text-center mt-3 fw-bold">
                                         Oleh Admin:
                                         <a href="<?= base_url('akun/admin/' . ($info['nama_admin'] ?? '#')); ?>"

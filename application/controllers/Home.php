@@ -24,9 +24,9 @@ class Home extends CI_Controller
 
         $this->load->model('Dashboard_model');
 
-            $data['total_penyewaan']= $this->Dashboard_model->get_total_penyewaan();
-            $data['total_users'] = $this->Dashboard_model->get_total_users();
-            $data['total_alat'] = $this->Dashboard_model->get_total_alat();
+        $data['total_penyewaan'] = $this->Dashboard_model->get_total_penyewaan();
+        $data['total_users'] = $this->Dashboard_model->get_total_users();
+        $data['total_alat'] = $this->Dashboard_model->get_total_alat();
 
         $this->load->view('home', $data);
         $this->load->view('templates/footer');

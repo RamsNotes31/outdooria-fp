@@ -41,7 +41,7 @@
             <?= htmlspecialchars($total_chats); ?> Pesan
         </span>
 
-        <?php if ($admin['nama_admin'] !== 'Bot') : ?>
+        <?php if ($admin['nama_admin'] !== 'Admin') : ?>
             <div class="text-center mt-5">
                 <h1 class="fs-1 fw-light mb-4 mt-5 text-center fw-bold">Contact Us</h1>
                 <a href="mailto:<?php echo $admin['email_admin']; ?>" class="text-decoration-none" target="_blank">

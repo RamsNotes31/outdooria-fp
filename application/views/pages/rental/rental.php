@@ -7,7 +7,7 @@ defined('BASEPATH') or
     <h1 class="text-center fw-bolder mb-5">Our Products</h1>
 
     <div class="row">
-        <div class="col-12 ">
+        <div class="col-md-6 col-12 mx-auto">
             <div class="card-body">
                 <div class="splide" id="splide" role="group" aria-label="Main Slider">
                     <div class="splide__track">
@@ -15,7 +15,7 @@ defined('BASEPATH') or
                             <?php foreach ($img_alat as $view) : ?>
                                 <li class="splide__slide d-flex align-items-center justify-content-center me-5">
                                     <?php if (!empty($view['foto_produk'])): ?>
-                                        <img src="<?= base_url('public/img/produk/' . $view['foto_produk']); ?>" alt="Slide" class="img-fluid mb-3 card-neoraised border border-dark border-3 rounded-3" height="1000" width="1000">
+                                        <img src="<?= base_url('public/img/produk/' . $view['foto_produk']); ?>" alt="Slide" class="card-neoraised border border-dark border-3 rounded-3 mb-3" style="object-fit: scale; width: 100%; max-height: 500px;">
                                     <?php else: ?>
                                         <p>Gambar tidak tersedia.</p>
                                     <?php endif; ?>
@@ -100,7 +100,8 @@ defined('BASEPATH') or
 
                                 <img src="<?= base_url("public/img/produk/" . $produk['foto_produk']); ?>"
                                     class="img-fluid border border-dark border-3 rounded-3 card-neoraised"
-                                    alt="<?= $produk['nama_alat']; ?>">
+                                    alt="<?= $produk['nama_alat']; ?>"
+                                    style="object-fit: scale; width: 100%; height: 200px;">
                                 <div class="d-flex justify-content-center mt-3 mb-md-2">
 
 
@@ -143,7 +144,7 @@ defined('BASEPATH') or
                                         <div class="d-flex">
                                             <?php
                                             $rating = $produk['rata_rata_rating'] !== null ? floor($produk['rata_rata_rating']) : 0;
-                                            $hasHalfStar = ($produk['rata_rata_rating'] - $rating) >= 0.5; 
+                                            $hasHalfStar = ($produk['rata_rata_rating'] - $rating) >= 0.5;
                                             for ($i = 1; $i <= 5; $i++) {
                                                 if ($i <= $rating) {
                                                     echo '<i class="bi bi-star-fill text-warning fs-4"></i>';

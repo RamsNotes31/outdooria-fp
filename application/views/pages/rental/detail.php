@@ -5,7 +5,8 @@
             <div class="col-md-6 d-flex justify-content-center mb-5 align-items-center">
                 <div class="row">
                     <div class="col-md-12 px-5 text-center">
-                        <img src="<?= base_url('public/img/produk/' . $product['foto_produk']); ?>" class="img-fluid border border-dark border-3 rounded-5 card-neoraised" alt="<?= $product['nama_alat']; ?>">
+                        <img src="<?= base_url('public/img/produk/' . $product['foto_produk']); ?>" class="img-fluid border border-dark border-3 rounded-5 card-neoraised" alt="<?= $product['nama_alat']; ?>"
+                            style="object-fit: scale; width: 100%; height: 500px;">
 
                         <div class="d-flex justify-content-center">
                             <?php if (isset($favorit) && in_array($product['id_alat'], $favorit)): ?>
@@ -121,7 +122,8 @@
                                     <h3 class="card-title text-center mt-2 mb-3 fw-bold"><?= $produc['nama_alat']; ?></h3>
                                     <img src="<?= base_url('public/img/produk/' . $produc['foto_produk']); ?>"
                                         class="img-fluid border border-dark border-3 rounded-3 card-neoraised"
-                                        alt="<?= $produc['nama_alat']; ?>">
+                                        alt="<?= $produc['nama_alat']; ?>"
+                                        style="object-fit: scale; width: 100%; height: 200px;">
                                     <div class="d-flex justify-content-center mt-3 mb-md-2">
                                         <a href="<?= base_url('produk/detail/' . $produc['id_alat']); ?>"
                                             class="btn btn-md btn-neoraised btn-primary mb-3 fw-bold">

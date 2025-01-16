@@ -7,7 +7,7 @@ defined('BASEPATH') or
     <?php if (!$this->session->userdata('cek')): ?>
         Swal.fire({
             title: 'Selamat Datang!',
-            text: 'Selamat datang kembali, <?php echo $this->session->userdata('nama'); ?>',
+            text: 'Selamat datang <?php echo $this->session->userdata('nama'); ?>',
             icon: 'success',
             confirmButtonText: 'Oke'
         })
